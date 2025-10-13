@@ -23,7 +23,7 @@ const INFO = {
   location: "West Lafayette, IN",
   email: "svege@purdue.edu",
   headline:
-    "Purdue CS + Math · interests in ML reliability, medical imaging, and RAG systems.",
+    "Purdue CS + Math · interests in ML reliability and high-powered computing.",
   resumeUrl: "/resume.pdf",
   github: "https://github.com/srihanvege",
   linkedin: "https://www.linkedin.com/in/srihan-vege/",
@@ -215,7 +215,7 @@ export default function App() {
           </a>
           <div className="hidden sm:flex items-center gap-6 text-sm">
             <a href="#about" className="hover:opacity-80">Biography</a>
-            <a href="#skills" className="hover:opacity-80">Interests</a>
+            <a href="#skills" className="hover:opacity-80">Skills</a>
             <a href="#notes" className="hover:opacity-80">Notes</a>
             <a href="#projects" className="hover:opacity-80">Past Projects</a>
             <a href="#writings" className="hover:opacity-80">Writings</a>
@@ -404,7 +404,7 @@ export default function App() {
         </div>
       </Section>
 
-      <Section id="skills" title="Interests">
+      <Section id="skills" title="Skills">
         <Card className={PANEL}>
           <CardContent className="p-6">
             <div className="flex flex-wrap gap-2">
