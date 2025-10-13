@@ -220,7 +220,7 @@ export default function App() {
           </a>
           <div className="hidden sm:flex items-center gap-6 text-base">
             <a href="#about" className="hover:opacity-80">Biography</a>
-            <a href="#skills" className="hover:opacity-80">Interests</a>
+            <a href="#skills" className="hover:opacity-80">Skills</a>
             <a href="#notes" className="hover:opacity-80">Notes</a>
             <a href="#projects" className="hover:opacity-80">Past Projects</a>
             <a href="#experience" className="hover:opacity-80">Experience</a>
@@ -383,7 +383,7 @@ export default function App() {
           </div>
         </Section>
 
-        <Section id="skills" title="Interests">
+        <Section id="skills" title="Skills">
           <Card className={PANEL}>
             <CardContent className="p-4">
               <div className="flex flex-wrap gap-2">
