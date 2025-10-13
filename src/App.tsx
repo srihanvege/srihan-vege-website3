@@ -218,7 +218,6 @@ export default function App() {
             <a href="#skills" className="hover:opacity-80">Interests</a>
             <a href="#notes" className="hover:opacity-80">Notes</a>
             <a href="#projects" className="hover:opacity-80">Past Projects</a>
-            <a href="#writings" className="hover:opacity-80">Writings</a>
             <Button asChild className="rounded-md text-base px-4 py-2">
               <a href={INFO.resumeUrl} target="_blank" rel="noreferrer">
                 <Download className="w-5 h-5 mr-2" /> Resume
