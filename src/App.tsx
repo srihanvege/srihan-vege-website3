@@ -289,8 +289,8 @@ export default function App() {
       </section>
 
       <Section id="about" title="Biography">
-        <Card className="rounded-xl border-slate-200 dark:border-slate-800">
-          <CardContent className="p-6 text-slate-700 dark:text-slate-200 leading-relaxed">
+        <Card className="rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/70">
+        <CardContent className="p-6 text-slate-700 dark:text-slate-100 leading-relaxed">
             I recently started at Purdue University (CS & Math). I enjoy building
             things at the intersection of ML reliability and usable products.
             Recent projects include a sports Q&A bot with retrieval-augmented
