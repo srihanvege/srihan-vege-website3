@@ -374,3 +374,102 @@ export default function App() {
                   )}
                 </div>
               </CardContent>
+            </Card>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="experience" title="Experience">
+        <div className="space-y-4">
+          {EXPERIENCE.map((e, idx) => (
+            <Card key={idx} className={PANEL}>
+              <CardHeader className="pb-3">
+                <CardTitle className={`flex items-center gap-2 text-lg ${PANEL_TEXT}`}>
+                  <Briefcase className="w-5 h-5" />
+                  <span>
+                    {e.role} · {e.org}
+                  </span>
+                </CardTitle>
+                <p className={`text-sm ${SUBTLE}`}>{e.date}</p>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <ul className={`list-disc pl-5 space-y-1 ${PANEL_TEXT}`}>
+                  {e.bullets.map((b: string, i: number) => (
+                    <li key={i}>{b}</li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="skills" title="Interests">
+        <Card className={PANEL}>
+          <CardContent className="p-6">
+            <div className="flex flex-wrap gap-2">
+              {SKILLS.map((s) => (
+                <span
+                  key={s}
+                  className="px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-sm dark:bg-slate-700 dark:text-slate-100"
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </Section>
+
+      <Section id="contact" title="Contact">
+        <Card className={PANEL}>
+          <CardContent className="p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <p className={PANEL_TEXT}>
+                Interested in collaborating or have a role that fits?
+              </p>
+              <p className={`text-sm ${MUTED}`}>
+                I'm open to internships, research, and product work.
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <Button asChild className="rounded-md">
+                <a href={`mailto:${INFO.email}`}>
+                  <Mail className="w-4 h-4 mr-2" /> Email
+                </a>
+              </Button>
+              <Button asChild variant="secondary" className="rounded-md">
+                <a href={INFO.linkedin} target="_blank" rel="noreferrer">
+                  <Linkedin className="w-4 h-4 mr-2" /> LinkedIn
+                </a>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </Section>
+
+      <footer className="border-t border-slate-200 dark:border-slate-800">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-500 dark:text-slate-400 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <LinkIcon href={INFO.github} title="GitHub">
+              <Github className="w-4 h-4" />
+              <span>GitHub</span>
+            </LinkIcon>
+            <LinkIcon href={INFO.linkedin} title="LinkedIn">
+              <Linkedin className="w-4 h-4" />
+              <span>LinkedIn</span>
+            </LinkIcon>
+            <LinkIcon href={`mailto:${INFO.email}`} title="Email">
+              <Mail className="w-4 h-4" />
+              <span>Email</span>
+            </LinkIcon>
+          </div>
+          <p>
+            © {new Date().getFullYear()} {INFO.name}. This site is inspired by
+            clean academic profiles.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
