@@ -298,6 +298,7 @@ export default function App() {
         </Card>
       </Section>
 
+      {/* Publications / Notes */}
       <Section id="notes" title="Publications">
         <div className="grid sm:grid-cols-2 gap-6">
           <Card className={PANEL}>
@@ -321,18 +322,11 @@ export default function App() {
                   arXiv
                 </a>
               </Button>
-              <Button asChild variant="secondary" className="rounded-md">
-                <a
-                  href="https://openreview.net/forum?id=GHUh9O5Im8"
-                  target="_blank"
-                  rel="noreferrer"
-                </a>
-              </Button>
+              {/* OpenReview button removed as requested */}
             </CardContent>
           </Card>
         </div>
       </Section>
-
 
       <Section id="projects" title="Past Projects">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
