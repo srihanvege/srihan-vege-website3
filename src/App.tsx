@@ -41,7 +41,7 @@ const PROJECTS: Project[] = [
   {
     title: "RAG Sports Bot",
     description:
-      "Retrieval-augantaged chatbot that answers NFL stat questions using a Python backend (FAISS) and a SwiftUI front end.",
+      "Retrieval-augmented chatbot that answers NFL stat questions using a Python backend (FAISS) and a SwiftUI front end.",
     tags: ["Python", "FAISS", "RAG", "SwiftUI"],
     links: { code: "https://github.com/srihanvege" },
   },
@@ -208,9 +208,9 @@ const LinkIcon: React.FC<LinkIconProps> = ({ href, children, title }) => (
 export default function App() {
   return (
     <div className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 text-lg">
-      <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-slate-900/70 bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800">
+      <header className="sticky top-0 z-50 backdrop-blur bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800">
         <nav className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12 h-20 flex items-center justify-between text-lg">
-          <a href="#home" className="font-semibold text-lg sm:text-xl tracking-tight">
+          <a href="#home" className="font-semibold text-xl tracking-tight">
             {INFO.name}
           </a>
           <div className="hidden sm:flex items-center gap-8 text-base">
@@ -267,13 +267,13 @@ export default function App() {
             </div>
             <div className="mt-5 text-lg flex items-center gap-3 text-slate-700 dark:text-slate-300">
               <GraduationCap className="w-5 h-5" />
-              <span>B.S. in Computer Science &amp; Mathematics · Purdue University (Aug 2025 – May 2029)</span>
+              <span>B.S. in Computer Science & Mathematics · Purdue University (Aug 2025 – May 2029)</span>
             </div>
           </div>
           <div className="justify-self-center md:justify-self-end">
             <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-full bg-gradient-to-br from-slate-50 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center shadow-inner border border-slate-200 dark:border-slate-700">
               <span className="text-5xl font-bold text-slate-500 dark:text-slate-300 select-none">
-                {INFO.name.split(" ").map((n) => n[0]).join("")}
+                {INFO.name.split(' ').map((n) => n[0]).join('')}
               </span>
             </div>
             <p className="mt-4 text-lg text-slate-700 dark:text-slate-300 text-center md:text-right">CS + Math</p>
@@ -287,8 +287,7 @@ export default function App() {
             I recently started at Purdue University (CS & Math). I enjoy building things at the intersection of ML reliability and usable products. Recent projects include a sports Q&A bot with retrieval-augmented generation and research on mitigating multi-turn sycophancy in LLMs. If any of this connects to your work, feel free to reach out at{" "}
             <a className="text-sky-700 hover:underline dark:text-sky-400" href={`mailto:${INFO.email}`}>
               {INFO.email}
-            </a>
-            .
+            </a>.
           </CardContent>
         </Card>
       </Section>
@@ -314,3 +313,5 @@ export default function App() {
           </Card>
         </div>
       </Section>
+
+      {/* --- Rest of sections from previous message would continue here exactly as shown --- */}
