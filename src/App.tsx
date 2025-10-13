@@ -18,23 +18,26 @@ linkedin: "https://www.linkedin.com/in/srihan-vege/",
 };
 
 const PROJECTS = [
-  {
-    title: "RAG Sports Bot",
-    description: "Retrieval-augmented chatbot that answers NFL stat questions using a Python backend (FAISS) and a SwiftUI front end.",
-    tags: ["Python", "FAISS", "RAG", "SwiftUI"],
-    links: { code: "https://github.com/srihanvege"},
-  },
-  {
-    title: "ContrastIQ",
-    description: "CNN + pharmacokinetic priors to predict arterial-phase aortic peak enhancement timing in CT (mode error ~0.3s; ~97% improvement).",
-    tags: ["PyTorch", "Medical Imaging", "CNN", "MONAI"],
-  },
-  {
-    title: "TRUTH DECAY",
-    description: "Benchmark + mitigation study on multi-turn sycophancy in LLMs; accepted to NAACL SRW 2025.",
-    tags: ["LLM Eval", "NLP", "Prompting"],
-    links: { paper: "https://arxiv.org/abs/2503.11656" },
-  },
+{
+title: "RAG Sports Bot",
+description:
+"Retrieval‑augmented chatbot that answers NFL stat questions using a Python backend (FAISS) and a SwiftUI front end.",
+tags: ["Python", "FAISS", "RAG", "SwiftUI"],
+links: { code: "https://github.com/srihanvege" },
+},
+{
+title: "ContrastIQ",
+description:
+"CNN + pharmacokinetic priors to predict arterial‑phase aortic peak enhancement timing in CT (mode error ~0.3s; ~97% improvement).",
+tags: ["PyTorch", "Medical Imaging", "CNN", "MONAI"],
+},
+{
+title: "TRUTH DECAY",
+description:
+"Benchmark + mitigation study on multi‑turn sycophancy in LLMs; accepted to NAACL SRW 2025.",
+tags: ["LLM Eval", "NLP", "Prompting"],
+links: { paper: "https://arxiv.org/abs/2503.11656" },
+},
 ];
 
 const EXPERIENCE = [
