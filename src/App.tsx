@@ -116,13 +116,11 @@ const SKILLS = [
   "FAISS",
 ];
 
-// ---------- Shared UI tokens for consistent contrast ----------
 const PANEL =
   "rounded-xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 shadow-sm";
 const PANEL_TEXT = "text-slate-800 dark:text-slate-100";
 const MUTED = "text-slate-600 dark:text-slate-300";
 const SUBTLE = "text-slate-500 dark:text-slate-400";
-// -------------------------------------------------------------
 
 type Mode = "light" | "dark" | "system";
 
@@ -221,7 +219,6 @@ export default function App() {
             <a href="#notes" className="hover:opacity-80">Notes</a>
             <a href="#projects" className="hover:opacity-80">Past Projects</a>
             <a href="#writings" className="hover:opacity-80">Writings</a>
-            <a href="#education" className="hover:opacity-80">Education</a>
             <Button asChild className="rounded-md">
               <a href={INFO.resumeUrl} target="_blank" rel="noreferrer">
                 <Download className="w-4 h-4 mr-2" /> Resume
@@ -268,6 +265,10 @@ export default function App() {
                 </a>
               </Button>
             </div>
+            <div className="mt-4 text-sm flex items-center gap-2 text-slate-600 dark:text-slate-300">
+              <GraduationCap className="w-4 h-4" />
+              <span>B.S. in Computer Science &amp; Mathematics · Purdue University (Aug 2025 – May 2029)</span>
+            </div>
           </div>
           <div className="justify-self-center md:justify-self-end">
             <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-br from-slate-50 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center shadow-inner border border-slate-200 dark:border-slate-700">
@@ -275,6 +276,7 @@ export default function App() {
                 {INFO.name.split(" ").map((n) => n[0]).join("")}
               </span>
             </div>
+            <p className="mt-3 text-sm text-slate-600 dark:text-slate-300 text-center md:text-right">CS + Math</p>
           </div>
         </div>
       </section>
@@ -298,7 +300,6 @@ export default function App() {
         </Card>
       </Section>
 
-      {/* Publications / Notes */}
       <Section id="notes" title="Publications">
         <div className="grid sm:grid-cols-2 gap-6">
           <Card className={PANEL}>
@@ -322,7 +323,6 @@ export default function App() {
                   arXiv
                 </a>
               </Button>
-              {/* OpenReview button removed as requested */}
             </CardContent>
           </Card>
         </div>
@@ -374,122 +374,3 @@ export default function App() {
                   )}
                 </div>
               </CardContent>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="experience" title="Experience">
-        <div className="space-y-4">
-          {EXPERIENCE.map((e, idx) => (
-            <Card key={idx} className={PANEL}>
-              <CardHeader className="pb-3">
-                <CardTitle className={`flex items-center gap-2 text-lg ${PANEL_TEXT}`}>
-                  <Briefcase className="w-5 h-5" />
-                  <span>
-                    {e.role} · {e.org}
-                  </span>
-                </CardTitle>
-                <p className={`text-sm ${SUBTLE}`}>{e.date}</p>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <ul className={`list-disc pl-5 space-y-1 ${PANEL_TEXT}`}>
-                  {e.bullets.map((b: string, i: number) => (
-                    <li key={i}>{b}</li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="skills" title="Interests">
-        <Card className={PANEL}>
-          <CardContent className="p-6">
-            <div className="flex flex-wrap gap-2">
-              {SKILLS.map((s) => (
-                <span
-                  key={s}
-                  className="px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-sm dark:bg-slate-700 dark:text-slate-100"
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </Section>
-
-      <Section id="education" title="Education">
-        <Card className={PANEL}>
-          <CardHeader>
-            <CardTitle className={`flex items-center gap-2 text-lg ${PANEL_TEXT}`}>
-              <GraduationCap className="w-5 h-5" />
-              B.S. in Computer Science &amp; Mathematics · Purdue University (Aug
-              2025 – May 2029)
-            </CardTitle>
-          </CardHeader>
-          <CardContent className={PANEL_TEXT}>
-            <p>
-              Relevant coursework: Linear Algebra, Programming I, CS Tools,
-              Multivariable Calculus, AP CS A/Principles, AP Calculus BC, AP
-              Physics C, Neural Network Architecture, ML Theory, Deep Learning
-              Theory.
-            </p>
-          </CardContent>
-        </Card>
-      </Section>
-
-      <Section id="contact" title="Contact">
-        <Card className={PANEL}>
-          <CardContent className="p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <p className={PANEL_TEXT}>
-                Interested in collaborating or have a role that fits?
-              </p>
-              <p className={`text-sm ${MUTED}`}>
-                I'm open to internships, research, and product work.
-              </p>
-            </div>
-            <div className="flex gap-3">
-              <Button asChild className="rounded-md">
-                <a href={`mailto:${INFO.email}`}>
-                  <Mail className="w-4 h-4 mr-2" /> Email
-                </a>
-              </Button>
-              <Button asChild variant="secondary" className="rounded-md">
-                <a href={INFO.linkedin} target="_blank" rel="noreferrer">
-                  <Linkedin className="w-4 h-4 mr-2" /> LinkedIn
-                </a>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </Section>
-
-      <footer className="border-t border-slate-200 dark:border-slate-800">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-500 dark:text-slate-400 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <LinkIcon href={INFO.github} title="GitHub">
-              <Github className="w-4 h-4" />
-              <span>GitHub</span>
-            </LinkIcon>
-            <LinkIcon href={INFO.linkedin} title="LinkedIn">
-              <Linkedin className="w-4 h-4" />
-              <span>LinkedIn</span>
-            </LinkIcon>
-            <LinkIcon href={`mailto:${INFO.email}`} title="Email">
-              <Mail className="w-4 h-4" />
-              <span>Email</span>
-            </LinkIcon>
-          </div>
-          <p>
-            © {new Date().getFullYear()} {INFO.name}. This site is inspired by
-            clean academic profiles.
-          </p>
-        </div>
-      </footer>
-    </div>
-  );
-}
