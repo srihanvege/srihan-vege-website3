@@ -303,4 +303,214 @@ export default function App() {
           <Card className={PANEL}>
             <CardHeader className="pb-2">
               <CardTitle className={`text-lg ${PANEL_TEXT}`}>
-                TRUTH DECAY: Quantifying Multi-Turn Sycophancy
+                TRUTH DECAY: Quantifying Multi-Turn Sycophancy in Language Models
+              </CardTitle>
+              <p className={`text-sm ${SUBTLE}`}>
+                Liu, Jain, Takuri, <strong>Vege</strong>, Akalin, Zhu, O&apos;Brien,
+                Sharma. NAACL SRW 2025.
+              </p>
+            </CardHeader>
+            <CardContent className="pt-0 flex flex-wrap gap-3">
+              <Button asChild variant="secondary" className="rounded-md">
+                <a
+                  href="https://arxiv.org/abs/2503.11656"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  arXiv
+                </a>
+              </Button>
+              <Button asChild variant="secondary" className="rounded-md">
+                <a
+                  href="https://openreview.net/forum?id=GHUh9O5Im8"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  OpenReview
+                </a>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </Section>
+
+      <Section id="writings" title="Writings & Pieces">
+        <Card className={PANEL}>
+          <CardContent className={`p-6 text-sm space-y-3 ${PANEL_TEXT}`}>
+            <p className="italic">Some cool things I’ve been thinking about:</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Lyapunov functions &amp; stability (notes draft)</li>
+              <li>RAG UX patterns for sports analytics users</li>
+              <li>Measuring prompt-strategy robustness over multi-turn dialogues</li>
+            </ul>
+          </CardContent>
+        </Card>
+      </Section>
+
+      <Section id="projects" title="Past Projects">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {PROJECTS.map((p, idx) => (
+            <Card key={idx} className={PANEL}>
+              <CardHeader>
+                <CardTitle className={`flex items-start justify-between gap-3 ${PANEL_TEXT}`}>
+                  <span>{p.title}</span>
+                  <Badge>Project</Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className={`text-sm min-h-[48px] ${MUTED}`}>{p.description}</p>
+                <div className="flex flex-wrap gap-2">
+                  {p.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-100"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  {p.links?.code && (
+                    <Button asChild variant="secondary" className="rounded-md">
+                      <a href={p.links.code} target="_blank" rel="noreferrer">
+                        <Github className="w-4 h-4 mr-2" /> Code
+                      </a>
+                    </Button>
+                  )}
+                  {p.links?.demo && (
+                    <Button asChild className="rounded-md">
+                      <a href={p.links.demo} target="_blank" rel="noreferrer">
+                        <ExternalLink className="w-4 h-4 mr-2" /> Live
+                      </a>
+                    </Button>
+                  )}
+                  {p.links?.paper && (
+                    <Button asChild className="rounded-md">
+                      <a href={p.links.paper} target="_blank" rel="noreferrer">
+                        <FileText className="w-4 h-4 mr-2" /> Paper
+                      </a>
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="experience" title="Experience">
+        <div className="space-y-4">
+          {EXPERIENCE.map((e, idx) => (
+            <Card key={idx} className={PANEL}>
+              <CardHeader className="pb-3">
+                <CardTitle className={`flex items-center gap-2 text-lg ${PANEL_TEXT}`}>
+                  <Briefcase className="w-5 h-5" />
+                  <span>
+                    {e.role} · {e.org}
+                  </span>
+                </CardTitle>
+                <p className={`text-sm ${SUBTLE}`}>{e.date}</p>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <ul className={`list-disc pl-5 space-y-1 ${PANEL_TEXT}`}>
+                  {e.bullets.map((b: string, i: number) => (
+                    <li key={i}>{b}</li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="skills" title="Interests">
+        <Card className={PANEL}>
+          <CardContent className="p-6">
+            <div className="flex flex-wrap gap-2">
+              {SKILLS.map((s) => (
+                <span
+                  key={s}
+                  className="px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-sm dark:bg-slate-700 dark:text-slate-100"
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </Section>
+
+      <Section id="education" title="Education">
+        <Card className={PANEL}>
+          <CardHeader>
+            <CardTitle className={`flex items-center gap-2 text-lg ${PANEL_TEXT}`}>
+              <GraduationCap className="w-5 h-5" />
+              B.S. in Computer Science &amp; Mathematics · Purdue University (Aug
+              2025 – May 2029)
+            </CardTitle>
+          </CardHeader>
+          <CardContent className={PANEL_TEXT}>
+            <p>
+              Relevant coursework: Linear Algebra, Programming I, CS Tools,
+              Multivariable Calculus, AP CS A/Principles, AP Calculus BC, AP
+              Physics C, Neural Network Architecture, ML Theory, Deep Learning
+              Theory.
+            </p>
+          </CardContent>
+        </Card>
+      </Section>
+
+      <Section id="contact" title="Contact">
+        <Card className={PANEL}>
+          <CardContent className="p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <p className={PANEL_TEXT}>
+                Interested in collaborating or have a role that fits?
+              </p>
+              <p className={`text-sm ${MUTED}`}>
+                I'm open to internships, research, and product work.
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <Button asChild className="rounded-md">
+                <a href={`mailto:${INFO.email}`}>
+                  <Mail className="w-4 h-4 mr-2" /> Email
+                </a>
+              </Button>
+              <Button asChild variant="secondary" className="rounded-md">
+                <a href={INFO.linkedin} target="_blank" rel="noreferrer">
+                  <Linkedin className="w-4 h-4 mr-2" /> LinkedIn
+                </a>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </Section>
+
+      <footer className="border-t border-slate-200 dark:border-slate-800">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-500 dark:text-slate-400 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <LinkIcon href={INFO.github} title="GitHub">
+              <Github className="w-4 h-4" />
+              <span>GitHub</span>
+            </LinkIcon>
+            <LinkIcon href={INFO.linkedin} title="LinkedIn">
+              <Linkedin className="w-4 h-4" />
+              <span>LinkedIn</span>
+            </LinkIcon>
+            <LinkIcon href={`mailto:${INFO.email}`} title="Email">
+              <Mail className="w-4 h-4" />
+              <span>Email</span>
+            </LinkIcon>
+          </div>
+          <p>
+            © {new Date().getFullYear()} {INFO.name}. This site is inspired by
+            clean academic profiles.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
