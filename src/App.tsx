@@ -326,9 +326,6 @@ export default function App() {
                   href="https://openreview.net/forum?id=GHUh9O5Im8"
                   target="_blank"
                   rel="noreferrer"
-                >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  OpenReview
                 </a>
               </Button>
             </CardContent>
