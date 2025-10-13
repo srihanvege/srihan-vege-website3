@@ -298,7 +298,7 @@ export default function App() {
         </Card>
       </Section>
 
-      <Section id="notes" title="Notes & Publications">
+      <Section id="notes" title="Publications">
         <div className="grid sm:grid-cols-2 gap-6">
           <Card className={PANEL}>
             <CardHeader className="pb-2">
@@ -336,18 +336,6 @@ export default function App() {
         </div>
       </Section>
 
-      <Section id="writings" title="Writings & Pieces">
-        <Card className={PANEL}>
-          <CardContent className={`p-6 text-sm space-y-3 ${PANEL_TEXT}`}>
-            <p className="italic">Some cool things I’ve been thinking about:</p>
-            <ul className="list-disc pl-5 space-y-1">
-              <li>Lyapunov functions &amp; stability (notes draft)</li>
-              <li>RAG UX patterns for sports analytics users</li>
-              <li>Measuring prompt-strategy robustness over multi-turn dialogues</li>
-            </ul>
-          </CardContent>
-        </Card>
-      </Section>
 
       <Section id="projects" title="Past Projects">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
