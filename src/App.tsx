@@ -23,7 +23,7 @@ const INFO = {
   location: "West Lafayette, IN",
   email: "svege@purdue.edu",
   headline:
-    "Purdue CS + Math · interests in ML reliability, medical imaging, and RAG systems.",
+    "Purdue CS + Math · interests in ML reliability and high-powered computing.",
   resumeUrl: "/resume.pdf",
   github: "https://github.com/srihanvege",
   linkedin: "https://www.linkedin.com/in/srihan-vege/",
