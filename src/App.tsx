@@ -267,13 +267,13 @@ export default function App() {
             </div>
             <div className="mt-5 text-lg flex items-center gap-3 text-slate-700 dark:text-slate-300">
               <GraduationCap className="w-5 h-5" />
-              <span>B.S. in Computer Science & Mathematics · Purdue University (Aug 2025 – May 2029)</span>
+              <span>B.S. in Computer Science &amp; Mathematics · Purdue University (Aug 2025 – May 2029)</span>
             </div>
           </div>
           <div className="justify-self-center md:justify-self-end">
             <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-full bg-gradient-to-br from-slate-50 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center shadow-inner border border-slate-200 dark:border-slate-700">
               <span className="text-5xl font-bold text-slate-500 dark:text-slate-300 select-none">
-                {INFO.name.split(' ').map((n) => n[0]).join('')}
+                {INFO.name.split(" ").map((n) => n[0]).join("")}
               </span>
             </div>
             <p className="mt-4 text-lg text-slate-700 dark:text-slate-300 text-center md:text-right">CS + Math</p>
@@ -284,10 +284,7 @@ export default function App() {
       <Section id="about" title="Biography">
         <Card className={PANEL}>
           <CardContent className={`p-8 leading-relaxed ${PANEL_TEXT}`}>
-            I recently started at Purdue University (CS & Math). I enjoy building things at the intersection of ML reliability and usable products. Recent projects include a sports Q&A bot with retrieval-augmented generation and research on mitigating multi-turn sycophancy in LLMs. If any of this connects to your work, feel free to reach out at{" "}
-            <a className="text-sky-700 hover:underline dark:text-sky-400" href={`mailto:${INFO.email}`}>
-              {INFO.email}
-            </a>.
+            I recently started at Purdue University (CS & Math). I enjoy building things at the intersection of ML reliability and usable products. Recent projects include a sports Q&A bot with retrieval-augmented generation and research on mitigating multi-turn sycophancy in LLMs. If any of this connects to your work, feel free to reach out at <a className="text-sky-700 hover:underline dark:text-sky-400" href={`mailto:${INFO.email}`}>{INFO.email}</a>.
           </CardContent>
         </Card>
       </Section>
@@ -314,4 +311,143 @@ export default function App() {
         </div>
       </Section>
 
-      {/* --- Rest of sections from previous message would continue here exactly as shown --- */}
+      <Section id="projects" title="Past Projects">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {PROJECTS.map((p, idx) => (
+            <Card key={idx} className={PANEL}>
+              <CardHeader>
+                <CardTitle className={`flex items-start justify-between gap-3 ${PANEL_TEXT}`}>
+                  <span>{p.title}</span>
+                  <Badge>Project</Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-5">
+                <p className={`text-base ${MUTED}`}>{p.description}</p>
+                <div className="flex flex-wrap gap-3">
+                  {p.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="text-sm px-3 py-1 rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-100"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-4">
+                  {p.links?.code && (
+                    <Button asChild variant="secondary" className="rounded-md text-base px-5 py-2">
+                      <a href={p.links.code} target="_blank" rel="noreferrer">
+                        <Github className="w-5 h-5 mr-2" /> Code
+                      </a>
+                    </Button>
+                  )}
+                  {p.links?.demo && (
+                    <Button asChild className="rounded-md text-base px-5 py-2">
+                      <a href={p.links.demo} target="_blank" rel="noreferrer">
+                        <ExternalLink className="w-5 h-5 mr-2" /> Live
+                      </a>
+                    </Button>
+                  )}
+                  {p.links?.paper && (
+                    <Button asChild className="rounded-md text-base px-5 py-2">
+                      <a href={p.links.paper} target="_blank" rel="noreferrer">
+                        <FileText className="w-5 h-5 mr-2" /> Paper
+                      </a>
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="experience" title="Experience">
+        <div className="space-y-5">
+          {EXPERIENCE.map((e, idx) => (
+            <Card key={idx} className={PANEL}>
+              <CardHeader className="pb-4">
+                <CardTitle className={`flex items-center gap-3 text-xl ${PANEL_TEXT}`}>
+                  <Briefcase className="w-5 h-5" />
+                  <span>
+                    {e.role} · {e.org}
+                  </span>
+                </CardTitle>
+                <p className={`text-base ${SUBTLE}`}>{e.date}</p>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <ul className={`list-disc pl-6 space-y-2 ${PANEL_TEXT}`}>
+                  {e.bullets.map((b, i) => (
+                    <li key={i}>{b}</li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="skills" title="Interests">
+        <Card className={PANEL}>
+          <CardContent className="p-8">
+            <div className="flex flex-wrap gap-3">
+              {SKILLS.map((s) => (
+                <span
+                  key={s}
+                  className="px-4 py-2 rounded-full bg-slate-100 text-slate-800 text-base dark:bg-slate-700 dark:text-slate-100"
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </Section>
+
+      <Section id="contact" title="Contact">
+        <Card className={PANEL}>
+          <CardContent className="p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+            <div>
+              <p className={PANEL_TEXT}>Interested in collaborating or have a role that fits?</p>
+              <p className={`text-base ${MUTED}`}>I'm open to internships, research, and product work.</p>
+            </div>
+            <div className="flex gap-4">
+              <Button asChild className="rounded-md text-base px-5 py-2">
+                <a href={`mailto:${INFO.email}`}>
+                  <Mail className="w-5 h-5 mr-2" /> Email
+                </a>
+              </Button>
+              <Button asChild variant="secondary" className="rounded-md text-base px-5 py-2">
+                <a href={INFO.linkedin} target="_blank" rel="noreferrer">
+                  <Linkedin className="w-5 h-5 mr-2" /> LinkedIn
+                </a>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </Section>
+
+      <footer className="border-t border-slate-200 dark:border-slate-800 mt-10">
+        <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12 py-10 text-base text-slate-500 dark:text-slate-400 flex flex-wrap items-center justify-between gap-6">
+          <div className="flex items-center gap-5">
+            <LinkIcon href={INFO.github} title="GitHub">
+              <Github className="w-5 h-5" />
+              <span>GitHub</span>
+            </LinkIcon>
+            <LinkIcon href={INFO.linkedin} title="LinkedIn">
+              <Linkedin className="w-5 h-5" />
+              <span>LinkedIn</span>
+            </LinkIcon>
+            <LinkIcon href={`mailto:${INFO.email}`} title="Email">
+              <Mail className="w-5 h-5" />
+              <span>Email</span>
+            </LinkIcon>
+          </div>
+          <p>
+            © {new Date().getFullYear()} {INFO.name}. This site is inspired by clean academic profiles.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
