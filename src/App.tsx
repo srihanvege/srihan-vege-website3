@@ -11,7 +11,7 @@ const INFO = {
   location: "West Lafayette, IN",
   email: "svege@purdue.edu",
   headline:
-    "Purdue CS+Math — building RAG systems and medical imaging ML; co-author of TRUTH DECAY (NAACL SRW '25).",
+    "Purdue CS+Math",
   resumeUrl: "/resume.pdf",
   github: "https://github.com/srihanvege",
   linkedin: "https://www.linkedin.com/in/srihan-vege/",
