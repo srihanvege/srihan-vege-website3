@@ -23,7 +23,7 @@ const INFO = {
   location: "West Lafayette, IN",
   email: "svege@purdue.edu",
   headline:
-    "Purdue CS + Math · interests in ML reliability and high-powered computing.",
+    "Purdue CS + Math · interests in ML reliability, medical imaging, and RAG systems.",
   resumeUrl: "/resume.pdf",
   github: "https://github.com/srihanvege",
   linkedin: "https://www.linkedin.com/in/srihan-vege/",
@@ -41,7 +41,7 @@ const PROJECTS: Project[] = [
   {
     title: "RAG Sports Bot",
     description:
-      "Retrieval-augmented chatbot that answers NFL stat questions using a Python backend (FAISS) and a SwiftUI front end.",
+      "Retrieval-augantaged chatbot that answers NFL stat questions using a Python backend (FAISS) and a SwiftUI front end.",
     tags: ["Python", "FAISS", "RAG", "SwiftUI"],
     links: { code: "https://github.com/srihanvege" },
   },
@@ -118,9 +118,9 @@ const SKILLS = [
 
 const PANEL =
   "rounded-xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 shadow-sm";
-const PANEL_TEXT = "text-slate-800 dark:text-slate-100";
-const MUTED = "text-slate-600 dark:text-slate-300";
-const SUBTLE = "text-slate-500 dark:text-slate-400";
+const PANEL_TEXT = "text-slate-800 dark:text-slate-100 text-lg sm:text-xl";
+const MUTED = "text-slate-600 dark:text-slate-300 text-base sm:text-lg";
+const SUBTLE = "text-slate-500 dark:text-slate-400 text-base";
 
 type Mode = "light" | "dark" | "system";
 
@@ -134,30 +134,30 @@ function ThemeToggle() {
     root.classList.toggle("dark", toDark);
   }, [mode]);
 
-  const btn = "h-8 px-2 rounded-md";
+  const btn = "h-9 px-3 rounded-md text-base";
 
   return (
-    <div className="inline-flex items-center gap-2 text-sm">
+    <div className="inline-flex items-center gap-3 text-base">
       <Button
         variant="secondary"
-        className={`${btn} ${mode === "light" ? "ring-1 ring-sky-600" : ""}`}
+        className={`${btn} ${mode === "light" ? "ring-2 ring-sky-600" : ""}`}
         onClick={() => setMode("light")}
       >
-        <Sun className="w-4 h-4 mr-1" /> Light
+        <Sun className="w-5 h-5 mr-1" /> Light
       </Button>
       <Button
         variant="secondary"
-        className={`${btn} ${mode === "dark" ? "ring-1 ring-sky-600" : ""}`}
+        className={`${btn} ${mode === "dark" ? "ring-2 ring-sky-600" : ""}`}
         onClick={() => setMode("dark")}
       >
-        <Moon className="w-4 h-4 mr-1" /> Dark
+        <Moon className="w-5 h-5 mr-1" /> Dark
       </Button>
       <Button
         variant="secondary"
-        className={`${btn} ${mode === "system" ? "ring-1 ring-sky-600" : ""}`}
+        className={`${btn} ${mode === "system" ? "ring-2 ring-sky-600" : ""}`}
         onClick={() => setMode("system")}
       >
-        <Monitor className="w-4 h-4 mr-1" /> Auto
+        <Monitor className="w-5 h-5 mr-1" /> Auto
       </Button>
     </div>
   );
@@ -172,14 +172,14 @@ interface SectionProps {
 const Section: React.FC<SectionProps> = ({ id, title, children }) => (
   <section
     id={id}
-    className="scroll-mt-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14"
+    className="scroll-mt-24 max-w-6xl mx-auto px-6 sm:px-10 lg:px-12 py-20"
   >
     <motion.h2
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4 }}
-      className={`text-2xl sm:text-3xl font-semibold tracking-tight mb-6 ${PANEL_TEXT}`}
+      className={`text-3xl sm:text-4xl font-semibold tracking-tight mb-8 ${PANEL_TEXT}`}
     >
       {title}
     </motion.h2>
@@ -199,7 +199,7 @@ const LinkIcon: React.FC<LinkIconProps> = ({ href, children, title }) => (
     target="_blank"
     rel="noreferrer"
     title={title}
-    className="inline-flex items-center gap-2 text-sm text-sky-700 hover:underline dark:text-sky-400"
+    className="inline-flex items-center gap-2 text-base text-sky-700 hover:underline dark:text-sky-400"
   >
     {children}
   </a>
@@ -207,21 +207,21 @@ const LinkIcon: React.FC<LinkIconProps> = ({ href, children, title }) => (
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 text-lg">
       <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-slate-900/70 bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800">
-        <nav className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <a href="#home" className="font-semibold text-base sm:text-lg tracking-tight">
+        <nav className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12 h-20 flex items-center justify-between text-lg">
+          <a href="#home" className="font-semibold text-lg sm:text-xl tracking-tight">
             {INFO.name}
           </a>
-          <div className="hidden sm:flex items-center gap-6 text-sm">
+          <div className="hidden sm:flex items-center gap-8 text-base">
             <a href="#about" className="hover:opacity-80">Biography</a>
-            <a href="#skills" className="hover:opacity-80">Skills</a>
+            <a href="#skills" className="hover:opacity-80">Interests</a>
             <a href="#notes" className="hover:opacity-80">Notes</a>
             <a href="#projects" className="hover:opacity-80">Past Projects</a>
             <a href="#writings" className="hover:opacity-80">Writings</a>
-            <Button asChild className="rounded-md">
+            <Button asChild className="rounded-md text-base px-4 py-2">
               <a href={INFO.resumeUrl} target="_blank" rel="noreferrer">
-                <Download className="w-4 h-4 mr-2" /> Resume
+                <Download className="w-5 h-5 mr-2" /> Resume
               </a>
             </Button>
             <ThemeToggle />
@@ -231,68 +231,61 @@ export default function App() {
 
       <section
         id="home"
-        className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
+        className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12 py-20"
       >
-        <div className="grid md:grid-cols-[1fr,220px] gap-10 items-center">
+        <div className="grid md:grid-cols-[1fr,260px] gap-14 items-center">
           <div>
             <motion.h1
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="text-4xl sm:text-5xl font-extrabold tracking-tight"
+              className="text-5xl sm:text-6xl font-extrabold tracking-tight"
             >
               {INFO.name}
             </motion.h1>
-            <p className={`mt-2 text-lg ${MUTED}`}>{INFO.role}</p>
-            <p className={MUTED}>{INFO.location}</p>
-            <p className={`mt-5 max-w-2xl leading-relaxed ${PANEL_TEXT}`}>
+            <p className={`mt-3 text-2xl ${MUTED}`}>{INFO.role}</p>
+            <p className={`text-xl ${MUTED}`}>{INFO.location}</p>
+            <p className={`mt-6 max-w-3xl leading-relaxed ${PANEL_TEXT}`}>
               {INFO.headline}
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button asChild variant="secondary" className="rounded-md">
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Button asChild variant="secondary" className="rounded-md text-lg px-5 py-2">
                 <a href={INFO.github} target="_blank" rel="noreferrer">
-                  <Github className="w-4 h-4 mr-2" /> GitHub
+                  <Github className="w-5 h-5 mr-2" /> GitHub
                 </a>
               </Button>
-              <Button asChild variant="secondary" className="rounded-md">
+              <Button asChild variant="secondary" className="rounded-md text-lg px-5 py-2">
                 <a href={INFO.linkedin} target="_blank" rel="noreferrer">
-                  <Linkedin className="w-4 h-4 mr-2" /> LinkedIn
+                  <Linkedin className="w-5 h-5 mr-2" /> LinkedIn
                 </a>
               </Button>
-              <Button asChild className="rounded-md">
+              <Button asChild className="rounded-md text-lg px-5 py-2">
                 <a href={`mailto:${INFO.email}`}>
-                  <Mail className="w-4 h-4 mr-2" /> Email me
+                  <Mail className="w-5 h-5 mr-2" /> Email me
                 </a>
               </Button>
             </div>
-            <div className="mt-4 text-sm flex items-center gap-2 text-slate-600 dark:text-slate-300">
-              <GraduationCap className="w-4 h-4" />
+            <div className="mt-5 text-lg flex items-center gap-3 text-slate-700 dark:text-slate-300">
+              <GraduationCap className="w-5 h-5" />
               <span>B.S. in Computer Science &amp; Mathematics · Purdue University (Aug 2025 – May 2029)</span>
             </div>
           </div>
           <div className="justify-self-center md:justify-self-end">
-            <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-br from-slate-50 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center shadow-inner border border-slate-200 dark:border-slate-700">
-              <span className="text-4xl font-bold text-slate-500 dark:text-slate-300 select-none">
+            <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-full bg-gradient-to-br from-slate-50 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center shadow-inner border border-slate-200 dark:border-slate-700">
+              <span className="text-5xl font-bold text-slate-500 dark:text-slate-300 select-none">
                 {INFO.name.split(" ").map((n) => n[0]).join("")}
               </span>
             </div>
-            <p className="mt-3 text-sm text-slate-600 dark:text-slate-300 text-center md:text-right">CS + Math</p>
+            <p className="mt-4 text-lg text-slate-700 dark:text-slate-300 text-center md:text-right">CS + Math</p>
           </div>
         </div>
       </section>
 
       <Section id="about" title="Biography">
         <Card className={PANEL}>
-          <CardContent className={`p-6 leading-relaxed ${PANEL_TEXT}`}>
-            I recently started at Purdue University (CS & Math). I enjoy building
-            things at the intersection of ML reliability and usable products.
-            Recent projects include a sports Q&A bot with retrieval-augmented
-            generation and research on mitigating multi-turn sycophancy in LLMs.
-            If any of this connects to your work, feel free to reach out at{" "}
-            <a
-              className="text-sky-700 hover:underline dark:text-sky-400"
-              href={`mailto:${INFO.email}`}
-            >
+          <CardContent className={`p-8 leading-relaxed ${PANEL_TEXT}`}>
+            I recently started at Purdue University (CS & Math). I enjoy building things at the intersection of ML reliability and usable products. Recent projects include a sports Q&A bot with retrieval-augmented generation and research on mitigating multi-turn sycophancy in LLMs. If any of this connects to your work, feel free to reach out at{" "}
+            <a className="text-sky-700 hover:underline dark:text-sky-400" href={`mailto:${INFO.email}`}>
               {INFO.email}
             </a>
             .
@@ -301,175 +294,23 @@ export default function App() {
       </Section>
 
       <Section id="notes" title="Publications">
-        <div className="grid sm:grid-cols-2 gap-6">
+        <div className="grid sm:grid-cols-2 gap-8">
           <Card className={PANEL}>
-            <CardHeader className="pb-2">
-              <CardTitle className={`text-lg ${PANEL_TEXT}`}>
+            <CardHeader className="pb-3">
+              <CardTitle className={`text-xl sm:text-2xl ${PANEL_TEXT}`}>
                 TRUTH DECAY: Quantifying Multi-Turn Sycophancy in Language Models
               </CardTitle>
-              <p className={`text-sm ${SUBTLE}`}>
-                Liu, Jain, Takuri, <strong>Vege</strong>, Akalin, Zhu, O&apos;Brien,
-                Sharma. NAACL SRW 2025.
+              <p className={`text-base ${SUBTLE}`}>
+                Liu, Jain, Takuri, <strong>Vege</strong>, Akalin, Zhu, O&apos;Brien, Sharma. NAACL SRW 2025.
               </p>
             </CardHeader>
-            <CardContent className="pt-0 flex flex-wrap gap-3">
-              <Button asChild variant="secondary" className="rounded-md">
-                <a
-                  href="https://arxiv.org/abs/2503.11656"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  arXiv
+            <CardContent className="pt-0 flex flex-wrap gap-4">
+              <Button asChild variant="secondary" className="rounded-md text-lg px-5 py-2">
+                <a href="https://arxiv.org/abs/2503.11656" target="_blank" rel="noreferrer">
+                  <ExternalLink className="w-5 h-5 mr-2" /> arXiv
                 </a>
               </Button>
             </CardContent>
           </Card>
         </div>
       </Section>
-
-      <Section id="projects" title="Past Projects">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PROJECTS.map((p, idx) => (
-            <Card key={idx} className={PANEL}>
-              <CardHeader>
-                <CardTitle className={`flex items-start justify-between gap-3 ${PANEL_TEXT}`}>
-                  <span>{p.title}</span>
-                  <Badge>Project</Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className={`text-sm min-h-[48px] ${MUTED}`}>{p.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {p.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-100"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  {p.links?.code && (
-                    <Button asChild variant="secondary" className="rounded-md">
-                      <a href={p.links.code} target="_blank" rel="noreferrer">
-                        <Github className="w-4 h-4 mr-2" /> Code
-                      </a>
-                    </Button>
-                  )}
-                  {p.links?.demo && (
-                    <Button asChild className="rounded-md">
-                      <a href={p.links.demo} target="_blank" rel="noreferrer">
-                        <ExternalLink className="w-4 h-4 mr-2" /> Live
-                      </a>
-                    </Button>
-                  )}
-                  {p.links?.paper && (
-                    <Button asChild className="rounded-md">
-                      <a href={p.links.paper} target="_blank" rel="noreferrer">
-                        <FileText className="w-4 h-4 mr-2" /> Paper
-                      </a>
-                    </Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="experience" title="Experience">
-        <div className="space-y-4">
-          {EXPERIENCE.map((e, idx) => (
-            <Card key={idx} className={PANEL}>
-              <CardHeader className="pb-3">
-                <CardTitle className={`flex items-center gap-2 text-lg ${PANEL_TEXT}`}>
-                  <Briefcase className="w-5 h-5" />
-                  <span>
-                    {e.role} · {e.org}
-                  </span>
-                </CardTitle>
-                <p className={`text-sm ${SUBTLE}`}>{e.date}</p>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <ul className={`list-disc pl-5 space-y-1 ${PANEL_TEXT}`}>
-                  {e.bullets.map((b: string, i: number) => (
-                    <li key={i}>{b}</li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="skills" title="Skills">
-        <Card className={PANEL}>
-          <CardContent className="p-6">
-            <div className="flex flex-wrap gap-2">
-              {SKILLS.map((s) => (
-                <span
-                  key={s}
-                  className="px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-sm dark:bg-slate-700 dark:text-slate-100"
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </Section>
-
-      <Section id="contact" title="Contact">
-        <Card className={PANEL}>
-          <CardContent className="p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <p className={PANEL_TEXT}>
-                Interested in collaborating or have a role that fits?
-              </p>
-              <p className={`text-sm ${MUTED}`}>
-                I'm open to internships, research, and product work.
-              </p>
-            </div>
-            <div className="flex gap-3">
-              <Button asChild className="rounded-md">
-                <a href={`mailto:${INFO.email}`}>
-                  <Mail className="w-4 h-4 mr-2" /> Email
-                </a>
-              </Button>
-              <Button asChild variant="secondary" className="rounded-md">
-                <a href={INFO.linkedin} target="_blank" rel="noreferrer">
-                  <Linkedin className="w-4 h-4 mr-2" /> LinkedIn
-                </a>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </Section>
-
-      <footer className="border-t border-slate-200 dark:border-slate-800">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-500 dark:text-slate-400 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <LinkIcon href={INFO.github} title="GitHub">
-              <Github className="w-4 h-4" />
-              <span>GitHub</span>
-            </LinkIcon>
-            <LinkIcon href={INFO.linkedin} title="LinkedIn">
-              <Linkedin className="w-4 h-4" />
-              <span>LinkedIn</span>
-            </LinkIcon>
-            <LinkIcon href={`mailto:${INFO.email}`} title="Email">
-              <Mail className="w-4 h-4" />
-              <span>Email</span>
-            </LinkIcon>
-          </div>
-          <p>
-            © {new Date().getFullYear()} {INFO.name}. This site is inspired by
-            clean academic profiles.
-          </p>
-        </div>
-      </footer>
-    </div>
-  );
-}
