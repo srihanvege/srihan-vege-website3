@@ -116,6 +116,14 @@ const SKILLS = [
   "FAISS",
 ];
 
+// ---------- Shared UI tokens for consistent contrast ----------
+const PANEL =
+  "rounded-xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 shadow-sm";
+const PANEL_TEXT = "text-slate-800 dark:text-slate-100";
+const MUTED = "text-slate-600 dark:text-slate-300";
+const SUBTLE = "text-slate-500 dark:text-slate-400";
+// -------------------------------------------------------------
+
 type Mode = "light" | "dark" | "system";
 
 function ThemeToggle() {
@@ -128,27 +136,27 @@ function ThemeToggle() {
     root.classList.toggle("dark", toDark);
   }, [mode]);
 
-  const common = "h-8 px-2 rounded-md";
+  const btn = "h-8 px-2 rounded-md";
 
   return (
     <div className="inline-flex items-center gap-2 text-sm">
       <Button
         variant="secondary"
-        className={`${common} ${mode === "light" ? "ring-1 ring-sky-600" : ""}`}
+        className={`${btn} ${mode === "light" ? "ring-1 ring-sky-600" : ""}`}
         onClick={() => setMode("light")}
       >
         <Sun className="w-4 h-4 mr-1" /> Light
       </Button>
       <Button
         variant="secondary"
-        className={`${common} ${mode === "dark" ? "ring-1 ring-sky-600" : ""}`}
+        className={`${btn} ${mode === "dark" ? "ring-1 ring-sky-600" : ""}`}
         onClick={() => setMode("dark")}
       >
         <Moon className="w-4 h-4 mr-1" /> Dark
       </Button>
       <Button
         variant="secondary"
-        className={`${common} ${mode === "system" ? "ring-1 ring-sky-600" : ""}`}
+        className={`${btn} ${mode === "system" ? "ring-1 ring-sky-600" : ""}`}
         onClick={() => setMode("system")}
       >
         <Monitor className="w-4 h-4 mr-1" /> Auto
@@ -173,7 +181,7 @@ const Section: React.FC<SectionProps> = ({ id, title, children }) => (
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4 }}
-      className="text-2xl sm:text-3xl font-semibold tracking-tight mb-6 text-slate-900 dark:text-white"
+      className={`text-2xl sm:text-3xl font-semibold tracking-tight mb-6 ${PANEL_TEXT}`}
     >
       {title}
     </motion.h2>
@@ -208,24 +216,12 @@ export default function App() {
             {INFO.name}
           </a>
           <div className="hidden sm:flex items-center gap-6 text-sm">
-            <a href="#about" className="hover:opacity-80">
-              Biography
-            </a>
-            <a href="#skills" className="hover:opacity-80">
-              Interests
-            </a>
-            <a href="#notes" className="hover:opacity-80">
-              Notes
-            </a>
-            <a href="#projects" className="hover:opacity-80">
-              Past Projects
-            </a>
-            <a href="#writings" className="hover:opacity-80">
-              Writings
-            </a>
-            <a href="#education" className="hover:opacity-80">
-              Education
-            </a>
+            <a href="#about" className="hover:opacity-80">Biography</a>
+            <a href="#skills" className="hover:opacity-80">Interests</a>
+            <a href="#notes" className="hover:opacity-80">Notes</a>
+            <a href="#projects" className="hover:opacity-80">Past Projects</a>
+            <a href="#writings" className="hover:opacity-80">Writings</a>
+            <a href="#education" className="hover:opacity-80">Education</a>
             <Button asChild className="rounded-md">
               <a href={INFO.resumeUrl} target="_blank" rel="noreferrer">
                 <Download className="w-4 h-4 mr-2" /> Resume
@@ -250,11 +246,9 @@ export default function App() {
             >
               {INFO.name}
             </motion.h1>
-            <p className="mt-2 text-lg text-slate-600 dark:text-slate-300">
-              {INFO.role}
-            </p>
-            <p className="text-slate-600 dark:text-slate-300">{INFO.location}</p>
-            <p className="mt-5 max-w-2xl text-slate-700 dark:text-slate-200 leading-relaxed">
+            <p className={`mt-2 text-lg ${MUTED}`}>{INFO.role}</p>
+            <p className={MUTED}>{INFO.location}</p>
+            <p className={`mt-5 max-w-2xl leading-relaxed ${PANEL_TEXT}`}>
               {INFO.headline}
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
@@ -278,10 +272,7 @@ export default function App() {
           <div className="justify-self-center md:justify-self-end">
             <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-gradient-to-br from-slate-50 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center shadow-inner border border-slate-200 dark:border-slate-700">
               <span className="text-4xl font-bold text-slate-500 dark:text-slate-300 select-none">
-                {INFO.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")}
+                {INFO.name.split(" ").map((n) => n[0]).join("")}
               </span>
             </div>
           </div>
@@ -289,8 +280,8 @@ export default function App() {
       </section>
 
       <Section id="about" title="Biography">
-        <Card className="rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/70">
-        <CardContent className="p-6 text-slate-700 dark:text-slate-100 leading-relaxed">
+        <Card className={PANEL}>
+          <CardContent className={`p-6 leading-relaxed ${PANEL_TEXT}`}>
             I recently started at Purdue University (CS & Math). I enjoy building
             things at the intersection of ML reliability and usable products.
             Recent projects include a sports Q&A bot with retrieval-augmented
@@ -309,228 +300,7 @@ export default function App() {
 
       <Section id="notes" title="Notes & Publications">
         <div className="grid sm:grid-cols-2 gap-6">
-          <Card className="rounded-xl hover:shadow-sm transition-shadow border-slate-200 dark:border-slate-800">
+          <Card className={PANEL}>
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">
-                TRUTH DECAY: Quantifying Multi-Turn Sycophancy in Language
-                Models
-              </CardTitle>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Liu, Jain, Takuri, <strong>Vege</strong>, Akalin, Zhu, O&apos;Brien,
-                Sharma. NAACL SRW 2025.
-              </p>
-            </CardHeader>
-            <CardContent className="pt-0 flex flex-wrap gap-3">
-              <Button asChild variant="secondary" className="rounded-md">
-                <a
-                  href="https://arxiv.org/abs/2503.11656"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  arXiv
-                </a>
-              </Button>
-              <Button asChild variant="secondary" className="rounded-md">
-                <a
-                  href="https://openreview.net/forum?id=GHUh9O5Im8"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  OpenReview
-                </a>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </Section>
-
-      <Section id="writings" title="Writings & Pieces">
-        <Card className="rounded-xl border-slate-200 dark:border-slate-800">
-          <CardContent className="p-6 text-sm text-slate-700 dark:text-slate-200 space-y-3">
-            <p className="italic">Some cool things I’ve been thinking about:</p>
-            <ul className="list-disc pl-5 space-y-1">
-              <li>Lyapunov functions &amp; stability (notes draft)</li>
-              <li>RAG UX patterns for sports analytics users</li>
-              <li>Measuring prompt-strategy robustness over multi-turn dialogues</li>
-            </ul>
-          </CardContent>
-        </Card>
-      </Section>
-
-      <Section id="projects" title="Past Projects">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PROJECTS.map((p, idx) => (
-            <Card
-              key={idx}
-              className="rounded-xl hover:shadow-sm transition-shadow border-slate-200 dark:border-slate-800"
-            >
-              <CardHeader>
-                <CardTitle className="flex items-start justify-between gap-3">
-                  <span>{p.title}</span>
-                  <Badge>Project</Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-slate-600 dark:text-slate-300 min-h-[48px]">
-                  {p.description}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {p.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-100"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  {p.links?.code && (
-                    <Button asChild variant="secondary" className="rounded-md">
-                      <a href={p.links.code} target="_blank" rel="noreferrer">
-                        <Github className="w-4 h-4 mr-2" /> Code
-                      </a>
-                    </Button>
-                  )}
-                  {p.links?.demo && (
-                    <Button asChild className="rounded-md">
-                      <a href={p.links.demo} target="_blank" rel="noreferrer">
-                        <ExternalLink className="w-4 h-4 mr-2" /> Live
-                      </a>
-                    </Button>
-                  )}
-                  {p.links?.paper && (
-                    <Button asChild className="rounded-md">
-                      <a href={p.links.paper} target="_blank" rel="noreferrer">
-                        <FileText className="w-4 h-4 mr-2" /> Paper
-                      </a>
-                    </Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="experience" title="Experience">
-        <div className="space-y-4">
-          {EXPERIENCE.map((e, idx) => (
-            <Card
-              key={idx}
-              className="rounded-xl border-slate-200 dark:border-slate-800"
-            >
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Briefcase className="w-5 h-5" />
-                  <span>
-                    {e.role} · {e.org}
-                  </span>
-                </CardTitle>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
-                  {e.date}
-                </p>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <ul className="list-disc pl-5 space-y-1 text-slate-700 dark:text-slate-200">
-                  {e.bullets.map((b: string, i: number) => (
-                    <li key={i}>{b}</li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="skills" title="Interests">
-        <Card className="rounded-xl border-slate-200 dark:border-slate-800">
-          <CardContent className="p-6">
-            <div className="flex flex-wrap gap-2">
-              {SKILLS.map((s) => (
-                <span
-                  key={s}
-                  className="px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-sm dark:bg-slate-800 dark:text-slate-100"
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </Section>
-
-      <Section id="education" title="Education">
-        <Card className="rounded-xl border-slate-200 dark:border-slate-800">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <GraduationCap className="w-5 h-5" />
-              B.S. in Computer Science &amp; Mathematics · Purdue University (Aug
-              2025 – May 2029)
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-slate-700 dark:text-slate-200">
-            <p>
-              Relevant coursework: Linear Algebra, Programming I, CS Tools,
-              Multivariable Calculus, AP CS A/Principles, AP Calculus BC, AP
-              Physics C, Neural Network Architecture, ML Theory, Deep Learning
-              Theory.
-            </p>
-          </CardContent>
-        </Card>
-      </Section>
-
-      <Section id="contact" title="Contact">
-        <Card className="rounded-xl border-slate-200 dark:border-slate-800">
-          <CardContent className="p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <p className="text-slate-700 dark:text-slate-200">
-                Interested in collaborating or have a role that fits?
-              </p>
-              <p className="text-slate-500 dark:text-slate-400 text-sm">
-                I'm open to internships, research, and product work.
-              </p>
-            </div>
-            <div className="flex gap-3">
-              <Button asChild className="rounded-md">
-                <a href={`mailto:${INFO.email}`}>
-                  <Mail className="w-4 h-4 mr-2" /> Email
-                </a>
-              </Button>
-              <Button asChild variant="secondary" className="rounded-md">
-                <a href={INFO.linkedin} target="_blank" rel="noreferrer">
-                  <Linkedin className="w-4 h-4 mr-2" /> LinkedIn
-                </a>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </Section>
-
-      <footer className="border-t border-slate-200 dark:border-slate-800">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-sm text-slate-500 dark:text-slate-400 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <LinkIcon href={INFO.github} title="GitHub">
-              <Github className="w-4 h-4" />
-              <span>GitHub</span>
-            </LinkIcon>
-            <LinkIcon href={INFO.linkedin} title="LinkedIn">
-              <Linkedin className="w-4 h-4" />
-              <span>LinkedIn</span>
-            </LinkIcon>
-            <LinkIcon href={`mailto:${INFO.email}`} title="Email">
-              <Mail className="w-4 h-4" />
-              <span>Email</span>
-            </LinkIcon>
-          </div>
-          <p>
-            © {new Date().getFullYear()} {INFO.name}. This site is inspired by
-            clean academic profiles.
-          </p>
-        </div>
-      </footer>
-    </div>
-  );
-}
+              <CardTitle className={`text-lg ${PANEL_TEXT}`}>
+                TRUTH DECAY: Quantifying Multi-Turn Sycophancy
