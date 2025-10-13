@@ -22,7 +22,7 @@ const INFO = {
   location: "West Lafayette, IN",
   email: "svege@purdue.edu",
   headline:
-    "Purdue CS + Math · interests in ML reliability, medical imaging, and RAG systems.",
+    "Purdue CS + Math · interests in ML reliability and high-powered computing.",
   resumeUrl: "/resume.pdf",
   github: "https://github.com/srihanvege",
   linkedin: "https://www.linkedin.com/in/srihan-vege/",
@@ -42,7 +42,7 @@ const PROJECTS: Project[] = [
     description:
       "Retrieval-augmented chatbot that answers NFL stat questions using a Python backend (FAISS) and a SwiftUI front end.",
     tags: ["Python", "FAISS", "RAG", "SwiftUI"],
-    links: { code: "https://github.com/srihanvege" },
+    links: { code: "https://github.com/srihanvege/RAG-Bot" },
   },
   {
     title: "ContrastIQ",
