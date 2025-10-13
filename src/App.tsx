@@ -5,16 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import { Button } from "./components/ui/button";
 import { Badge } from "./components/ui/badge";
 
-const INFO = {
-  name: "Srihan Vege",
-  role: "Computer Science & Mathematics Student",
-  location: "West Lafayette, IN",
-  email: "svege@purdue.edu",
-  headline:
-    "Purdue CS+Math",
-  resumeUrl: "/resume.pdf",
-  github: "https://github.com/srihanvege",
-  linkedin: "https://www.linkedin.com/in/srihan-vege/",
+const INFO = 
+{
+name: "Srihan Vege",
+role: "Computer Science & Mathematics Student",
+location: "West Lafayette, IN",
+email: "svege@purdue.edu",
+headline: "Purdue CS + Math · interests in ML reliability, medical imaging, and RAG systems.",
+resumeUrl: "/resume.pdf",
+github: "https://github.com/srihanvege",
+linkedin: "https://www.linkedin.com/in/srihan-vege/",
 };
 
 const PROJECTS = [
