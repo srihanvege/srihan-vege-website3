@@ -276,7 +276,6 @@ export default function App() {
                 {INFO.name.split(" ").map((n) => n[0]).join("")}
               </span>
             </div>
-            <p className="mt-4 text-lg text-slate-700 dark:text-slate-300 text-center md:text-right">CS + Math</p>
           </div>
         </div>
       </section>
@@ -362,92 +361,4 @@ export default function App() {
         </div>
       </Section>
 
-      <Section id="experience" title="Experience">
-        <div className="space-y-5">
-          {EXPERIENCE.map((e, idx) => (
-            <Card key={idx} className={PANEL}>
-              <CardHeader className="pb-4">
-                <CardTitle className={`flex items-center gap-3 text-xl ${PANEL_TEXT}`}>
-                  <Briefcase className="w-5 h-5" />
-                  <span>
-                    {e.role} · {e.org}
-                  </span>
-                </CardTitle>
-                <p className={`text-base ${SUBTLE}`}>{e.date}</p>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <ul className={`list-disc pl-6 space-y-2 ${PANEL_TEXT}`}>
-                  {e.bullets.map((b, i) => (
-                    <li key={i}>{b}</li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="skills" title="Interests">
-        <Card className={PANEL}>
-          <CardContent className="p-8">
-            <div className="flex flex-wrap gap-3">
-              {SKILLS.map((s) => (
-                <span
-                  key={s}
-                  className="px-4 py-2 rounded-full bg-slate-100 text-slate-800 text-base dark:bg-slate-700 dark:text-slate-100"
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </Section>
-
-      <Section id="contact" title="Contact">
-        <Card className={PANEL}>
-          <CardContent className="p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-            <div>
-              <p className={PANEL_TEXT}>Interested in collaborating or have a role that fits?</p>
-              <p className={`text-base ${MUTED}`}>I'm open to internships, research, and product work.</p>
-            </div>
-            <div className="flex gap-4">
-              <Button asChild className="rounded-md text-base px-5 py-2">
-                <a href={`mailto:${INFO.email}`}>
-                  <Mail className="w-5 h-5 mr-2" /> Email
-                </a>
-              </Button>
-              <Button asChild variant="secondary" className="rounded-md text-base px-5 py-2">
-                <a href={INFO.linkedin} target="_blank" rel="noreferrer">
-                  <Linkedin className="w-5 h-5 mr-2" /> LinkedIn
-                </a>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </Section>
-
-      <footer className="border-t border-slate-200 dark:border-slate-800 mt-10">
-        <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-12 py-10 text-base text-slate-500 dark:text-slate-400 flex flex-wrap items-center justify-between gap-6">
-          <div className="flex items-center gap-5">
-            <LinkIcon href={INFO.github} title="GitHub">
-              <Github className="w-5 h-5" />
-              <span>GitHub</span>
-            </LinkIcon>
-            <LinkIcon href={INFO.linkedin} title="LinkedIn">
-              <Linkedin className="w-5 h-5" />
-              <span>LinkedIn</span>
-            </LinkIcon>
-            <LinkIcon href={`mailto:${INFO.email}`} title="Email">
-              <Mail className="w-5 h-5" />
-              <span>Email</span>
-            </LinkIcon>
-          </div>
-          <p>
-            © {new Date().getFullYear()} {INFO.name}. This site is inspired by clean academic profiles.
-          </p>
-        </div>
-      </footer>
-    </div>
-  );
-}
+     
