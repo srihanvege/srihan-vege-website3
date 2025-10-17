@@ -267,7 +267,7 @@ export default function App() {
                 </Button>
                 <Button asChild className="rounded-md text-lg px-4 py-2">
                   <a href={INFO.resumeUrl} target="_blank" rel="noreferrer">
-                  <Download className="w-5 h-5 mr-2" /> View Resume
+                  <Download className="w-5 h-5 mr-2" /> Resume
                     </a>
                 </Button>
               </div>
