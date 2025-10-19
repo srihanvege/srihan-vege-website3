@@ -408,8 +408,8 @@ export default function App() {
           <Card className={PANEL}>
             <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
-                <p className={PANEL_TEXT}>Interested in collaborating or have a role that fits?</p>
-                <p className={`text-base ${MUTED}`}>I'm open to internships, research, and product work.</p>
+                <p className={PANEL_TEXT}>Interested in collaborating?</p>
+                <p className={`text-base ${MUTED}`}>Feel free to reach out.</p>
               </div>
               <div className="flex gap-3">
                 <Button asChild className="rounded-md text-base px-4 py-2">
