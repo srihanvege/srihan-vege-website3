@@ -22,7 +22,7 @@ const INFO = {
   location: "West Lafayette, IN",
   email: "svege@purdue.edu",
   headline:
-    "Purdue CS + Math · interests in ML reliability and high-powered computing.",
+    "Purdue CS + Math · Interests in ML reliability and high-powered computing.",
   resumeUrl: "/resume.pdf",
   github: "https://github.com/srihanvege",
   linkedin: "https://www.linkedin.com/in/srihan-vege/",
@@ -221,7 +221,6 @@ export default function App() {
           <div className="hidden sm:flex items-center gap-6 text-base">
             <a href="#about" className="hover:opacity-80">Biography</a>
             <a href="#skills" className="hover:opacity-80">Skills</a>
-            <a href="#notes" className="hover:opacity-80">Notes</a>
             <a href="#projects" className="hover:opacity-80">Past Projects</a>
             <a href="#experience" className="hover:opacity-80">Experience</a>
             <Button asChild className="rounded-md text-base px-3 py-1.5">
@@ -274,7 +273,7 @@ export default function App() {
               <div className="mt-3 text-lg flex items-center gap-2 text-slate-700 dark:text-slate-300">
                 <GraduationCap className="w-5 h-5" />
                 <span>
-                  B.S. in Computer Science &amp; Mathematics · Purdue University (Aug 2025 – May 2029)
+                  B.S. in Computer Science &amp; Mathematics · Purdue University (Aug 2025 – May 2028)
                 </span>
               </div>
             </div>
