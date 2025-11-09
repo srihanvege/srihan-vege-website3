@@ -23,7 +23,7 @@ const INFO = {
   email: "svege@purdue.edu",
   headline:
     "Purdue CS + Math · Interests in ML reliability and high-powered computing.",
-  resumeUrl: "/resume.pdf",
+  resumeUrl: "/srihan_vege_resume.pdf",
   github: "https://github.com/srihanvege",
   linkedin: "https://www.linkedin.com/in/srihan-vege/",
 };
