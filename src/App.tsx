@@ -130,7 +130,6 @@ const SUBTLE = "text-slate-500 dark:text-slate-400 text-base";
 
 type Mode = "light" | "dark" | "system";
 
-// ✅ UPDATED THEME TOGGLE WITH PERSISTENCE + AUTO DETECTION
 function ThemeToggle() {
   const [mode, setMode] = React.useState<Mode>(() => {
     const saved =
@@ -140,32 +139,11 @@ function ThemeToggle() {
     return saved ?? "system";
   });
 
-  const applyThemeClass = React.useCallback((m: Mode) => {
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const toDark = m === "dark" || (m === "system" && prefersDark);
-    document.documentElement.classList.toggle("dark", toDark);
-  }, []);
-
   React.useEffect(() => {
     if (typeof window === "undefined") return;
-    applyThemeClass(mode);
+    if (mode === "light") document.documentElement.classList.remove("dark");
     localStorage.setItem("theme", mode);
-  }, [mode, applyThemeClass]);
-
-  React.useEffect(() => {
-    if (typeof window === "undefined") return;
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = () => {
-      const saved = (localStorage.getItem("theme") as Mode | null) ?? "system";
-      if (saved === "system") applyThemeClass("system");
-    };
-    media.addEventListener?.("change", handler);
-    media.addListener?.(handler); // Safari fallback
-    return () => {
-      media.removeEventListener?.("change", handler);
-      media.removeListener?.(handler);
-    };
-  }, [applyThemeClass]);
+  }, [mode]);
 
   const btn = "h-8 px-3 rounded-md text-base";
 
@@ -247,18 +225,10 @@ export default function App() {
             {INFO.name}
           </a>
           <div className="hidden sm:flex items-center gap-6 text-base">
-            <a href="#about" className="hover:opacity-80">
-              Biography
-            </a>
-            <a href="#skills" className="hover:opacity-80">
-              Skills
-            </a>
-            <a href="#projects" className="hover:opacity-80">
-              Past Projects
-            </a>
-            <a href="#experience" className="hover:opacity-80">
-              Experience
-            </a>
+            <a href="#about" className="hover:opacity-80">Biography</a>
+            <a href="#skills" className="hover:opacity-80">Skills</a>
+            <a href="#projects" className="hover:opacity-80">Past Projects</a>
+            <a href="#experience" className="hover:opacity-80">Experience</a>
             <Button asChild className="rounded-md text-base px-3 py-1.5">
               <a href={INFO.resumeUrl} target="_blank" rel="noreferrer">
                 <Download className="w-5 h-5 mr-2" /> Resume
@@ -270,11 +240,7 @@ export default function App() {
       </header>
 
       <main>
-        {}
-        <section
-          id="home"
-          className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-8"
-        >
+        <section id="home" className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-8">
           <div className="grid md:grid-cols-[1fr,220px] gap-6 items-center">
             <div>
               <motion.h1
@@ -291,20 +257,12 @@ export default function App() {
                 {INFO.headline}
               </p>
               <div className="mt-3 flex flex-wrap gap-3">
-                <Button
-                  asChild
-                  variant="secondary"
-                  className="rounded-md text-lg px-4 py-2"
-                >
+                <Button asChild variant="secondary" className="rounded-md text-lg px-4 py-2">
                   <a href={INFO.github} target="_blank" rel="noreferrer">
                     <Github className="w-5 h-5 mr-2" /> GitHub
                   </a>
                 </Button>
-                <Button
-                  asChild
-                  variant="secondary"
-                  className="rounded-md text-lg px-4 py-2"
-                >
+                <Button asChild variant="secondary" className="rounded-md text-lg px-4 py-2">
                   <a href={INFO.linkedin} target="_blank" rel="noreferrer">
                     <Linkedin className="w-5 h-5 mr-2" /> LinkedIn
                   </a>
@@ -318,8 +276,7 @@ export default function App() {
               <div className="mt-3 text-lg flex items-center gap-2 text-slate-700 dark:text-slate-300">
                 <GraduationCap className="w-5 h-5" />
                 <span>
-                  B.S. in Computer Science &amp; Mathematics · Purdue University
-                  (Aug 2025 – May 2028)
+                  B.S. in Computer Science & Mathematics · Purdue University (Aug 2025 – May 2028)
                 </span>
               </div>
             </div>
@@ -335,39 +292,24 @@ export default function App() {
           </div>
         </section>
 
-        {}
         <Section id="about" title="Biography">
           <Card className={PANEL}>
             <CardContent className={`p-4 leading-relaxed ${PANEL_TEXT}`}>
-              I recently started at Purdue University (CS & Math). I enjoy
-              building things at the intersection of ML reliability and usable
-              products. Recent projects include a sports Q&A bot with
-              retrieval-augmented generation and research on mitigating
-              multi-turn sycophancy in LLMs. If any of this connects to your
-              work, feel free to reach out at{" "}
-              <a
-                className="text-sky-700 hover:underline dark:text-sky-400"
-                href={`mailto:${INFO.email}`}
-              >
-                {INFO.email}
-              </a>
-              .
+              I recently started at Purdue University (CS & Math). I enjoy building things at the intersection of ML reliability and usable products. Recent projects include a sports Q&A bot with retrieval-augmented generation and research on mitigating multi-turn sycophancy in LLMs. If any of this connects to your work, feel free to reach out at{" "}
+              <a className="text-sky-700 hover:underline dark:text-sky-400" href={`mailto:${INFO.email}`}>{INFO.email}</a>.
             </CardContent>
           </Card>
         </Section>
 
-        {}
         <Section id="notes" title="Publications">
           <div className="grid sm:grid-cols-2 gap-3">
             <Card className={PANEL}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-xl sm:text-2xl ${PANEL_TEXT}`}>
-                  TRUTH DECAY: Quantifying Multi-Turn Sycophancy in Language
-                  Models
+                  TRUTH DECAY: Quantifying Multi-Turn Sycophancy in Language Models
                 </CardTitle>
                 <p className={`text-base ${SUBTLE}`}>
-                  Liu, Jain, Takuri, <strong>Vege</strong>, Akalin, Zhu,
-                  O&apos;Brien, Sharma. NAACL SRW 2025.
+                  Liu, Jain, Takuri, <strong>Vege</strong>, Akalin, Zhu, O&apos;Brien, Sharma. NAACL SRW 2025.
                 </p>
               </CardHeader>
               <CardContent className="pt-1">
@@ -384,22 +326,14 @@ export default function App() {
           </div>
         </Section>
 
-        {}
         <Section id="projects" title="Past Projects">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {PROJECTS.map((p, idx) => (
               <Card key={idx} className={PANEL}>
                 <CardHeader className="pb-2">
-                  <CardTitle
-                    className={`flex items-start justify-between gap-2 ${PANEL_TEXT}`}
-                  >
+                  <CardTitle className={`flex items-start justify-between gap-2 ${PANEL_TEXT}`}>
                     <a
-                      href={
-                        p.links?.demo ||
-                        p.links?.code ||
-                        p.links?.paper ||
-                        "#"
-                      }
+                      href={p.links?.demo || p.links?.code || p.links?.paper || "#"}
                       target="_blank"
                       rel="noreferrer"
                       className="hover:underline text-sky-700 dark:text-sky-400"
@@ -427,15 +361,12 @@ export default function App() {
           </div>
         </Section>
 
-        {}
         <Section id="experience" title="Experience">
           <div className="space-y-2">
             {EXPERIENCE.map((e, idx) => (
               <Card key={idx} className={PANEL}>
                 <CardHeader className="pb-2">
-                  <CardTitle
-                    className={`flex items-center gap-2 text-xl ${PANEL_TEXT}`}
-                  >
+                  <CardTitle className={`flex items-center gap-2 text-xl ${PANEL_TEXT}`}>
                     <Briefcase className="w-5 h-5" />
                     <span>
                       {e.role} · {e.org}
@@ -455,7 +386,6 @@ export default function App() {
           </div>
         </Section>
 
-        {}
         <Section id="skills" title="Skills">
           <Card className={PANEL}>
             <CardContent className="p-4">
@@ -473,15 +403,12 @@ export default function App() {
           </Card>
         </Section>
 
-        {}
         <Section id="contact" title="Contact">
           <Card className={PANEL}>
             <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
                 <p className={PANEL_TEXT}>Interested in collaborating?</p>
-                <p className={`text-base ${MUTED}`}>
-                  Feel free to reach out.
-                </p>
+                <p className={`text-base ${MUTED}`}>Feel free to reach out.</p>
               </div>
               <div className="flex gap-3">
                 <Button asChild className="rounded-md text-base px-4 py-2">
@@ -489,11 +416,7 @@ export default function App() {
                     <Mail className="w-5 h-5 mr-2" /> Email
                   </a>
                 </Button>
-                <Button
-                  asChild
-                  variant="secondary"
-                  className="rounded-md text-base px-4 py-2"
-                >
+                <Button asChild variant="secondary" className="rounded-md text-base px-4 py-2">
                   <a href={INFO.linkedin} target="_blank" rel="noreferrer">
                     <Linkedin className="w-5 h-5 mr-2" /> LinkedIn
                   </a>
@@ -504,7 +427,6 @@ export default function App() {
         </Section>
       </main>
 
-      {}
       <footer className="border-t border-slate-200 dark:border-slate-800 mt-6">
         <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-6 text-base text-slate-500 dark:text-slate-400 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
@@ -521,10 +443,7 @@ export default function App() {
               <span>Email</span>
             </LinkIcon>
           </div>
-          <p>
-            © {new Date().getFullYear()} {INFO.name}. This site is inspired by
-            clean academic profiles.
-          </p>
+          <p>© {new Date().getFullYear()} {INFO.name}. This site is inspired by clean academic profiles.</p>
         </div>
       </footer>
     </div>
