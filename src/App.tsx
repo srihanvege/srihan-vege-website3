@@ -162,7 +162,7 @@ function ThemeToggle({
   );
 }
 
-const PANEL = "rounded-xl border bg-white/95 border-slate-200 shadow-sm";
+const PANEL_BASE = "rounded-xl border shadow-sm";
 const PANEL_TEXT = "text-lg sm:text-xl";
 const MUTED = "text-base sm:text-lg opacity-80";
 const SUBTLE = "text-base opacity-75";
@@ -236,9 +236,11 @@ export default function App() {
     ? "sticky top-0 z-50 backdrop-blur bg-slate-900/80 border-b border-slate-800"
     : "sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-200";
 
-  const footerTextClass = isDark
-    ? "text-slate-400"
-    : "text-slate-500";
+  const footerTextClass = isDark ? "text-slate-400" : "text-slate-500";
+
+  const panelClass = isDark
+    ? `${PANEL_BASE} bg-slate-900 border-slate-700`
+    : `${PANEL_BASE} bg-white border-slate-200`;
 
   return (
     <div className={mainClass}>
@@ -343,7 +345,7 @@ export default function App() {
         </section>
 
         <Section id="about" title="Biography">
-          <Card className={PANEL}>
+          <Card className={panelClass}>
             <CardContent className={`p-4 leading-relaxed ${PANEL_TEXT}`}>
               I recently started at Purdue University (CS & Math). I enjoy
               building things at the intersection of ML reliability and usable
@@ -364,7 +366,7 @@ export default function App() {
 
         <Section id="notes" title="Publications">
           <div className="grid sm:grid-cols-2 gap-3">
-            <Card className={PANEL}>
+            <Card className={panelClass}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-xl sm:text-2xl ${PANEL_TEXT}`}>
                   TRUTH DECAY: Quantifying Multi-Turn Sycophancy in Language
@@ -392,7 +394,7 @@ export default function App() {
         <Section id="projects" title="Past Projects">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {PROJECTS.map((p, idx) => (
-              <Card key={idx} className={PANEL}>
+              <Card key={idx} className={panelClass}>
                 <CardHeader className="pb-2">
                   <CardTitle
                     className={`flex items-start justify-between gap-2 ${PANEL_TEXT}`}
@@ -432,7 +434,7 @@ export default function App() {
         <Section id="experience" title="Experience">
           <div className="space-y-2">
             {EXPERIENCE.map((e, idx) => (
-              <Card key={idx} className={PANEL}>
+              <Card key={idx} className={panelClass}>
                 <CardHeader className="pb-2">
                   <CardTitle
                     className={`flex items-center gap-2 text-xl ${PANEL_TEXT}`}
@@ -458,7 +460,7 @@ export default function App() {
         </Section>
 
         <Section id="skills" title="Skills">
-          <Card className={PANEL}>
+          <Card className={panelClass}>
             <CardContent className="p-4">
               <div className="flex flex-wrap gap-2">
                 {SKILLS.map((s) => (
@@ -475,7 +477,7 @@ export default function App() {
         </Section>
 
         <Section id="contact" title="Contact">
-          <Card className={PANEL}>
+          <Card className={panelClass}>
             <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
                 <p className={PANEL_TEXT}>Interested in collaborating?</p>
