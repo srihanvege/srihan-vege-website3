@@ -131,47 +131,33 @@ function ThemeToggle({
   mode: Mode;
   setMode: (m: Mode) => void;
 }) {
-  const base =
-    "h-8 w-8 flex items-center justify-center rounded-full text-sm transition";
+  const btn = "h-8 px-3 rounded-md text-base";
 
   return (
-    <div className="inline-flex items-center rounded-full border border-slate-300/60 bg-white/70 backdrop-blur px-1">
-      <button
-        type="button"
+    <div className="inline-flex items-center gap-3 text-base">
+      <Button
+        variant="secondary"
+        className={`${btn} ${mode === "light" ? "ring-2 ring-sky-600" : ""}`}
         onClick={() => setMode("light")}
-        className={`${base} ${
-          mode === "light"
-            ? "bg-slate-900 text-slate-50"
-            : "text-slate-500"
-        }`}
-        aria-label="Light mode"
       >
-        <Sun className="w-4 h-4" />
-      </button>
-      <button
-        type="button"
+        <Sun className="w-5 h-5 mr-1" /> Light
+      </Button>
+
+      <Button
+        variant="secondary"
+        className={`${btn} ${mode === "dark" ? "ring-2 ring-sky-600" : ""}`}
         onClick={() => setMode("dark")}
-        className={`${base} ${
-          mode === "dark"
-            ? "bg-slate-900 text-slate-50"
-            : "text-slate-500"
-        }`}
-        aria-label="Dark mode"
       >
-        <Moon className="w-4 h-4" />
-      </button>
-      <button
-        type="button"
+        <Moon className="w-5 h-5 mr-1" /> Dark
+      </Button>
+
+      <Button
+        variant="secondary"
+        className={`${btn} ${mode === "system" ? "ring-2 ring-sky-600" : ""}`}
         onClick={() => setMode("system")}
-        className={`${base} ${
-          mode === "system"
-            ? "bg-slate-900 text-slate-50"
-            : "text-slate-500"
-        }`}
-        aria-label="System theme"
       >
-        <Monitor className="w-4 h-4" />
-      </button>
+        <Monitor className="w-5 h-5 mr-1" /> Auto
+      </Button>
     </div>
   );
 }
@@ -247,8 +233,8 @@ export default function App() {
     : "min-h-screen bg-white text-slate-900 text-lg";
 
   const headerClass = isDark
-    ? "sticky top-0 z-50 backdrop-blur bg-slate-950/80 border-b border-slate-900/70"
-    : "sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-200/70";
+    ? "sticky top-0 z-50 backdrop-blur bg-slate-900/80 border-b border-slate-800"
+    : "sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-200";
 
   const footerTextClass = isDark ? "text-slate-400" : "text-slate-500";
 
@@ -267,45 +253,29 @@ export default function App() {
   return (
     <div className={mainClass}>
       <header className={headerClass}>
-        <nav className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 h-14 flex items-center justify-between text-sm sm:text-base">
-          {/* Left: minimal mono mark */}
-          <a
-            href="#home"
-            className="font-mono tracking-tight text-sm sm:text-base opacity-80 hover:opacity-100 transition"
-          >
-            srihan.vege
+        <nav className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 h-16 flex items-center justify-between text-lg">
+          <a href="#home" className="font-semibold text-xl tracking-tight">
+            {INFO.name}
           </a>
-
-          {/* Right: slim nav + theme + resume */}
-          <div className="hidden sm:flex items-center gap-5">
-            <a
-              href="#projects"
-              className="opacity-70 hover:opacity-100 transition"
-            >
-              Projects
+          <div className="hidden sm:flex items-center gap-6 text-base">
+            <a href="#about" className="hover:opacity-80">
+              Biography
             </a>
-            <a
-              href="#experience"
-              className="opacity-70 hover:opacity-100 transition"
-            >
+            <a href="#skills" className="hover:opacity-80">
+              Skills
+            </a>
+            <a href="#projects" className="hover:opacity-80">
+              Past Projects
+            </a>
+            <a href="#experience" className="hover:opacity-80">
               Experience
             </a>
-            <a
-              href="#notes"
-              className="opacity-70 hover:opacity-100 transition"
-            >
-              Publications
-            </a>
 
-            <a
-              href={INFO.resumeUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 rounded-full border border-slate-300/70 px-3 py-1.5 text-xs font-medium opacity-80 hover:opacity-100 hover:bg-slate-900 hover:text-slate-50 transition"
-            >
-              <Download className="w-3 h-3" />
-              Resume
-            </a>
+            <Button asChild className="rounded-md text-base px-3 py-1.5">
+              <a href={INFO.resumeUrl} target="_blank" rel="noreferrer">
+                <Download className="w-5 h-5 mr-2" /> Resume
+              </a>
+            </Button>
 
             <ThemeToggle mode={mode} setMode={setMode} />
           </div>
@@ -313,73 +283,72 @@ export default function App() {
       </header>
 
       <main>
-        {}
         <section
           id="home"
-          className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 min-h-[calc(100vh-4rem)] flex items-center justify-center"
+          className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-8"
         >
-          <div className="max-w-3xl text-center space-y-6">
-            <motion.p
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="text-sm sm:text-base opacity-60"
-            >
-              {INFO.location} · {INFO.role}
-            </motion.p>
+          <div className="grid md:grid-cols-[1fr,220px] gap-6 items-center">
+            <div>
+              <motion.h1
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="text-5xl sm:text-6xl font-extrabold tracking-tight"
+              >
+                {INFO.name}
+              </motion.h1>
+              <p className={`mt-2 text-2xl ${MUTED}`}>{INFO.role}</p>
+              <p className={`text-xl ${MUTED}`}>{INFO.location}</p>
+              <p className={`mt-3 max-w-3xl leading-relaxed ${PANEL_TEXT}`}>
+                {INFO.headline}
+              </p>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.05 }}
-              className="font-mono text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight"
-            >
-              Experiment at the speed of thought.
-            </motion.h1>
+              <div className="mt-3 flex flex-wrap gap-3">
+                <Button
+                  asChild
+                  variant="secondary"
+                  className="rounded-md text-lg px-4 py-2"
+                >
+                  <a href={INFO.github} target="_blank" rel="noreferrer">
+                    <Github className="w-5 h-5 mr-2" /> GitHub
+                  </a>
+                </Button>
 
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45 }}
-              className="text-sm sm:text-base opacity-80 leading-relaxed max-w-2xl mx-auto"
-            >
-              I&apos;m {INFO.name}, a Purdue CS & Math student interested in ML
-              reliability and high-performance computing. I work on
-              retrieval-based systems, medical imaging models, and multi-turn
-              LLM evaluation.
-            </motion.p>
+                <Button
+                  asChild
+                  variant="secondary"
+                  className="rounded-md text-lg px-4 py-2"
+                >
+                  <a href={INFO.linkedin} target="_blank" rel="noreferrer">
+                    <Linkedin className="w-5 h-5 mr-2" /> LinkedIn
+                  </a>
+                </Button>
 
-            {}
-            <motion.form
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45 }}
-              onSubmit={(e) => e.preventDefault()}
-              className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3"
-            >
-              <div className="w-full sm:w-80 flex items-center gap-2 rounded-md border border-slate-300/60 px-3 py-2 bg-white/5 backdrop-blur-sm">
-                <Mail className="w-5 h-5 opacity-70" />
-                <input
-                  type="email"
-                  defaultValue={INFO.email}
-                  placeholder="you@domain.com"
-                  className="w-full bg-transparent outline-none text-base placeholder:opacity-60"
-                />
+                <Button asChild className="rounded-md text-lg px-4 py-2">
+                  <a href={INFO.resumeUrl} target="_blank" rel="noreferrer">
+                    <Download className="w-5 h-5 mr-2" /> Resume
+                  </a>
+                </Button>
               </div>
 
-              <Button
-                type="submit"
-                className="w-full sm:w-auto rounded-md text-base px-5 py-2.5"
-                asChild
-              >
-                <a href={`mailto:${INFO.email}`}>Let&apos;s talk</a>
-              </Button>
-            </motion.form>
+              <div className="mt-3 text-lg flex items-center gap-2">
+                <GraduationCap className="w-5 h-5" />
+                <span>
+                  B.S. in Computer Science & Mathematics · Purdue University
+                  (Aug 2025 – May 2028)
+                </span>
+              </div>
+            </div>
 
-            <p className="text-sm opacity-60">
-              Open to research, internships, and collaborations in ML systems &
-              eval.
-            </p>
+            <div className="justify-self-center md:justify-self-end">
+              <div className="w-44 h-44 sm:w-48 sm:h-48 rounded-full overflow-hidden shadow-inner border border-slate-200">
+                <img
+                  src="/1753369044349.jpeg"
+                  alt="Srihan Vege"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
           </div>
         </section>
 
@@ -433,7 +402,11 @@ export default function App() {
         <Section id="projects" title="Past Projects">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {PROJECTS.map((p, idx) => (
-              <Card key={idx} className={PANEL_CARD_CLASS} style={cardStyle}>
+              <Card
+                key={idx}
+                className={PANEL_CARD_CLASS}
+                style={cardStyle}
+              >
                 <CardHeader className="pb-2">
                   <CardTitle
                     className={`flex items-start justify-between gap-2 ${PANEL_TEXT}`}
@@ -473,7 +446,11 @@ export default function App() {
         <Section id="experience" title="Experience">
           <div className="space-y-2">
             {EXPERIENCE.map((e, idx) => (
-              <Card key={idx} className={PANEL_CARD_CLASS} style={cardStyle}>
+              <Card
+                key={idx}
+                className={PANEL_CARD_CLASS}
+                style={cardStyle}
+              >
                 <CardHeader className="pb-2">
                   <CardTitle
                     className={`flex items-center gap-2 text-xl ${PANEL_TEXT}`}
@@ -546,7 +523,7 @@ export default function App() {
       </main>
 
       <footer className="border-t border-slate-200 mt-6">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-6 text-base flex flex-wrap items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-6 text-base flex flex-wrap items-center justify-between" >
           <div className="flex items-center gap-4">
             <LinkIcon href={INFO.github} title="GitHub">
               <Github className="w-5 h-5" />
