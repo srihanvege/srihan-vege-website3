@@ -38,9 +38,16 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
+    title: "TRUTH DECAY",
+    description:
+      "Benchmark + mitigation study on multi-turn sycophancy in LLMs; accepted to NAACL SRW 2025.",
+    tags: ["LLM Eval", "NLP", "Prompting"],
+    links: { paper: "https://arxiv.org/abs/2503.11656" },
+  },
+  {
     title: "RAG Sports Bot",
     description:
-      "Retrieval-augmented chatbot that answers NFL stat questions using a Python backend (FAISS) and a SwiftUI front end.",
+      "Retrieval-augmented chatbot that answers NFL stat questions using a Python backend (FAISS) and a SwiftUI front end. Currently a work in progress.",
     tags: ["Python", "FAISS", "RAG", "SwiftUI"],
     links: { code: "https://github.com/srihanvege/RAG-Bot" },
   },
@@ -49,13 +56,7 @@ const PROJECTS: Project[] = [
     description:
       "CNN + pharmacokinetic priors to predict arterial-phase aortic peak enhancement timing in CT (mode error ~0.3s; ~97% improvement).",
     tags: ["PyTorch", "Medical Imaging", "CNN", "MONAI"],
-  },
-  {
-    title: "TRUTH DECAY",
-    description:
-      "Benchmark + mitigation study on multi-turn sycophancy in LLMs; accepted to NAACL SRW 2025.",
-    tags: ["LLM Eval", "NLP", "Prompting"],
-    links: { paper: "https://arxiv.org/abs/2503.11656" },
+    // No links on purpose – title will render without a hyperlink
   },
   {
     title: "REALestate.ai",
@@ -401,45 +402,51 @@ export default function App() {
 
         <Section id="projects" title="Past Projects">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {PROJECTS.map((p, idx) => (
-              <Card
-                key={idx}
-                className={PANEL_CARD_CLASS}
-                style={cardStyle}
-              >
-                <CardHeader className="pb-2">
-                  <CardTitle
-                    className={`flex items-start justify-between gap-2 ${PANEL_TEXT}`}
-                  >
-                    <a
-                      href={
-                        p.links?.demo || p.links?.code || p.links?.paper || "#"
-                      }
-                      target="_blank"
-                      rel="noreferrer"
-                      className="hover:underline text-sky-700"
+            {PROJECTS.map((p, idx) => {
+              const primaryLink =
+                p.links?.demo || p.links?.code || p.links?.paper;
+              return (
+                <Card
+                  key={idx}
+                  className={PANEL_CARD_CLASS}
+                  style={cardStyle}
+                >
+                  <CardHeader className="pb-2">
+                    <CardTitle
+                      className={`flex items-start justify-between gap-2 ${PANEL_TEXT}`}
                     >
-                      {p.title}
-                    </a>
-                    <Badge>Project</Badge>
-                  </CardTitle>
-                </CardHeader>
+                      {primaryLink ? (
+                        <a
+                          href={primaryLink}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="hover:underline text-sky-700"
+                        >
+                          {p.title}
+                        </a>
+                      ) : (
+                        <span>{p.title}</span>
+                      )}
+                      <Badge>Project</Badge>
+                    </CardTitle>
+                  </CardHeader>
 
-                <CardContent className="space-y-2">
-                  <p className={`text-base ${MUTED}`}>{p.description}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {p.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="text-sm px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  <CardContent className="space-y-2">
+                    <p className={`text-base ${MUTED}`}>{p.description}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {p.tags.map((t) => (
+                        <span
+                          key={t}
+                          className="text-sm px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </Section>
 
@@ -523,7 +530,7 @@ export default function App() {
       </main>
 
       <footer className="border-t border-slate-200 mt-6">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-6 text-base flex flex-wrap items-center justify-between" >
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-6 text-base flex flex-wrap items-center justify-between">
           <div className="flex items-center gap-4">
             <LinkIcon href={INFO.github} title="GitHub">
               <Github className="w-5 h-5" />
