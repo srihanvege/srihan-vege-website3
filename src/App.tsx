@@ -36,9 +36,6 @@ interface Project {
   links?: ProjectLinks;
 }
 
-//
-// ---------- PROJECT ORDER ----------
-//
 const PROJECTS: Project[] = [
   {
     title: "TRUTH DECAY",
@@ -61,11 +58,11 @@ const PROJECTS: Project[] = [
     links: { code: "https://github.com/S-K-23/REALestate.ai" },
   },
   {
-    title: "RAG Sports Bot",
+    title: "Credit Card Fraud Detection",
     description:
-      "Retrieval-augmented chatbot that answers NFL stat questions using a Python backend (FAISS) and a SwiftUI front end. Currently a work in progress.",
-    tags: ["Python", "FAISS", "RAG", "SwiftUI"],
-    links: { code: "https://github.com/srihanvege/RAG-Bot" },
+      "Binary classification pipeline for detecting fraudulent credit card transactions, with feature engineering and model evaluation for reliable risk scoring. Currently a work in progress.",
+    tags: ["Python", "Machine Learning", "XGBoost", "Pandas"],
+    links: { code: "https://github.com/srihanvege/Credit-Card-Fraud-Detection" },
   },
 ];
 
@@ -360,10 +357,9 @@ export default function App() {
             <CardContent className={`p-4 leading-relaxed ${PANEL_TEXT}`}>
               I recently started at Purdue University (CS & Math). I enjoy
               building things at the intersection of ML reliability and usable
-              products. Recent projects include a sports Q&A bot with
-              retrieval-augmented generation and research on mitigating
-              multi-turn sycophancy in LLMs. If any of this connects to your
-              work, feel free to reach out at{" "}
+              products. Recent projects include a credit card fraud detection
+              pipeline and research on mitigating multi-turn sycophancy in LLMs.
+              If any of this connects to your work, feel free to reach out at{" "}
               <a
                 className="text-sky-700 hover:underline"
                 href={`mailto:${INFO.email}`}
