@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Github,
   Linkedin,
@@ -121,6 +121,127 @@ const SKILLS = [
   "LLMs",
   "FAISS",
 ];
+
+// ─── Scroll-spy nav sections ───────────────────────────────────────────────
+const NAV_SECTIONS = [
+  { id: "home",       label: "Home" },
+  { id: "about",      label: "Biography" },
+  { id: "notes",      label: "Publications" },
+  { id: "projects",   label: "Projects" },
+  { id: "experience", label: "Experience" },
+  { id: "skills",     label: "Skills" },
+  { id: "contact",    label: "Contact" },
+];
+
+// ─── Scroll-spy sidebar component ─────────────────────────────────────────
+function ScrollSpyNav({ isDark }: { isDark: boolean }) {
+  const [activeId, setActiveId] = React.useState<string>("home");
+  const [hoveredId, setHoveredId] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+
+    // Track which sections are currently visible and pick the topmost one
+    const visibleSections = new Map<string, number>();
+
+    NAV_SECTIONS.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              visibleSections.set(id, entry.boundingClientRect.top);
+            } else {
+              visibleSections.delete(id);
+            }
+
+            // Set active to the section with the smallest (topmost) top value
+            if (visibleSections.size > 0) {
+              const topmost = [...visibleSections.entries()].sort(
+                (a, b) => a[1] - b[1]
+              )[0][0];
+              setActiveId(topmost);
+            }
+          });
+        },
+        { threshold: 0.15, rootMargin: "-10% 0px -60% 0px" }
+      );
+
+      observer.observe(el);
+      observers.push(observer);
+    });
+
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
+
+  const handleClick = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  const dotActive = isDark ? "#38bdf8" : "#0284c7";       // sky-400 / sky-600
+  const dotInactive = isDark ? "#475569" : "#cbd5e1";      // slate-600 / slate-300
+  const labelBg = isDark ? "bg-slate-800 text-slate-100" : "bg-white text-slate-800";
+  const labelShadow = isDark ? "shadow-slate-900/60" : "shadow-slate-200/80";
+
+  return (
+    // Hidden on mobile, visible on lg+ screens
+    <nav
+      className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-end gap-4"
+      aria-label="Page sections"
+    >
+      {NAV_SECTIONS.map(({ id, label }) => {
+        const isActive = activeId === id;
+        const isHovered = hoveredId === id;
+
+        return (
+          <button
+            key={id}
+            onClick={() => handleClick(id)}
+            onMouseEnter={() => setHoveredId(id)}
+            onMouseLeave={() => setHoveredId(null)}
+            className="flex items-center gap-3 group cursor-pointer bg-transparent border-0 p-0"
+            aria-label={`Go to ${label}`}
+          >
+            {/* Label — slides in on hover */}
+            <AnimatePresence>
+              {isHovered && (
+                <motion.span
+                  key="label"
+                  initial={{ opacity: 0, x: 8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 8 }}
+                  transition={{ duration: 0.15 }}
+                  className={`text-sm font-medium px-2.5 py-1 rounded-md shadow-md ${labelBg} ${labelShadow}`}
+                >
+                  {label}
+                </motion.span>
+              )}
+            </AnimatePresence>
+
+            {/* Dot */}
+            <motion.span
+              animate={{
+                width: isActive ? 10 : 8,
+                height: isActive ? 10 : 8,
+                backgroundColor: isActive ? dotActive : dotInactive,
+                scale: isHovered ? 1.3 : 1,
+              }}
+              transition={{ duration: 0.2 }}
+              style={{ borderRadius: "50%", display: "block", flexShrink: 0 }}
+            />
+          </button>
+        );
+      })}
+    </nav>
+  );
+}
+
+// ──────────────────────────────────────────────────────────────────────────
 
 type Mode = "light" | "dark" | "system";
 
@@ -252,6 +373,9 @@ export default function App() {
 
   return (
     <div className={mainClass}>
+      {/* ── Scroll-spy sidebar nav ── */}
+      <ScrollSpyNav isDark={isDark} />
+
       <header className={headerClass}>
         <nav className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 h-16 flex items-center justify-between text-lg">
           <a href="#home" className="font-semibold text-xl tracking-tight">
