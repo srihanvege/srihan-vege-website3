@@ -1,5 +1,5 @@
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import {
   Github,
   Linkedin,
@@ -11,10 +11,9 @@ import {
   Sun,
   Moon,
   Monitor,
+  ArrowUpRight,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import { Button } from "./components/ui/button";
-import { Badge } from "./components/ui/badge";
 
 const INFO = {
   name: "Srihan Vege",
@@ -29,10 +28,15 @@ const INFO = {
 };
 
 type ProjectLinks = { code?: string; demo?: string; paper?: string };
+type CategoryColor = "blue" | "purple" | "amber" | "green" | "rose";
 interface Project {
   title: string;
   description: string;
   tags: string[];
+  category: string;
+  categoryColor: CategoryColor;
+  year: string;
+  featured?: boolean;
   links?: ProjectLinks;
 }
 
@@ -40,28 +44,42 @@ const PROJECTS: Project[] = [
   {
     title: "TRUTH DECAY",
     description:
-      "Benchmark + mitigation study on multi-turn sycophancy in LLMs; accepted to NAACL SRW 2025.",
-    tags: ["LLM Eval", "NLP", "Prompting"],
+      "Benchmark and mitigation study on multi-turn sycophancy in LLMs. Co-first authored paper accepted to NAACL SRW 2025; built the multi-turn evaluation harness and prompt-strategy ablations that reduced accuracy degradation by ~43%.",
+    tags: ["LLM Eval", "NLP", "Prompting", "Python"],
+    category: "RESEARCH",
+    categoryColor: "blue",
+    year: "2025",
+    featured: true,
     links: { paper: "https://arxiv.org/abs/2503.11656" },
   },
   {
     title: "ContrastIQ",
     description:
-      "CNN + pharmacokinetic priors to predict arterial-phase aortic peak enhancement timing in CT (mode error ~0.3s; ~97% improvement).",
+      "CT imaging model that combines a CNN with pharmacokinetic priors to predict arterial-phase aortic peak enhancement timing. Reduced mode timing error to ~0.3s (≈97% improvement) on 272 patient scans; EMBC paper submitted, patent pending.",
     tags: ["PyTorch", "Medical Imaging", "CNN", "MONAI"],
+    category: "RESEARCH",
+    categoryColor: "purple",
+    year: "2024",
+    featured: true,
   },
   {
     title: "REALestate.ai",
     description:
-      "AI-driven real estate valuation and insight system built to automate and optimize property value estimation.",
+      "AI-driven real estate valuation system that automates and optimizes property value estimation by combining tabular features with location and market signals.",
     tags: ["Machine Learning", "Real Estate", "Automation"],
+    category: "FULL-STACK",
+    categoryColor: "green",
+    year: "2024",
     links: { code: "https://github.com/S-K-23/REALestate.ai" },
   },
   {
     title: "Credit Card Fraud Detection",
     description:
       "Binary classification pipeline for detecting fraudulent credit card transactions, with feature engineering and model evaluation for reliable risk scoring. Currently a work in progress.",
-    tags: ["Python", "Machine Learning", "XGBoost", "Pandas"],
+    tags: ["Python", "XGBoost", "Pandas", "scikit-learn"],
+    category: "ML",
+    categoryColor: "amber",
+    year: "2025",
     links: { code: "https://github.com/srihanvege/Credit-Card-Fraud-Detection" },
   },
 ];
@@ -104,50 +122,55 @@ const EXPERIENCE = [
   },
 ];
 
-const SKILLS = [
-  "Python",
-  "Java",
-  "JavaScript",
-  "HTML",
-  "CSS",
-  "Swift",
-  "PyTorch",
-  "NumPy",
-  "Pandas",
-  "Matplotlib",
-  "MONAI",
-  "Git",
-  "Linux",
-  "LLMs",
-  "FAISS",
+interface SkillCategory {
+  label: string;     
+  title: string;     
+  items: string[];   
+}
+
+const SKILL_CATEGORIES: SkillCategory[] = [
+  {
+    label: "Languages",
+    title: "Programming Languages",
+    items: ["Python", "Java", "JavaScript", "TypeScript", "HTML/CSS", "Swift"],
+  },
+  {
+    label: "ML & AI",
+    title: "Machine Learning",
+    items: ["PyTorch", "MONAI", "LLMs", "FAISS", "CNNs", "Transformers"],
+  },
+  {
+    label: "Data",
+    title: "Data Science",
+    items: ["NumPy", "Pandas", "Matplotlib", "scikit-learn"],
+  },
+  {
+    label: "Tools & Platforms",
+    title: "Dev Tools",
+    items: ["Git", "GitHub", "Linux", "VS Code"],
+  },
 ];
 
-// ─── Scroll-spy nav sections ───────────────────────────────────────────────
 const NAV_SECTIONS = [
-  { id: "home",       label: "Home" },
-  { id: "about",      label: "Biography" },
-  { id: "notes",      label: "Publications" },
-  { id: "projects",   label: "Projects" },
+  { id: "home", label: "Home" },
+  { id: "about", label: "Biography" },
+  { id: "notes", label: "Publications" },
+  { id: "projects", label: "Projects" },
   { id: "experience", label: "Experience" },
-  { id: "skills",     label: "Skills" },
-  { id: "contact",    label: "Contact" },
+  { id: "skills", label: "Skills" },
+  { id: "contact", label: "Contact" },
 ];
 
-// ─── Scroll-spy sidebar component ─────────────────────────────────────────
 function ScrollSpyNav({ isDark }: { isDark: boolean }) {
   const [activeId, setActiveId] = React.useState<string>("home");
   const [hoveredId, setHoveredId] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const observers: IntersectionObserver[] = [];
-
-    // Track which sections are currently visible and pick the topmost one
     const visibleSections = new Map<string, number>();
-
     NAV_SECTIONS.forEach(({ id }) => {
       const el = document.getElementById(id);
       if (!el) return;
-
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
@@ -156,8 +179,6 @@ function ScrollSpyNav({ isDark }: { isDark: boolean }) {
             } else {
               visibleSections.delete(id);
             }
-
-            // Set active to the section with the smallest (topmost) top value
             if (visibleSections.size > 0) {
               const topmost = [...visibleSections.entries()].sort(
                 (a, b) => a[1] - b[1]
@@ -168,28 +189,25 @@ function ScrollSpyNav({ isDark }: { isDark: boolean }) {
         },
         { threshold: 0.15, rootMargin: "-10% 0px -60% 0px" }
       );
-
       observer.observe(el);
       observers.push(observer);
     });
-
     return () => observers.forEach((o) => o.disconnect());
   }, []);
 
   const handleClick = (id: string) => {
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const dotActive = isDark ? "#38bdf8" : "#0284c7";       // sky-400 / sky-600
-  const dotInactive = isDark ? "#475569" : "#cbd5e1";      // slate-600 / slate-300
-  const labelBg = isDark ? "bg-slate-800 text-slate-100" : "bg-white text-slate-800";
+  const dotActive = isDark ? "#38bdf8" : "#0284c7";
+  const dotInactive = isDark ? "#475569" : "#cbd5e1";
+  const labelBg = isDark
+    ? "bg-slate-800 text-slate-100"
+    : "bg-white text-slate-800";
   const labelShadow = isDark ? "shadow-slate-900/60" : "shadow-slate-200/80";
 
   return (
-    // Hidden on mobile, visible on lg+ screens
     <nav
       className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-end gap-4"
       aria-label="Page sections"
@@ -197,7 +215,6 @@ function ScrollSpyNav({ isDark }: { isDark: boolean }) {
       {NAV_SECTIONS.map(({ id, label }) => {
         const isActive = activeId === id;
         const isHovered = hoveredId === id;
-
         return (
           <button
             key={id}
@@ -207,7 +224,6 @@ function ScrollSpyNav({ isDark }: { isDark: boolean }) {
             className="flex items-center gap-3 group cursor-pointer bg-transparent border-0 p-0"
             aria-label={`Go to ${label}`}
           >
-            {/* Label — slides in on hover */}
             <AnimatePresence>
               {isHovered && (
                 <motion.span
@@ -222,8 +238,6 @@ function ScrollSpyNav({ isDark }: { isDark: boolean }) {
                 </motion.span>
               )}
             </AnimatePresence>
-
-            {/* Dot */}
             <motion.span
               animate={{
                 width: isActive ? 10 : 8,
@@ -241,10 +255,7 @@ function ScrollSpyNav({ isDark }: { isDark: boolean }) {
   );
 }
 
-// ──────────────────────────────────────────────────────────────────────────
-
 type Mode = "light" | "dark" | "system";
-
 function ThemeToggle({
   mode,
   setMode,
@@ -253,7 +264,6 @@ function ThemeToggle({
   setMode: (m: Mode) => void;
 }) {
   const btn = "h-8 px-3 rounded-md text-base";
-
   return (
     <div className="inline-flex items-center gap-3 text-base">
       <Button
@@ -263,7 +273,6 @@ function ThemeToggle({
       >
         <Sun className="w-5 h-5 mr-1" /> Light
       </Button>
-
       <Button
         variant="secondary"
         className={`${btn} ${mode === "dark" ? "ring-2 ring-sky-600" : ""}`}
@@ -271,7 +280,6 @@ function ThemeToggle({
       >
         <Moon className="w-5 h-5 mr-1" /> Dark
       </Button>
-
       <Button
         variant="secondary"
         className={`${btn} ${mode === "system" ? "ring-2 ring-sky-600" : ""}`}
@@ -283,48 +291,346 @@ function ThemeToggle({
   );
 }
 
-const PANEL_CARD_CLASS = "rounded-xl border shadow-sm";
-const PANEL_TEXT = "text-lg sm:text-xl";
-const MUTED = "text-base sm:text-lg opacity-80";
-const SUBTLE = "text-base opacity-75";
-
-interface SectionProps {
-  id: string;
-  title: string;
-  children: React.ReactNode;
+function ScrollProgress({ isDark }: { isDark: boolean }) {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+  return (
+    <motion.div
+      style={{
+        scaleX,
+        transformOrigin: "0% 50%",
+        backgroundColor: isDark ? "#38bdf8" : "#0284c7",
+      }}
+      className="fixed top-0 left-0 right-0 h-[2px] z-[60]"
+    />
+  );
 }
 
-const Section: React.FC<SectionProps> = ({ id, title, children }) => (
-  <section
-    id={id}
-    className="scroll-mt-20 max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-6"
-  >
+interface SectionHeaderProps {
+  number: string;
+  title: string;
+  isDark: boolean;
+}
+const SectionHeader: React.FC<SectionHeaderProps> = ({
+  number,
+  title,
+  isDark,
+}) => (
+  <div className="flex items-baseline gap-4 sm:gap-6 mb-10">
+    <motion.span
+      initial={{ opacity: 0, x: -8 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.4 }}
+      className="font-mono text-sm sm:text-base tracking-[0.2em] text-sky-500 dark:text-sky-400 shrink-0"
+    >
+      {number}.
+    </motion.span>
     <motion.h2
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.35 }}
-      className={`text-3xl sm:text-4xl font-semibold tracking-tight mb-4 ${PANEL_TEXT}`}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.5, delay: 0.05 }}
+      className="font-serif text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-none"
     >
       {title}
     </motion.h2>
-    {children}
+    <motion.div
+      initial={{ scaleX: 0 }}
+      whileInView={{ scaleX: 1 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.6, delay: 0.2 }}
+      style={{ transformOrigin: "0% 50%" }}
+      className={`flex-1 h-px ${
+        isDark ? "bg-slate-700" : "bg-slate-300"
+      }`}
+    />
+  </div>
+);
+
+interface SectionProps {
+  id: string;
+  number: string;
+  title: string;
+  isDark: boolean;
+  children: React.ReactNode;
+}
+const Section: React.FC<SectionProps> = ({
+  id,
+  number,
+  title,
+  isDark,
+  children,
+}) => (
+  <section
+    id={id}
+    className="scroll-mt-24 max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-16 sm:py-24"
+  >
+    <SectionHeader number={number} title={title} isDark={isDark} />
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-80px" }}
+      variants={{
+        hidden: {},
+        visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+      }}
+    >
+      {children}
+    </motion.div>
   </section>
 );
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
+
+function categoryClasses(c: CategoryColor, isDark: boolean): string {
+  const map: Record<CategoryColor, { dark: string; light: string }> = {
+    blue: {
+      dark: "bg-sky-500/10 text-sky-300 border-sky-500/30",
+      light: "bg-sky-50 text-sky-700 border-sky-200",
+    },
+    purple: {
+      dark: "bg-violet-500/10 text-violet-300 border-violet-500/30",
+      light: "bg-violet-50 text-violet-700 border-violet-200",
+    },
+    amber: {
+      dark: "bg-amber-500/10 text-amber-300 border-amber-500/30",
+      light: "bg-amber-50 text-amber-700 border-amber-200",
+    },
+    green: {
+      dark: "bg-emerald-500/10 text-emerald-300 border-emerald-500/30",
+      light: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    },
+    rose: {
+      dark: "bg-rose-500/10 text-rose-300 border-rose-500/30",
+      light: "bg-rose-50 text-rose-700 border-rose-200",
+    },
+  };
+  return isDark ? map[c].dark : map[c].light;
+}
+
+function ProjectCard({
+  project,
+  index,
+  isDark,
+}: {
+  project: Project;
+  index: number;
+  isDark: boolean;
+}) {
+  const primaryLink =
+    project.links?.demo || project.links?.code || project.links?.paper;
+  const linkLabel = project.links?.paper
+    ? "Paper"
+    : project.links?.demo
+    ? "Demo"
+    : "GitHub";
+
+  const cardBg = isDark
+    ? "bg-slate-900/40 border-slate-800 hover:border-slate-600"
+    : "bg-white border-slate-200 hover:border-slate-400";
+  const tagPill = isDark
+    ? "bg-slate-900/60 border-slate-700 text-slate-300"
+    : "bg-slate-50 border-slate-200 text-slate-700";
+  const featuredCls = isDark
+    ? "bg-amber-500/10 text-amber-300 border-amber-500/30"
+    : "bg-amber-50 text-amber-700 border-amber-200";
+  const yearCls = isDark ? "text-slate-500" : "text-slate-400";
+  const watermarkCls = isDark ? "text-slate-800/60" : "text-slate-200";
+  const ghostBtn = isDark
+    ? "bg-slate-900/60 border-slate-700 text-slate-200 hover:bg-slate-800"
+    : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50";
+
+  return (
+    <motion.div variants={itemVariants}>
+      <div
+        className={`relative overflow-hidden rounded-2xl border transition-colors duration-300 ${cardBg}`}
+      >
+        {/* Big watermark number */}
+        <span
+          aria-hidden
+          className={`pointer-events-none select-none absolute -top-2 right-4 font-serif font-bold text-[7rem] sm:text-[9rem] leading-none ${watermarkCls}`}
+        >
+          {String(index + 1).padStart(2, "0")}
+        </span>
+
+        <div className="relative p-6 sm:p-8">
+          {/* Top tag row */}
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            {project.featured && (
+              <span
+                className={`text-[10px] sm:text-xs font-mono font-semibold tracking-widest px-2 py-1 rounded border ${featuredCls}`}
+              >
+                FEATURED
+              </span>
+            )}
+            <span
+              className={`text-[10px] sm:text-xs font-mono font-semibold tracking-widest px-2 py-1 rounded border ${categoryClasses(
+                project.categoryColor,
+                isDark
+              )}`}
+            >
+              {project.category}
+            </span>
+            <span
+              className={`text-xs sm:text-sm font-mono ${yearCls} ml-1`}
+            >
+              {project.year}
+            </span>
+
+            {primaryLink && (
+              <a
+                href={primaryLink}
+                target="_blank"
+                rel="noreferrer"
+                className={`ml-auto inline-flex items-center gap-1.5 text-xs sm:text-sm px-3 py-1.5 rounded-md border transition-colors ${ghostBtn}`}
+              >
+                <ArrowUpRight className="w-3.5 h-3.5" />
+                {linkLabel}
+              </a>
+            )}
+          </div>
+
+          {/* Title */}
+          <h3 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight mb-3 max-w-3xl">
+            {primaryLink ? (
+              <a
+                href={primaryLink}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:underline decoration-sky-500 underline-offset-4"
+              >
+                {project.title}
+              </a>
+            ) : (
+              project.title
+            )}
+          </h3>
+
+          {/* Description */}
+          <p
+            className={`max-w-3xl leading-relaxed text-base sm:text-lg ${
+              isDark ? "text-slate-400" : "text-slate-600"
+            }`}
+          >
+            {project.description}
+          </p>
+
+          {/* Tags */}
+          <div className="mt-5 flex flex-wrap gap-2">
+            {project.tags.map((t) => (
+              <span
+                key={t}
+                className={`font-mono text-xs px-2.5 py-1 rounded border ${tagPill}`}
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function SkillCard({
+  cat,
+  isDark,
+}: {
+  cat: SkillCategory;
+  isDark: boolean;
+}) {
+  const cardBg = isDark
+    ? "bg-slate-900/40 border-slate-800"
+    : "bg-white border-slate-200";
+  const labelCls = isDark ? "text-sky-400" : "text-sky-600";
+  const tagPill = isDark
+    ? "bg-slate-900/60 border-slate-700 text-slate-300"
+    : "bg-slate-50 border-slate-200 text-slate-700";
+
+  return (
+    <motion.div
+      variants={itemVariants}
+      className={`rounded-2xl border p-6 ${cardBg}`}
+    >
+      <p
+        className={`text-xs font-mono font-semibold tracking-[0.2em] uppercase mb-2 ${labelCls}`}
+      >
+        {cat.label}
+      </p>
+      <h3 className="text-xl sm:text-2xl font-semibold mb-4 tracking-tight">
+        {cat.title}
+      </h3>
+      <div className="flex flex-wrap gap-2">
+        {cat.items.map((s) => (
+          <span
+            key={s}
+            className={`font-mono text-xs px-2.5 py-1 rounded border ${tagPill}`}
+          >
+            {s}
+          </span>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+function ExperienceCard({
+  e,
+  isDark,
+}: {
+  e: (typeof EXPERIENCE)[number];
+  isDark: boolean;
+}) {
+  const cardBg = isDark
+    ? "bg-slate-900/40 border-slate-800"
+    : "bg-white border-slate-200";
+  const muted = isDark ? "text-slate-400" : "text-slate-600";
+  const subtle = isDark ? "text-slate-500" : "text-slate-500";
+
+  return (
+    <motion.div
+      variants={itemVariants}
+      className={`rounded-2xl border p-6 ${cardBg}`}
+    >
+      <div className="flex items-start gap-3 mb-1">
+        <Briefcase className="w-5 h-5 mt-1 shrink-0 text-sky-500" />
+        <div>
+          <h3 className="font-serif text-xl sm:text-2xl font-semibold tracking-tight">
+            {e.role}
+          </h3>
+          <p className={`text-base ${muted}`}>{e.org}</p>
+        </div>
+      </div>
+      <p className={`font-mono text-xs ${subtle} ml-8 mb-3`}>{e.date}</p>
+      <ul className={`list-disc pl-12 space-y-1.5 text-base ${muted}`}>
+        {e.bullets.map((b, i) => (
+          <li key={i}>{b}</li>
+        ))}
+      </ul>
+    </motion.div>
+  );
+}
 
 interface LinkIconProps {
   href: string;
   title?: string;
   children: React.ReactNode;
 }
-
 const LinkIcon: React.FC<LinkIconProps> = ({ href, children, title }) => (
   <a
     href={href}
     target="_blank"
     rel="noreferrer"
     title={title}
-    className="inline-flex items-center gap-2 text-base"
+    className="inline-flex items-center gap-2 text-base hover:text-sky-500 transition-colors"
   >
     {children}
   </a>
@@ -350,286 +656,295 @@ export default function App() {
   }, [mode]);
 
   const mainClass = isDark
-    ? "min-h-screen bg-slate-950 text-slate-100 text-lg"
-    : "min-h-screen bg-white text-slate-900 text-lg";
+    ? "min-h-screen bg-slate-950 text-slate-100"
+    : "min-h-screen bg-white text-slate-900";
 
   const headerClass = isDark
-    ? "sticky top-0 z-50 backdrop-blur bg-slate-900/80 border-b border-slate-800"
+    ? "sticky top-0 z-50 backdrop-blur bg-slate-950/80 border-b border-slate-800"
     : "sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-200";
 
-  const footerTextClass = isDark ? "text-slate-400" : "text-slate-500";
-
-  const cardStyle: React.CSSProperties = isDark
-    ? {
-        backgroundColor: "#020617",
-        borderColor: "#374151",
-        color: "#e5e7eb",
-      }
-    : {
-        backgroundColor: "#ffffff",
-        borderColor: "#e5e7eb",
-        color: "#020617",
-      };
+  const muted = isDark ? "text-slate-400" : "text-slate-600";
+  const footerTextClass = isDark ? "text-slate-500" : "text-slate-500";
 
   return (
-    <div className={mainClass}>
-      {/* ── Scroll-spy sidebar nav ── */}
+    <div className={`${mainClass} text-lg`}>
+      <ScrollProgress isDark={isDark} />
       <ScrollSpyNav isDark={isDark} />
 
+      {/* ── Header ── */}
       <header className={headerClass}>
         <nav className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 h-16 flex items-center justify-between text-lg">
-          <a href="#home" className="font-semibold text-xl tracking-tight">
+          <a
+            href="#home"
+            className="font-serif font-semibold text-2xl tracking-tight"
+          >
             {INFO.name}
           </a>
           <div className="hidden sm:flex items-center gap-6 text-base">
-            <a href="#about" className="hover:opacity-80">
+            <a href="#about" className="hover:text-sky-500 transition-colors">
               Biography
             </a>
-            <a href="#skills" className="hover:opacity-80">
-              Skills
+            <a href="#projects" className="hover:text-sky-500 transition-colors">
+              Projects
             </a>
-            <a href="#projects" className="hover:opacity-80">
-              Past Projects
-            </a>
-            <a href="#experience" className="hover:opacity-80">
+            <a
+              href="#experience"
+              className="hover:text-sky-500 transition-colors"
+            >
               Experience
             </a>
-
+            <a href="#skills" className="hover:text-sky-500 transition-colors">
+              Skills
+            </a>
             <Button asChild className="rounded-md text-base px-3 py-1.5">
               <a href={INFO.resumeUrl} target="_blank" rel="noreferrer">
                 <Download className="w-5 h-5 mr-2" /> Resume
               </a>
             </Button>
-
             <ThemeToggle mode={mode} setMode={setMode} />
           </div>
         </nav>
       </header>
 
       <main>
+        {/* ── Hero ── */}
         <section
           id="home"
-          className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-8"
+          className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-16 sm:py-24"
         >
-          <div className="grid md:grid-cols-[1fr,220px] gap-6 items-center">
+          <div className="grid md:grid-cols-[1fr,220px] gap-10 items-center">
             <div>
-              <motion.h1
+              <motion.p
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
-                className="text-5xl sm:text-6xl font-extrabold tracking-tight"
+                className="font-mono text-sm tracking-[0.25em] text-sky-500 dark:text-sky-400 uppercase mb-3"
               >
-                {INFO.name}
+                Hi, my name is
+              </motion.p>
+              <motion.h1
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.05 }}
+                className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05]"
+              >
+                {INFO.name}.
               </motion.h1>
-              <p className={`mt-2 text-2xl ${MUTED}`}>{INFO.role}</p>
-              <p className={`text-xl ${MUTED}`}>{INFO.location}</p>
-              <p className={`mt-3 max-w-3xl leading-relaxed ${PANEL_TEXT}`}>
+              <motion.h2
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.15 }}
+                className={`font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight mt-2 ${muted}`}
+              >
+                I build at the edge of ML & math.
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.25 }}
+                className={`mt-5 max-w-2xl text-lg sm:text-xl leading-relaxed ${muted}`}
+              >
                 {INFO.headline}
-              </p>
+              </motion.p>
 
-              <div className="mt-3 flex flex-wrap gap-3">
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.35 }}
+                className="mt-6 flex flex-wrap gap-3"
+              >
                 <Button
                   asChild
                   variant="secondary"
-                  className="rounded-md text-lg px-4 py-2"
+                  className="rounded-md text-base px-4 py-2"
                 >
                   <a href={INFO.github} target="_blank" rel="noreferrer">
                     <Github className="w-5 h-5 mr-2" /> GitHub
                   </a>
                 </Button>
-
                 <Button
                   asChild
                   variant="secondary"
-                  className="rounded-md text-lg px-4 py-2"
+                  className="rounded-md text-base px-4 py-2"
                 >
                   <a href={INFO.linkedin} target="_blank" rel="noreferrer">
                     <Linkedin className="w-5 h-5 mr-2" /> LinkedIn
                   </a>
                 </Button>
-
-                <Button asChild className="rounded-md text-lg px-4 py-2">
+                <Button asChild className="rounded-md text-base px-4 py-2">
                   <a href={INFO.resumeUrl} target="_blank" rel="noreferrer">
                     <Download className="w-5 h-5 mr-2" /> Resume
                   </a>
                 </Button>
-              </div>
+              </motion.div>
 
-              <div className="mt-3 text-lg flex items-center gap-2">
-                <GraduationCap className="w-5 h-5" />
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className={`mt-6 text-base flex items-center gap-2 ${muted}`}
+              >
+                <GraduationCap className="w-5 h-5 text-sky-500" />
                 <span>
                   B.S. in Computer Science & Mathematics · Purdue University
                   (Aug 2025 – May 2028)
                 </span>
-              </div>
+              </motion.div>
             </div>
 
-            <div className="justify-self-center md:justify-self-end">
-              <div className="w-44 h-44 sm:w-48 sm:h-48 rounded-full overflow-hidden shadow-inner border border-slate-200">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="justify-self-center md:justify-self-end"
+            >
+              <div
+                className={`w-44 h-44 sm:w-52 sm:h-52 rounded-full overflow-hidden shadow-xl border-2 ${
+                  isDark ? "border-slate-700" : "border-slate-200"
+                }`}
+              >
                 <img
                   src="/1753369044349.jpeg"
                   alt="Srihan Vege"
                   className="w-full h-full object-cover"
                 />
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
-        <Section id="about" title="Biography">
-          <Card className={PANEL_CARD_CLASS} style={cardStyle}>
-            <CardContent className={`p-4 leading-relaxed ${PANEL_TEXT}`}>
-              I recently started at Purdue University (CS & Math). I enjoy
+        {/* ── Biography ── */}
+        <Section id="about" number="01" title="Biography" isDark={isDark}>
+          <motion.div
+            variants={itemVariants}
+            className={`rounded-2xl border p-6 sm:p-8 leading-relaxed text-lg sm:text-xl ${
+              isDark
+                ? "bg-slate-900/40 border-slate-800"
+                : "bg-white border-slate-200"
+            }`}
+          >
+            <p className={muted}>
+              I recently started at Purdue University (CS &amp; Math). I enjoy
               building things at the intersection of ML reliability and usable
               products. Recent projects include a credit card fraud detection
               pipeline and research on mitigating multi-turn sycophancy in LLMs.
               If any of this connects to your work, feel free to reach out at{" "}
               <a
-                className="text-sky-700 hover:underline"
+                className="text-sky-500 hover:underline"
                 href={`mailto:${INFO.email}`}
               >
                 {INFO.email}
               </a>
               .
-            </CardContent>
-          </Card>
+            </p>
+          </motion.div>
         </Section>
 
-        <Section id="notes" title="Publications">
-          <div className="grid sm:grid-cols-2 gap-3">
-            <Card className={PANEL_CARD_CLASS} style={cardStyle}>
-              <CardHeader className="pb-2">
-                <CardTitle className={`text-xl sm:text-2xl ${PANEL_TEXT}`}>
-                  TRUTH DECAY: Quantifying Multi-Turn Sycophancy in Language
-                  Models
-                </CardTitle>
-                <p className={`text-base ${SUBTLE}`}>
-                  Liu, Jain, Takuri, <strong>Vege</strong>, Akalin, Zhu,
-                  O&apos;Brien, Sharma. NAACL SRW 2025.
-                </p>
-              </CardHeader>
-              <CardContent className="pt-1">
-                <a
-                  className="inline-flex items-center gap-2 text-base text-sky-700 hover:underline"
-                  href="https://arxiv.org/abs/2503.11656"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <ExternalLink className="w-5 h-5" /> arXiv
-                </a>
-              </CardContent>
-            </Card>
-          </div>
+        {/* ── Publications ── */}
+        <Section
+          id="notes"
+          number="02"
+          title="Publications"
+          isDark={isDark}
+        >
+          <motion.div variants={itemVariants}>
+            <div
+              className={`rounded-2xl border p-6 sm:p-8 ${
+                isDark
+                  ? "bg-slate-900/40 border-slate-800"
+                  : "bg-white border-slate-200"
+              }`}
+            >
+              <p className="font-mono text-xs tracking-[0.2em] text-sky-500 dark:text-sky-400 uppercase mb-3">
+                NAACL SRW 2025
+              </p>
+              <h3 className="font-serif text-2xl sm:text-3xl font-semibold tracking-tight mb-3">
+                TRUTH DECAY: Quantifying Multi-Turn Sycophancy in Language
+                Models
+              </h3>
+              <p className={`text-base mb-4 ${muted}`}>
+                Liu, Jain, Takuri, <strong>Vege</strong>, Akalin, Zhu, O&apos;Brien,
+                Sharma.
+              </p>
+              <a
+                href="https://arxiv.org/abs/2503.11656"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-base text-sky-500 hover:underline"
+              >
+                <ExternalLink className="w-5 h-5" /> Read on arXiv
+              </a>
+            </div>
+          </motion.div>
         </Section>
 
-        <Section id="projects" title="Past Projects">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {PROJECTS.map((p, idx) => {
-              const primaryLink =
-                p.links?.demo || p.links?.code || p.links?.paper;
-
-              return (
-                <Card key={idx} className={PANEL_CARD_CLASS} style={cardStyle}>
-                  <CardHeader className="pb-2">
-                    <CardTitle
-                      className={`flex items-start justify-between gap-2 ${PANEL_TEXT}`}
-                    >
-                      {primaryLink ? (
-                        <a
-                          href={primaryLink}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="hover:underline text-sky-700"
-                        >
-                          {p.title}
-                        </a>
-                      ) : (
-                        <span className="text-sky-700">{p.title}</span>
-                      )}
-
-                      <Badge>Project</Badge>
-                    </CardTitle>
-                  </CardHeader>
-
-                  <CardContent className="space-y-2">
-                    <p className={`text-base ${MUTED}`}>{p.description}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {p.tags.map((t) => (
-                        <span
-                          key={t}
-                          className="text-sm px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </Section>
-
-        <Section id="experience" title="Experience">
-          <div className="space-y-2">
-            {EXPERIENCE.map((e, idx) => (
-              <Card key={idx} className={PANEL_CARD_CLASS} style={cardStyle}>
-                <CardHeader className="pb-2">
-                  <CardTitle
-                    className={`flex items-center gap-2 text-xl ${PANEL_TEXT}`}
-                  >
-                    <Briefcase className="w-5 h-5" />
-                    <span>
-                      {e.role} · {e.org}
-                    </span>
-                  </CardTitle>
-                  <p className={`text-base ${SUBTLE}`}>{e.date}</p>
-                </CardHeader>
-
-                <CardContent className="pt-0">
-                  <ul className={`list-disc pl-6 space-y-1 ${PANEL_TEXT}`}>
-                    {e.bullets.map((b, i) => (
-                      <li key={i}>{b}</li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
+        {/* ── Projects ── */}
+        <Section
+          id="projects"
+          number="03"
+          title="Projects"
+          isDark={isDark}
+        >
+          <div className="space-y-5">
+            {PROJECTS.map((p, idx) => (
+              <ProjectCard
+                key={p.title}
+                project={p}
+                index={idx}
+                isDark={isDark}
+              />
             ))}
           </div>
         </Section>
 
-        <Section id="skills" title="Skills">
-          <Card className={PANEL_CARD_CLASS} style={cardStyle}>
-            <CardContent className="p-4">
-              <div className="flex flex-wrap gap-2">
-                {SKILLS.map((s) => (
-                  <span
-                    key={s}
-                    className="px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-base"
-                  >
-                    {s}
-                  </span>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+        {/* ── Experience ── */}
+        <Section
+          id="experience"
+          number="04"
+          title="Experience"
+          isDark={isDark}
+        >
+          <div className="space-y-4">
+            {EXPERIENCE.map((e, idx) => (
+              <ExperienceCard key={idx} e={e} isDark={isDark} />
+            ))}
+          </div>
         </Section>
 
-        <Section id="contact" title="Contact">
-          <Card className={PANEL_CARD_CLASS} style={cardStyle}>
-            <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <div>
-                <p className={PANEL_TEXT}>Interested in collaborating?</p>
-                <p className={`text-base ${MUTED}`}>Feel free to reach out.</p>
-              </div>
+        {/* ── Skills ── */}
+        <Section id="skills" number="05" title="Skills" isDark={isDark}>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {SKILL_CATEGORIES.map((cat) => (
+              <SkillCard key={cat.label} cat={cat} isDark={isDark} />
+            ))}
+          </div>
+        </Section>
 
-              <div className="flex gap-3">
+        {/* ── Contact ── */}
+        <Section id="contact" number="06" title="Contact" isDark={isDark}>
+          <motion.div variants={itemVariants}>
+            <div
+              className={`rounded-2xl border p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 ${
+                isDark
+                  ? "bg-slate-900/40 border-slate-800"
+                  : "bg-white border-slate-200"
+              }`}
+            >
+              <div>
+                <p className="font-serif text-2xl sm:text-3xl font-semibold tracking-tight">
+                  Interested in collaborating?
+                </p>
+                <p className={`mt-1 text-base sm:text-lg ${muted}`}>
+                  I'm always open to research, internships, or interesting
+                  side-projects. Drop me a line.
+                </p>
+              </div>
+              <div className="flex gap-3 shrink-0">
                 <Button asChild className="rounded-md text-base px-4 py-2">
                   <a href={`mailto:${INFO.email}`}>
                     <Mail className="w-5 h-5 mr-2" /> Email
                   </a>
                 </Button>
-
                 <Button
                   asChild
                   variant="secondary"
@@ -640,33 +955,35 @@ export default function App() {
                   </a>
                 </Button>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </motion.div>
         </Section>
       </main>
 
-      <footer className="border-t border-slate-200 mt-6">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-6 text-base flex flex-wrap items-center justify-between">
-          <div className="flex items-center gap-4">
+      {/* ── Footer ── */}
+      <footer
+        className={`border-t mt-6 ${
+          isDark ? "border-slate-800" : "border-slate-200"
+        }`}
+      >
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-8 text-base flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-5">
             <LinkIcon href={INFO.github} title="GitHub">
               <Github className="w-5 h-5" />
               <span>GitHub</span>
             </LinkIcon>
-
             <LinkIcon href={INFO.linkedin} title="LinkedIn">
               <Linkedin className="w-5 h-5" />
               <span>LinkedIn</span>
             </LinkIcon>
-
             <LinkIcon href={`mailto:${INFO.email}`} title="Email">
               <Mail className="w-5 h-5" />
               <span>Email</span>
             </LinkIcon>
           </div>
-
           <p className={footerTextClass}>
-            © {new Date().getFullYear()} {INFO.name}. This site is inspired by
-            clean academic profiles.
+            © {new Date().getFullYear()} {INFO.name}. Built with React, Tailwind,
+            and Framer Motion.
           </p>
         </div>
       </footer>
