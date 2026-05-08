@@ -123,9 +123,9 @@ const EXPERIENCE = [
 ];
 
 interface SkillCategory {
-  label: string;     
-  title: string;     
-  items: string[];   
+  label: string;
+  title: string;
+  items: string[];
 }
 
 const SKILL_CATEGORIES: SkillCategory[] = [
@@ -160,6 +160,8 @@ const NAV_SECTIONS = [
   { id: "skills", label: "Skills" },
   { id: "contact", label: "Contact" },
 ];
+
+const CONTAINER = "w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16";
 
 function ScrollSpyNav({ isDark }: { isDark: boolean }) {
   const [activeId, setActiveId] = React.useState<string>("home");
@@ -320,35 +322,37 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
   title,
   isDark,
 }) => (
-  <div className="flex items-baseline gap-4 sm:gap-6 mb-10">
-    <motion.span
-      initial={{ opacity: 0, x: -8 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.4 }}
-      className="font-mono text-sm sm:text-base tracking-[0.2em] text-sky-500 dark:text-sky-400 shrink-0"
-    >
-      {number}.
-    </motion.span>
-    <motion.h2
-      initial={{ opacity: 0, y: 16 }}
+  <div className="mb-12 sm:mb-16">
+    <motion.p
+      initial={{ opacity: 0, y: 8 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.5, delay: 0.05 }}
-      className="font-serif text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-none"
+      transition={{ duration: 0.4 }}
+      className="font-mono text-xs sm:text-sm tracking-[0.3em] text-sky-500 dark:text-sky-400 uppercase mb-4"
     >
-      {title}
-    </motion.h2>
-    <motion.div
-      initial={{ scaleX: 0 }}
-      whileInView={{ scaleX: 1 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.6, delay: 0.2 }}
-      style={{ transformOrigin: "0% 50%" }}
-      className={`flex-1 h-px ${
-        isDark ? "bg-slate-700" : "bg-slate-300"
-      }`}
-    />
+      {number} — Section
+    </motion.p>
+    <div className="flex items-end gap-6">
+      <motion.h2
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6, delay: 0.05 }}
+        className="font-serif text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.95]"
+      >
+        {title}
+      </motion.h2>
+      <motion.div
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.7, delay: 0.25 }}
+        style={{ transformOrigin: "0% 50%" }}
+        className={`flex-1 h-px mb-4 ${
+          isDark ? "bg-slate-700" : "bg-slate-300"
+        }`}
+      />
+    </div>
   </div>
 );
 
@@ -357,6 +361,7 @@ interface SectionProps {
   number: string;
   title: string;
   isDark: boolean;
+  tinted?: boolean;
   children: React.ReactNode;
 }
 const Section: React.FC<SectionProps> = ({
@@ -364,30 +369,39 @@ const Section: React.FC<SectionProps> = ({
   number,
   title,
   isDark,
+  tinted,
   children,
-}) => (
-  <section
-    id={id}
-    className="scroll-mt-24 max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-16 sm:py-24"
-  >
-    <SectionHeader number={number} title={title} isDark={isDark} />
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-80px" }}
-      variants={{
-        hidden: {},
-        visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
-      }}
-    >
-      {children}
-    </motion.div>
-  </section>
-);
+}) => {
+  const bg = tinted
+    ? isDark
+      ? "bg-slate-900/40"
+      : "bg-slate-50"
+    : "";
+  return (
+    <section id={id} className={`scroll-mt-24 py-20 sm:py-28 ${bg}`}>
+      <div className={CONTAINER}>
+        <SectionHeader number={number} title={title} isDark={isDark} />
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={{
+            hidden: {},
+            visible: {
+              transition: { staggerChildren: 0.1, delayChildren: 0.15 },
+            },
+          }}
+        >
+          {children}
+        </motion.div>
+      </div>
+    </section>
+  );
+};
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
 
 function categoryClasses(c: CategoryColor, isDark: boolean): string {
@@ -434,7 +448,7 @@ function ProjectCard({
     : "GitHub";
 
   const cardBg = isDark
-    ? "bg-slate-900/40 border-slate-800 hover:border-slate-600"
+    ? "bg-slate-900/60 border-slate-800 hover:border-slate-600"
     : "bg-white border-slate-200 hover:border-slate-400";
   const tagPill = isDark
     ? "bg-slate-900/60 border-slate-700 text-slate-300"
@@ -443,7 +457,7 @@ function ProjectCard({
     ? "bg-amber-500/10 text-amber-300 border-amber-500/30"
     : "bg-amber-50 text-amber-700 border-amber-200";
   const yearCls = isDark ? "text-slate-500" : "text-slate-400";
-  const watermarkCls = isDark ? "text-slate-800/60" : "text-slate-200";
+  const watermarkCls = isDark ? "text-slate-800/80" : "text-slate-100";
   const ghostBtn = isDark
     ? "bg-slate-900/60 border-slate-700 text-slate-200 hover:bg-slate-800"
     : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50";
@@ -453,17 +467,15 @@ function ProjectCard({
       <div
         className={`relative overflow-hidden rounded-2xl border transition-colors duration-300 ${cardBg}`}
       >
-        {/* Big watermark number */}
         <span
           aria-hidden
-          className={`pointer-events-none select-none absolute -top-2 right-4 font-serif font-bold text-[7rem] sm:text-[9rem] leading-none ${watermarkCls}`}
+          className={`pointer-events-none select-none absolute -top-4 right-6 font-serif font-bold text-[8rem] sm:text-[11rem] leading-none ${watermarkCls}`}
         >
           {String(index + 1).padStart(2, "0")}
         </span>
 
-        <div className="relative p-6 sm:p-8">
-          {/* Top tag row */}
-          <div className="flex flex-wrap items-center gap-2 mb-4">
+        <div className="relative p-6 sm:p-10">
+          <div className="flex flex-wrap items-center gap-2 mb-5">
             {project.featured && (
               <span
                 className={`text-[10px] sm:text-xs font-mono font-semibold tracking-widest px-2 py-1 rounded border ${featuredCls}`}
@@ -498,8 +510,7 @@ function ProjectCard({
             )}
           </div>
 
-          {/* Title */}
-          <h3 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight mb-3 max-w-3xl">
+          <h3 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight mb-4 max-w-3xl leading-tight">
             {primaryLink ? (
               <a
                 href={primaryLink}
@@ -514,7 +525,6 @@ function ProjectCard({
             )}
           </h3>
 
-          {/* Description */}
           <p
             className={`max-w-3xl leading-relaxed text-base sm:text-lg ${
               isDark ? "text-slate-400" : "text-slate-600"
@@ -523,8 +533,7 @@ function ProjectCard({
             {project.description}
           </p>
 
-          {/* Tags */}
-          <div className="mt-5 flex flex-wrap gap-2">
+          <div className="mt-6 flex flex-wrap gap-2">
             {project.tags.map((t) => (
               <span
                 key={t}
@@ -548,7 +557,7 @@ function SkillCard({
   isDark: boolean;
 }) {
   const cardBg = isDark
-    ? "bg-slate-900/40 border-slate-800"
+    ? "bg-slate-900/60 border-slate-800"
     : "bg-white border-slate-200";
   const labelCls = isDark ? "text-sky-400" : "text-sky-600";
   const tagPill = isDark
@@ -590,7 +599,7 @@ function ExperienceCard({
   isDark: boolean;
 }) {
   const cardBg = isDark
-    ? "bg-slate-900/40 border-slate-800"
+    ? "bg-slate-900/60 border-slate-800"
     : "bg-white border-slate-200";
   const muted = isDark ? "text-slate-400" : "text-slate-600";
   const subtle = isDark ? "text-slate-500" : "text-slate-500";
@@ -598,12 +607,12 @@ function ExperienceCard({
   return (
     <motion.div
       variants={itemVariants}
-      className={`rounded-2xl border p-6 ${cardBg}`}
+      className={`rounded-2xl border p-6 sm:p-8 ${cardBg}`}
     >
       <div className="flex items-start gap-3 mb-1">
-        <Briefcase className="w-5 h-5 mt-1 shrink-0 text-sky-500" />
+        <Briefcase className="w-5 h-5 mt-2 shrink-0 text-sky-500" />
         <div>
-          <h3 className="font-serif text-xl sm:text-2xl font-semibold tracking-tight">
+          <h3 className="font-serif text-2xl sm:text-3xl font-semibold tracking-tight">
             {e.role}
           </h3>
           <p className={`text-base ${muted}`}>{e.org}</p>
@@ -667,13 +676,12 @@ export default function App() {
   const footerTextClass = isDark ? "text-slate-500" : "text-slate-500";
 
   return (
-    <div className={`${mainClass} text-lg`}>
+    <div className={`${mainClass} text-lg overflow-x-hidden`}>
       <ScrollProgress isDark={isDark} />
       <ScrollSpyNav isDark={isDark} />
 
-      {/* ── Header ── */}
       <header className={headerClass}>
-        <nav className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 h-16 flex items-center justify-between text-lg">
+        <nav className={`${CONTAINER} h-16 flex items-center justify-between text-lg`}>
           <a
             href="#home"
             className="font-serif font-semibold text-2xl tracking-tight"
@@ -707,119 +715,116 @@ export default function App() {
       </header>
 
       <main>
-        {/* ── Hero ── */}
-        <section
-          id="home"
-          className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-16 sm:py-24"
-        >
-          <div className="grid md:grid-cols-[1fr,220px] gap-10 items-center">
-            <div>
-              <motion.p
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="font-mono text-sm tracking-[0.25em] text-sky-500 dark:text-sky-400 uppercase mb-3"
-              >
-                Hi, my name is
-              </motion.p>
-              <motion.h1
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.05 }}
-                className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05]"
-              >
-                {INFO.name}.
-              </motion.h1>
-              <motion.h2
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.15 }}
-                className={`font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight mt-2 ${muted}`}
-              >
-                I build at the edge of ML & math.
-              </motion.h2>
-              <motion.p
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.25 }}
-                className={`mt-5 max-w-2xl text-lg sm:text-xl leading-relaxed ${muted}`}
-              >
-                {INFO.headline}
-              </motion.p>
+        <section id="home" className="py-20 sm:py-28">
+          <div className={CONTAINER}>
+            <div className="grid md:grid-cols-[1fr,240px] gap-12 items-center">
+              <div>
+                <motion.p
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="font-mono text-sm tracking-[0.3em] text-sky-500 dark:text-sky-400 uppercase mb-4"
+                >
+                  Hi, my name is
+                </motion.p>
+                <motion.h1
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.05 }}
+                  className="font-serif text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.95]"
+                >
+                  {INFO.name}.
+                </motion.h1>
+                <motion.h2
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.15 }}
+                  className={`font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight mt-4 ${muted}`}
+                >
+                  I build at the edge of ML & math.
+                </motion.h2>
+                <motion.p
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.25 }}
+                  className={`mt-6 max-w-2xl text-lg sm:text-xl leading-relaxed ${muted}`}
+                >
+                  {INFO.headline}
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.35 }}
+                  className="mt-8 flex flex-wrap gap-3"
+                >
+                  <Button
+                    asChild
+                    variant="secondary"
+                    className="rounded-md text-base px-4 py-2"
+                  >
+                    <a href={INFO.github} target="_blank" rel="noreferrer">
+                      <Github className="w-5 h-5 mr-2" /> GitHub
+                    </a>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="secondary"
+                    className="rounded-md text-base px-4 py-2"
+                  >
+                    <a href={INFO.linkedin} target="_blank" rel="noreferrer">
+                      <Linkedin className="w-5 h-5 mr-2" /> LinkedIn
+                    </a>
+                  </Button>
+                  <Button asChild className="rounded-md text-base px-4 py-2">
+                    <a href={INFO.resumeUrl} target="_blank" rel="noreferrer">
+                      <Download className="w-5 h-5 mr-2" /> Resume
+                    </a>
+                  </Button>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                  className={`mt-8 text-base flex items-center gap-2 ${muted}`}
+                >
+                  <GraduationCap className="w-5 h-5 text-sky-500" />
+                  <span>
+                    B.S. in Computer Science & Mathematics · Purdue University
+                    (Aug 2025 – May 2028)
+                  </span>
+                </motion.div>
+              </div>
 
               <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.35 }}
-                className="mt-6 flex flex-wrap gap-3"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="justify-self-center md:justify-self-end"
               >
-                <Button
-                  asChild
-                  variant="secondary"
-                  className="rounded-md text-base px-4 py-2"
+                <div
+                  className={`w-48 h-48 sm:w-56 sm:h-56 rounded-full overflow-hidden shadow-xl border-2 ${
+                    isDark ? "border-slate-700" : "border-slate-200"
+                  }`}
                 >
-                  <a href={INFO.github} target="_blank" rel="noreferrer">
-                    <Github className="w-5 h-5 mr-2" /> GitHub
-                  </a>
-                </Button>
-                <Button
-                  asChild
-                  variant="secondary"
-                  className="rounded-md text-base px-4 py-2"
-                >
-                  <a href={INFO.linkedin} target="_blank" rel="noreferrer">
-                    <Linkedin className="w-5 h-5 mr-2" /> LinkedIn
-                  </a>
-                </Button>
-                <Button asChild className="rounded-md text-base px-4 py-2">
-                  <a href={INFO.resumeUrl} target="_blank" rel="noreferrer">
-                    <Download className="w-5 h-5 mr-2" /> Resume
-                  </a>
-                </Button>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className={`mt-6 text-base flex items-center gap-2 ${muted}`}
-              >
-                <GraduationCap className="w-5 h-5 text-sky-500" />
-                <span>
-                  B.S. in Computer Science & Mathematics · Purdue University
-                  (Aug 2025 – May 2028)
-                </span>
+                  <img
+                    src="/1753369044349.jpeg"
+                    alt="Srihan Vege"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </motion.div>
             </div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="justify-self-center md:justify-self-end"
-            >
-              <div
-                className={`w-44 h-44 sm:w-52 sm:h-52 rounded-full overflow-hidden shadow-xl border-2 ${
-                  isDark ? "border-slate-700" : "border-slate-200"
-                }`}
-              >
-                <img
-                  src="/1753369044349.jpeg"
-                  alt="Srihan Vege"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </motion.div>
           </div>
         </section>
 
-        {/* ── Biography ── */}
-        <Section id="about" number="01" title="Biography" isDark={isDark}>
+        <Section id="about" number="01" title="Biography" isDark={isDark} tinted>
           <motion.div
             variants={itemVariants}
-            className={`rounded-2xl border p-6 sm:p-8 leading-relaxed text-lg sm:text-xl ${
+            className={`rounded-2xl border p-8 sm:p-10 leading-relaxed text-lg sm:text-xl max-w-4xl ${
               isDark
-                ? "bg-slate-900/40 border-slate-800"
+                ? "bg-slate-900/60 border-slate-800"
                 : "bg-white border-slate-200"
             }`}
           >
@@ -840,29 +845,23 @@ export default function App() {
           </motion.div>
         </Section>
 
-        {/* ── Publications ── */}
-        <Section
-          id="notes"
-          number="02"
-          title="Publications"
-          isDark={isDark}
-        >
+        <Section id="notes" number="02" title="Publications" isDark={isDark}>
           <motion.div variants={itemVariants}>
             <div
-              className={`rounded-2xl border p-6 sm:p-8 ${
+              className={`rounded-2xl border p-8 sm:p-10 max-w-4xl ${
                 isDark
-                  ? "bg-slate-900/40 border-slate-800"
+                  ? "bg-slate-900/60 border-slate-800"
                   : "bg-white border-slate-200"
               }`}
             >
               <p className="font-mono text-xs tracking-[0.2em] text-sky-500 dark:text-sky-400 uppercase mb-3">
                 NAACL SRW 2025
               </p>
-              <h3 className="font-serif text-2xl sm:text-3xl font-semibold tracking-tight mb-3">
+              <h3 className="font-serif text-3xl sm:text-4xl font-semibold tracking-tight mb-4 leading-tight">
                 TRUTH DECAY: Quantifying Multi-Turn Sycophancy in Language
                 Models
               </h3>
-              <p className={`text-base mb-4 ${muted}`}>
+              <p className={`text-base mb-5 ${muted}`}>
                 Liu, Jain, Takuri, <strong>Vege</strong>, Akalin, Zhu, O&apos;Brien,
                 Sharma.
               </p>
@@ -878,14 +877,8 @@ export default function App() {
           </motion.div>
         </Section>
 
-        {/* ── Projects ── */}
-        <Section
-          id="projects"
-          number="03"
-          title="Projects"
-          isDark={isDark}
-        >
-          <div className="space-y-5">
+        <Section id="projects" number="03" title="Projects" isDark={isDark} tinted>
+          <div className="space-y-6">
             {PROJECTS.map((p, idx) => (
               <ProjectCard
                 key={p.title}
@@ -897,22 +890,15 @@ export default function App() {
           </div>
         </Section>
 
-        {/* ── Experience ── */}
-        <Section
-          id="experience"
-          number="04"
-          title="Experience"
-          isDark={isDark}
-        >
-          <div className="space-y-4">
+        <Section id="experience" number="04" title="Experience" isDark={isDark}>
+          <div className="space-y-4 max-w-5xl">
             {EXPERIENCE.map((e, idx) => (
               <ExperienceCard key={idx} e={e} isDark={isDark} />
             ))}
           </div>
         </Section>
 
-        {/* ── Skills ── */}
-        <Section id="skills" number="05" title="Skills" isDark={isDark}>
+        <Section id="skills" number="05" title="Skills" isDark={isDark} tinted>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {SKILL_CATEGORIES.map((cat) => (
               <SkillCard key={cat.label} cat={cat} isDark={isDark} />
@@ -920,21 +906,20 @@ export default function App() {
           </div>
         </Section>
 
-        {/* ── Contact ── */}
         <Section id="contact" number="06" title="Contact" isDark={isDark}>
           <motion.div variants={itemVariants}>
             <div
-              className={`rounded-2xl border p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 ${
+              className={`rounded-2xl border p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 max-w-5xl ${
                 isDark
-                  ? "bg-slate-900/40 border-slate-800"
+                  ? "bg-slate-900/60 border-slate-800"
                   : "bg-white border-slate-200"
               }`}
             >
               <div>
-                <p className="font-serif text-2xl sm:text-3xl font-semibold tracking-tight">
+                <p className="font-serif text-3xl sm:text-4xl font-semibold tracking-tight leading-tight">
                   Interested in collaborating?
                 </p>
-                <p className={`mt-1 text-base sm:text-lg ${muted}`}>
+                <p className={`mt-2 text-base sm:text-lg ${muted}`}>
                   I'm always open to research, internships, or interesting
                   side-projects. Drop me a line.
                 </p>
@@ -960,13 +945,12 @@ export default function App() {
         </Section>
       </main>
 
-      {/* ── Footer ── */}
       <footer
-        className={`border-t mt-6 ${
+        className={`border-t ${
           isDark ? "border-slate-800" : "border-slate-200"
         }`}
       >
-        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10 py-8 text-base flex flex-wrap items-center justify-between gap-4">
+        <div className={`${CONTAINER} py-8 text-base flex flex-wrap items-center justify-between gap-4`}>
           <div className="flex items-center gap-5">
             <LinkIcon href={INFO.github} title="GitHub">
               <Github className="w-5 h-5" />
