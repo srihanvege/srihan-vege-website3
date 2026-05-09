@@ -11,6 +11,7 @@ import {
   Moon,
   Monitor,
   ArrowUpRight,
+  Briefcase,
 } from "lucide-react";
 import { Button } from "./components/ui/button";
 
@@ -208,7 +209,7 @@ function ScrollSpyNav({ isDark }: { isDark: boolean }) {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 8 }}
                   transition={{ duration: 0.15 }}
-                  className={`font-mono text-[10px] tracking-[0.2em] uppercase font-medium px-2 py-0.5 rounded shadow-sm ${labelBg}`}
+                  className={`font-mono text-[11px] tracking-[0.2em] uppercase font-medium px-2 py-0.5 rounded shadow-sm ${labelBg}`}
                 >
                   {label}
                 </motion.span>
@@ -216,8 +217,8 @@ function ScrollSpyNav({ isDark }: { isDark: boolean }) {
             </AnimatePresence>
             <motion.span
               animate={{
-                width: isActive ? 8 : 6,
-                height: isActive ? 8 : 6,
+                width: isActive ? 9 : 7,
+                height: isActive ? 9 : 7,
                 backgroundColor: isActive ? dotActive : dotInactive,
                 scale: isHovered ? 1.3 : 1,
               }}
@@ -243,7 +244,7 @@ function ThemeToggle({
 }) {
   const ringActive = isDark ? "ring-1 ring-sky-400" : "ring-1 ring-sky-600";
   const base =
-    "h-7 w-7 inline-flex items-center justify-center rounded transition-colors";
+    "h-8 w-8 inline-flex items-center justify-center rounded transition-colors";
   const inactive = isDark
     ? "text-slate-400 hover:text-slate-100"
     : "text-slate-500 hover:text-slate-900";
@@ -274,32 +275,42 @@ function ThemeToggle({
   );
 }
 
-interface SectionLabelProps {
-  number: string;
+interface SectionHeaderProps {
   title: string;
+  isDark: boolean;
 }
-const SectionLabel: React.FC<SectionLabelProps> = ({ number, title }) => (
-  <motion.p
-    initial={{ opacity: 0, y: 6 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-80px" }}
-    transition={{ duration: 0.4 }}
-    className="font-mono text-[11px] tracking-[0.3em] uppercase text-sky-500 dark:text-sky-400 mb-6"
-  >
-    {number} — {title}
-  </motion.p>
+const SectionHeader: React.FC<SectionHeaderProps> = ({ title, isDark }) => (
+  <div className="mb-8">
+    <motion.div
+      initial={{ scaleX: 0 }}
+      whileInView={{ scaleX: 1 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.5 }}
+      style={{ transformOrigin: "0% 50%" }}
+      className={`h-px mb-5 w-16 ${isDark ? "bg-sky-400" : "bg-sky-600"}`}
+    />
+    <motion.h2
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.5, delay: 0.1 }}
+      className="text-4xl sm:text-5xl font-bold tracking-tight"
+    >
+      {title}
+    </motion.h2>
+  </div>
 );
 
 interface SectionProps {
   id: string;
-  number: string;
   title: string;
+  isDark: boolean;
   children: React.ReactNode;
 }
-const Section: React.FC<SectionProps> = ({ id, number, title, children }) => (
-  <section id={id} className="scroll-mt-24 py-14">
+const Section: React.FC<SectionProps> = ({ id, title, isDark, children }) => (
+  <section id={id} className="scroll-mt-24 py-16 sm:py-20">
     <div className={CONTAINER}>
-      <SectionLabel number={number} title={title} />
+      <SectionHeader title={title} isDark={isDark} />
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -307,7 +318,7 @@ const Section: React.FC<SectionProps> = ({ id, number, title, children }) => (
         variants={{
           hidden: {},
           visible: {
-            transition: { staggerChildren: 0.06, delayChildren: 0.1 },
+            transition: { staggerChildren: 0.08, delayChildren: 0.1 },
           },
         }}
       >
@@ -318,8 +329,8 @@ const Section: React.FC<SectionProps> = ({ id, number, title, children }) => (
 );
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
 interface LinkIconProps {
@@ -386,14 +397,14 @@ export default function App() {
       <ScrollSpyNav isDark={isDark} />
 
       <header className={headerClass}>
-        <nav className={`${CONTAINER} h-14 flex items-center justify-between`}>
+        <nav className={`${CONTAINER} h-16 flex items-center justify-between`}>
           <a
             href="#home"
-            className="font-mono text-xs tracking-[0.3em] uppercase font-semibold"
+            className="font-mono text-xs sm:text-sm tracking-[0.3em] uppercase font-semibold"
           >
             {INFO.name}
           </a>
-          <div className="hidden sm:flex items-center gap-6 font-mono text-[11px] tracking-[0.25em] uppercase">
+          <div className="hidden sm:flex items-center gap-7 font-mono text-[11px] sm:text-xs tracking-[0.25em] uppercase">
             <a href="#about" className="hover:text-sky-500 transition-colors">
               Bio
             </a>
@@ -425,51 +436,55 @@ export default function App() {
       <main>
         <section id="home" className="pt-16 pb-12 sm:pt-24 sm:pb-16">
           <div className={CONTAINER}>
-            <div className="grid md:grid-cols-[1fr,200px] gap-10 sm:gap-14 items-start">
+            <div className="grid md:grid-cols-[1fr,240px] gap-10 sm:gap-16 items-start">
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-sky-500 dark:text-sky-400 mb-4">
+                <p className="font-mono text-xs sm:text-sm tracking-[0.3em] uppercase text-sky-500 dark:text-sky-400 mb-5">
                   CS · Math · Purdue
                 </p>
-                <h1 className="text-4xl sm:text-5xl font-bold tracking-tight leading-[1.1]">
+                <h1 className="text-5xl sm:text-6xl font-bold tracking-tight leading-[1.05]">
                   {INFO.name}
                 </h1>
-                <p className={`mt-3 text-lg ${muted}`}>{INFO.role}</p>
-                <p className={`mt-5 max-w-2xl leading-relaxed ${muted}`}>
+                <p className={`mt-4 text-xl sm:text-2xl ${muted}`}>
+                  {INFO.role}
+                </p>
+                <p className={`mt-6 max-w-2xl text-lg leading-relaxed ${muted}`}>
                   {INFO.headline}
                 </p>
 
-                <div className="mt-7 flex flex-wrap gap-2">
+                <div className="mt-8 flex flex-wrap gap-3">
                   <Button
                     asChild
                     variant="secondary"
-                    className="rounded-md text-sm h-9 px-3"
+                    className="rounded-md text-base h-11 px-5"
                   >
                     <a href={INFO.github} target="_blank" rel="noreferrer">
-                      <Github className="w-4 h-4 mr-1.5" /> GitHub
+                      <Github className="w-5 h-5 mr-2" /> GitHub
                     </a>
                   </Button>
                   <Button
                     asChild
                     variant="secondary"
-                    className="rounded-md text-sm h-9 px-3"
+                    className="rounded-md text-base h-11 px-5"
                   >
                     <a href={INFO.linkedin} target="_blank" rel="noreferrer">
-                      <Linkedin className="w-4 h-4 mr-1.5" /> LinkedIn
+                      <Linkedin className="w-5 h-5 mr-2" /> LinkedIn
                     </a>
                   </Button>
-                  <Button asChild className="rounded-md text-sm h-9 px-3">
+                  <Button asChild className="rounded-md text-base h-11 px-5">
                     <a href={INFO.resumeUrl} target="_blank" rel="noreferrer">
-                      <Download className="w-4 h-4 mr-1.5" /> Resume
+                      <Download className="w-5 h-5 mr-2" /> Resume
                     </a>
                   </Button>
                 </div>
 
-                <div className={`mt-6 flex items-center gap-2 text-sm ${subtle}`}>
-                  <GraduationCap className="w-4 h-4 text-sky-500" />
+                <div
+                  className={`mt-7 flex items-center gap-2 text-base ${subtle}`}
+                >
+                  <GraduationCap className="w-5 h-5 text-sky-500" />
                   <span>
                     B.S. Computer Science &amp; Mathematics · Purdue University
                     (Aug 2025 – May 2028)
@@ -484,7 +499,7 @@ export default function App() {
                 className="justify-self-center md:justify-self-end"
               >
                 <div
-                  className={`w-44 h-44 sm:w-48 sm:h-48 rounded-full overflow-hidden ${
+                  className={`w-56 h-56 sm:w-60 sm:h-60 rounded-full overflow-hidden shadow-lg ${
                     isDark ? "ring-1 ring-slate-800" : "ring-1 ring-slate-200"
                   }`}
                 >
@@ -499,10 +514,10 @@ export default function App() {
           </div>
         </section>
 
-        <Section id="about" number="01" title="Biography">
+        <Section id="about" title="Biography" isDark={isDark}>
           <motion.p
             variants={itemVariants}
-            className={`max-w-3xl leading-relaxed ${muted}`}
+            className={`max-w-3xl text-lg leading-relaxed ${muted}`}
           >
             I recently started at Purdue University (CS &amp; Math). I enjoy
             building things at the intersection of ML reliability and usable
@@ -519,15 +534,18 @@ export default function App() {
           </motion.p>
         </Section>
 
-        <Section id="notes" number="02" title="Publications">
-          <motion.div variants={itemVariants} className="max-w-3xl">
-            <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-sky-500 dark:text-sky-400 mb-1.5">
+        <Section id="notes" title="Publications" isDark={isDark}>
+          <motion.div
+            variants={itemVariants}
+            className={`rounded-xl border p-6 sm:p-8 max-w-3xl ${cardBg}`}
+          >
+            <p className="font-mono text-xs tracking-[0.25em] uppercase text-sky-500 dark:text-sky-400 mb-2">
               NAACL SRW · 2025
             </p>
-            <h3 className="text-lg sm:text-xl font-semibold tracking-tight mb-1.5 leading-snug">
+            <h3 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-3 leading-snug">
               TRUTH DECAY: Quantifying Multi-Turn Sycophancy in Language Models
             </h3>
-            <p className={`text-sm mb-2 ${muted}`}>
+            <p className={`text-base mb-4 ${muted}`}>
               Liu, Jain, Takuri, <strong>Vege</strong>, Akalin, Zhu,
               O&apos;Brien, Sharma.
             </p>
@@ -535,15 +553,15 @@ export default function App() {
               href="https://arxiv.org/abs/2503.11656"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm text-sky-500 hover:underline"
+              className="inline-flex items-center gap-2 text-base text-sky-500 hover:underline"
             >
-              <ExternalLink className="w-3.5 h-3.5" /> arXiv
+              <ExternalLink className="w-4 h-4" /> Read on arXiv
             </a>
           </motion.div>
         </Section>
 
-        <Section id="projects" number="03" title="Projects">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <Section id="projects" title="Projects" isDark={isDark}>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {PROJECTS.map((p) => (
               <motion.a
                 key={p.title}
@@ -551,33 +569,33 @@ export default function App() {
                 target={p.link ? "_blank" : undefined}
                 rel={p.link ? "noreferrer" : undefined}
                 variants={itemVariants}
-                className={`group rounded-lg border p-5 transition-colors duration-300 flex flex-col ${cardBg} ${
+                className={`group rounded-xl border p-6 transition-colors duration-300 flex flex-col ${cardBg} ${
                   p.link ? "" : "pointer-events-none"
                 }`}
               >
                 <div className="flex items-start justify-between mb-3">
                   <span
-                    className={`font-mono text-[10px] tracking-[0.2em] uppercase ${subtle}`}
+                    className={`font-mono text-xs tracking-[0.2em] uppercase ${subtle}`}
                   >
                     {p.year}
                   </span>
                   {p.link && (
                     <ArrowUpRight
-                      className={`w-4 h-4 ${subtle} group-hover:text-sky-500 transition-colors`}
+                      className={`w-5 h-5 ${subtle} group-hover:text-sky-500 transition-colors`}
                     />
                   )}
                 </div>
-                <h3 className="text-base sm:text-lg font-semibold tracking-tight mb-2 group-hover:text-sky-500 transition-colors">
+                <h3 className="text-xl sm:text-2xl font-semibold tracking-tight mb-3 group-hover:text-sky-500 transition-colors">
                   {p.title}
                 </h3>
-                <p className={`text-sm leading-relaxed mb-4 flex-1 ${muted}`}>
+                <p className={`text-base leading-relaxed mb-5 flex-1 ${muted}`}>
                   {p.description}
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {p.tags.map((t) => (
                     <span
                       key={t}
-                      className={`font-mono text-[10px] tracking-wider px-1.5 py-0.5 rounded border ${tagPill}`}
+                      className={`font-mono text-xs tracking-wide px-2 py-1 rounded border ${tagPill}`}
                     >
                       {t}
                     </span>
@@ -588,32 +606,43 @@ export default function App() {
           </div>
         </Section>
 
-        <Section id="experience" number="04" title="Experience">
-          <div className="space-y-0 max-w-3xl">
+        <Section id="experience" title="Experience" isDark={isDark}>
+          <div className="space-y-4 max-w-4xl">
             {EXPERIENCE.map((e, idx) => (
               <motion.div
                 key={idx}
                 variants={itemVariants}
-                className={`py-5 ${
-                  idx !== EXPERIENCE.length - 1
-                    ? isDark
-                      ? "border-b border-slate-800"
-                      : "border-b border-slate-200"
-                    : ""
-                }`}
+                className={`rounded-xl border p-6 sm:p-7 transition-colors duration-300 ${cardBg}`}
               >
-                <div className="flex flex-wrap items-baseline justify-between gap-2 mb-1">
-                  <h3 className="text-base sm:text-lg font-semibold tracking-tight">
-                    {e.role}
-                  </h3>
-                  <span
-                    className={`font-mono text-[10px] tracking-[0.2em] uppercase ${subtle}`}
+                <div className="flex items-start gap-3 mb-2">
+                  <div
+                    className={`mt-1 shrink-0 w-9 h-9 rounded-md flex items-center justify-center ${
+                      isDark ? "bg-sky-500/10" : "bg-sky-50"
+                    }`}
                   >
-                    {e.date}
-                  </span>
+                    <Briefcase
+                      className={`w-4.5 h-4.5 ${
+                        isDark ? "text-sky-400" : "text-sky-600"
+                      }`}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex flex-wrap items-baseline justify-between gap-2">
+                      <h3 className="text-xl sm:text-2xl font-semibold tracking-tight">
+                        {e.role}
+                      </h3>
+                      <span
+                        className={`font-mono text-xs tracking-[0.2em] uppercase ${subtle}`}
+                      >
+                        {e.date}
+                      </span>
+                    </div>
+                    <p className={`text-base mt-1 ${muted}`}>{e.org}</p>
+                  </div>
                 </div>
-                <p className={`text-sm mb-3 ${muted}`}>{e.org}</p>
-                <ul className={`list-disc pl-5 space-y-1 text-sm ${muted}`}>
+                <ul
+                  className={`list-disc pl-12 mt-4 space-y-1.5 text-base leading-relaxed ${muted}`}
+                >
                   {e.bullets.map((b, i) => (
                     <li key={i}>{b}</li>
                   ))}
@@ -623,15 +652,15 @@ export default function App() {
           </div>
         </Section>
 
-        <Section id="skills" number="05" title="Skills">
+        <Section id="skills" title="Skills" isDark={isDark}>
           <motion.div
             variants={itemVariants}
-            className="flex flex-wrap gap-1.5 max-w-3xl"
+            className="flex flex-wrap gap-2 max-w-3xl"
           >
             {SKILLS.map((s) => (
               <span
                 key={s}
-                className={`font-mono text-xs px-2 py-1 rounded border ${tagPill}`}
+                className={`font-mono text-sm px-3 py-1.5 rounded-md border ${tagPill}`}
               >
                 {s}
               </span>
@@ -639,9 +668,9 @@ export default function App() {
           </motion.div>
         </Section>
 
-        <Section id="contact" number="06" title="Contact">
+        <Section id="contact" title="Contact" isDark={isDark}>
           <motion.div variants={itemVariants} className="max-w-3xl">
-            <p className={`leading-relaxed ${muted}`}>
+            <p className={`text-lg leading-relaxed ${muted}`}>
               Open to research, internships, and interesting side-projects.
               Reach me at{" "}
               <a
@@ -661,25 +690,41 @@ export default function App() {
               </a>
               .
             </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button asChild className="rounded-md text-base h-11 px-5">
+                <a href={`mailto:${INFO.email}`}>
+                  <Mail className="w-5 h-5 mr-2" /> Email
+                </a>
+              </Button>
+              <Button
+                asChild
+                variant="secondary"
+                className="rounded-md text-base h-11 px-5"
+              >
+                <a href={INFO.linkedin} target="_blank" rel="noreferrer">
+                  <Linkedin className="w-5 h-5 mr-2" /> LinkedIn
+                </a>
+              </Button>
+            </div>
           </motion.div>
         </Section>
       </main>
 
-      <footer className="py-8">
+      <footer className="py-10">
         <div
-          className={`${CONTAINER} flex flex-wrap items-center justify-between gap-3 font-mono text-[10px] tracking-[0.25em] uppercase ${subtle}`}
+          className={`${CONTAINER} flex flex-wrap items-center justify-between gap-3 font-mono text-[11px] tracking-[0.25em] uppercase ${subtle}`}
         >
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-6">
             <LinkIcon href={INFO.github} title="GitHub">
-              <Github className="w-3.5 h-3.5" />
+              <Github className="w-4 h-4" />
               <span>GitHub</span>
             </LinkIcon>
             <LinkIcon href={INFO.linkedin} title="LinkedIn">
-              <Linkedin className="w-3.5 h-3.5" />
+              <Linkedin className="w-4 h-4" />
               <span>LinkedIn</span>
             </LinkIcon>
             <LinkIcon href={`mailto:${INFO.email}`} title="Email">
-              <Mail className="w-3.5 h-3.5" />
+              <Mail className="w-4 h-4" />
               <span>Email</span>
             </LinkIcon>
           </div>
