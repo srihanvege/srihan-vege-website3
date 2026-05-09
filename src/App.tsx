@@ -676,6 +676,12 @@ export default function App() {
     localStorage.setItem("theme", mode);
   }, [mode]);
 
+  React.useEffect(() => {
+    const bg = isDark ? "#020617" : "#ffffff";
+    document.documentElement.style.backgroundColor = bg;
+    document.body.style.backgroundColor = bg;
+  }, [isDark]);
+
   const mainClass = isDark
     ? "min-h-screen bg-slate-950 text-slate-100"
     : "min-h-screen bg-white text-slate-900";
