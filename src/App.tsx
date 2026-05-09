@@ -12,20 +12,37 @@ import {
   Moon,
   Monitor,
   ArrowUpRight,
+  MapPin,
 } from "lucide-react";
 import { Button } from "./components/ui/button";
 
 const INFO = {
   name: "Srihan Vege",
-  role: "Computer Science & Mathematics Student",
+  role: "CS & Mathematics",
+  school: "Purdue University",
   location: "West Lafayette, IN",
   email: "svege@purdue.edu",
   headline:
-    "Purdue CS + Math · Interests in ML reliability and high-powered computing.",
+    "Purdue CS + Math student interested in ML reliability and high-powered computing. Recent work spans LLM evaluation, medical imaging, and applied ML.",
   resumeUrl: "/srihan_vege_resume.pdf",
   github: "https://github.com/srihanvege",
   linkedin: "https://www.linkedin.com/in/srihan-vege/",
 };
+
+const INTERESTS = [
+  "Machine Learning",
+  "LLM Evaluation",
+  "Medical Imaging",
+  "Applied Mathematics",
+];
+
+const EDUCATION = [
+  {
+    degree: "B.S. in Computer Science & Mathematics",
+    school: "Purdue University",
+    date: "Aug 2025 – May 2028",
+  },
+];
 
 type ProjectLinks = { code?: string; demo?: string; paper?: string };
 type CategoryColor = "blue" | "purple" | "amber" | "green" | "rose";
@@ -161,7 +178,7 @@ const NAV_SECTIONS = [
   { id: "contact", label: "Contact" },
 ];
 
-const CONTAINER = "w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16";
+const CONTAINER = "w-full max-w-6xl mx-auto px-6 sm:px-10";
 
 function ScrollSpyNav({ isDark }: { isDark: boolean }) {
   const [activeId, setActiveId] = React.useState<string>("home");
@@ -322,23 +339,23 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
   title,
   isDark,
 }) => (
-  <div className="mb-12 sm:mb-16">
+  <div className="mb-8">
     <motion.p
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 6 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.4 }}
-      className="font-mono text-xs sm:text-sm tracking-[0.3em] text-sky-500 dark:text-sky-400 uppercase mb-4"
+      className="font-mono text-xs tracking-[0.25em] text-sky-500 dark:text-sky-400 uppercase mb-2"
     >
-      {number} — Section
+      {number}
     </motion.p>
-    <div className="flex items-end gap-6">
+    <div className="flex items-center gap-4">
       <motion.h2
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6, delay: 0.05 }}
-        className="font-serif text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.95]"
+        transition={{ duration: 0.5 }}
+        className="text-3xl sm:text-4xl font-bold tracking-tight"
       >
         {title}
       </motion.h2>
@@ -346,10 +363,10 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
         initial={{ scaleX: 0 }}
         whileInView={{ scaleX: 1 }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.7, delay: 0.25 }}
+        transition={{ duration: 0.6, delay: 0.15 }}
         style={{ transformOrigin: "0% 50%" }}
-        className={`flex-1 h-px mb-4 ${
-          isDark ? "bg-slate-700" : "bg-slate-300"
+        className={`flex-1 h-px ${
+          isDark ? "bg-slate-800" : "bg-slate-200"
         }`}
       />
     </div>
@@ -374,11 +391,11 @@ const Section: React.FC<SectionProps> = ({
 }) => {
   const bg = tinted
     ? isDark
-      ? "bg-slate-900/40"
+      ? "bg-slate-900/30"
       : "bg-slate-50"
     : "";
   return (
-    <section id={id} className={`scroll-mt-24 py-20 sm:py-28 ${bg}`}>
+    <section id={id} className={`scroll-mt-24 py-14 sm:py-16 ${bg}`}>
       <div className={CONTAINER}>
         <SectionHeader number={number} title={title} isDark={isDark} />
         <motion.div
@@ -388,7 +405,7 @@ const Section: React.FC<SectionProps> = ({
           variants={{
             hidden: {},
             visible: {
-              transition: { staggerChildren: 0.1, delayChildren: 0.15 },
+              transition: { staggerChildren: 0.08, delayChildren: 0.1 },
             },
           }}
         >
@@ -400,8 +417,8 @@ const Section: React.FC<SectionProps> = ({
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
 function categoryClasses(c: CategoryColor, isDark: boolean): string {
@@ -457,7 +474,6 @@ function ProjectCard({
     ? "bg-amber-500/10 text-amber-300 border-amber-500/30"
     : "bg-amber-50 text-amber-700 border-amber-200";
   const yearCls = isDark ? "text-slate-500" : "text-slate-400";
-  const watermarkCls = isDark ? "text-slate-800/80" : "text-slate-100";
   const ghostBtn = isDark
     ? "bg-slate-900/60 border-slate-700 text-slate-200 hover:bg-slate-800"
     : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50";
@@ -465,36 +481,32 @@ function ProjectCard({
   return (
     <motion.div variants={itemVariants}>
       <div
-        className={`relative overflow-hidden rounded-2xl border transition-colors duration-300 ${cardBg}`}
+        className={`relative overflow-hidden rounded-xl border transition-colors duration-300 ${cardBg}`}
       >
-        <span
-          aria-hidden
-          className={`pointer-events-none select-none absolute -top-4 right-6 font-serif font-bold text-[8rem] sm:text-[11rem] leading-none ${watermarkCls}`}
-        >
-          {String(index + 1).padStart(2, "0")}
-        </span>
-
-        <div className="relative p-6 sm:p-10">
-          <div className="flex flex-wrap items-center gap-2 mb-5">
+        <div className="p-5 sm:p-6">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+            <span
+              className={`text-[10px] font-mono ${yearCls} mr-1`}
+            >
+              {String(index + 1).padStart(2, "0")}
+            </span>
             {project.featured && (
               <span
-                className={`text-[10px] sm:text-xs font-mono font-semibold tracking-widest px-2 py-1 rounded border ${featuredCls}`}
+                className={`text-[10px] font-mono font-semibold tracking-widest px-2 py-0.5 rounded border ${featuredCls}`}
               >
                 FEATURED
               </span>
             )}
             <span
-              className={`text-[10px] sm:text-xs font-mono font-semibold tracking-widest px-2 py-1 rounded border ${categoryClasses(
+              className={`text-[10px] font-mono font-semibold tracking-widest px-2 py-0.5 rounded border ${categoryClasses(
                 project.categoryColor,
                 isDark
               )}`}
             >
               {project.category}
             </span>
-            <span
-              className={`text-xs sm:text-sm font-mono ${yearCls} ml-1`}
-            >
-              {project.year}
+            <span className={`text-xs font-mono ${yearCls}`}>
+              · {project.year}
             </span>
 
             {primaryLink && (
@@ -502,7 +514,7 @@ function ProjectCard({
                 href={primaryLink}
                 target="_blank"
                 rel="noreferrer"
-                className={`ml-auto inline-flex items-center gap-1.5 text-xs sm:text-sm px-3 py-1.5 rounded-md border transition-colors ${ghostBtn}`}
+                className={`ml-auto inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-md border transition-colors ${ghostBtn}`}
               >
                 <ArrowUpRight className="w-3.5 h-3.5" />
                 {linkLabel}
@@ -510,7 +522,7 @@ function ProjectCard({
             )}
           </div>
 
-          <h3 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight mb-4 max-w-3xl leading-tight">
+          <h3 className="font-serif text-xl sm:text-2xl font-semibold tracking-tight mb-2 max-w-3xl">
             {primaryLink ? (
               <a
                 href={primaryLink}
@@ -526,18 +538,18 @@ function ProjectCard({
           </h3>
 
           <p
-            className={`max-w-3xl leading-relaxed text-base sm:text-lg ${
+            className={`max-w-3xl leading-relaxed text-base ${
               isDark ? "text-slate-400" : "text-slate-600"
             }`}
           >
             {project.description}
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-2">
+          <div className="mt-4 flex flex-wrap gap-1.5">
             {project.tags.map((t) => (
               <span
                 key={t}
-                className={`font-mono text-xs px-2.5 py-1 rounded border ${tagPill}`}
+                className={`font-mono text-xs px-2 py-0.5 rounded border ${tagPill}`}
               >
                 {t}
               </span>
@@ -567,21 +579,21 @@ function SkillCard({
   return (
     <motion.div
       variants={itemVariants}
-      className={`rounded-2xl border p-6 ${cardBg}`}
+      className={`rounded-xl border p-5 ${cardBg}`}
     >
       <p
-        className={`text-xs font-mono font-semibold tracking-[0.2em] uppercase mb-2 ${labelCls}`}
+        className={`text-[10px] font-mono font-semibold tracking-[0.2em] uppercase mb-1.5 ${labelCls}`}
       >
         {cat.label}
       </p>
-      <h3 className="text-xl sm:text-2xl font-semibold mb-4 tracking-tight">
+      <h3 className="text-lg font-semibold mb-3 tracking-tight">
         {cat.title}
       </h3>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-1.5">
         {cat.items.map((s) => (
           <span
             key={s}
-            className={`font-mono text-xs px-2.5 py-1 rounded border ${tagPill}`}
+            className={`font-mono text-xs px-2 py-0.5 rounded border ${tagPill}`}
           >
             {s}
           </span>
@@ -607,19 +619,19 @@ function ExperienceCard({
   return (
     <motion.div
       variants={itemVariants}
-      className={`rounded-2xl border p-6 sm:p-8 ${cardBg}`}
+      className={`rounded-xl border p-5 sm:p-6 ${cardBg}`}
     >
       <div className="flex items-start gap-3 mb-1">
-        <Briefcase className="w-5 h-5 mt-2 shrink-0 text-sky-500" />
+        <Briefcase className="w-5 h-5 mt-1 shrink-0 text-sky-500" />
         <div>
-          <h3 className="font-serif text-2xl sm:text-3xl font-semibold tracking-tight">
+          <h3 className="text-lg sm:text-xl font-semibold tracking-tight">
             {e.role}
           </h3>
-          <p className={`text-base ${muted}`}>{e.org}</p>
+          <p className={`text-sm ${muted}`}>{e.org}</p>
         </div>
       </div>
-      <p className={`font-mono text-xs ${subtle} ml-8 mb-3`}>{e.date}</p>
-      <ul className={`list-disc pl-12 space-y-1.5 text-base ${muted}`}>
+      <p className={`font-mono text-xs ${subtle} ml-8 mb-2`}>{e.date}</p>
+      <ul className={`list-disc pl-12 space-y-1 text-sm ${muted}`}>
         {e.bullets.map((b, i) => (
           <li key={i}>{b}</li>
         ))}
@@ -673,40 +685,37 @@ export default function App() {
     : "sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-200";
 
   const muted = isDark ? "text-slate-400" : "text-slate-600";
-  const footerTextClass = isDark ? "text-slate-500" : "text-slate-500";
+  const subtle = isDark ? "text-slate-500" : "text-slate-500";
+  const cardBg = isDark
+    ? "bg-slate-900/60 border-slate-800"
+    : "bg-white border-slate-200";
 
   return (
-    <div className={`${mainClass} text-lg overflow-x-hidden`}>
+    <div className={`${mainClass} text-base overflow-x-hidden`}>
       <ScrollProgress isDark={isDark} />
       <ScrollSpyNav isDark={isDark} />
 
       <header className={headerClass}>
-        <nav className={`${CONTAINER} h-16 flex items-center justify-between text-lg`}>
-          <a
-            href="#home"
-            className="font-serif font-semibold text-2xl tracking-tight"
-          >
+        <nav className={`${CONTAINER} h-14 flex items-center justify-between`}>
+          <a href="#home" className="font-serif font-semibold text-xl tracking-tight">
             {INFO.name}
           </a>
-          <div className="hidden sm:flex items-center gap-6 text-base">
+          <div className="hidden sm:flex items-center gap-5 text-sm">
             <a href="#about" className="hover:text-sky-500 transition-colors">
               Biography
             </a>
             <a href="#projects" className="hover:text-sky-500 transition-colors">
               Projects
             </a>
-            <a
-              href="#experience"
-              className="hover:text-sky-500 transition-colors"
-            >
+            <a href="#experience" className="hover:text-sky-500 transition-colors">
               Experience
             </a>
             <a href="#skills" className="hover:text-sky-500 transition-colors">
               Skills
             </a>
-            <Button asChild className="rounded-md text-base px-3 py-1.5">
+            <Button asChild className="rounded-md text-sm h-8 px-3">
               <a href={INFO.resumeUrl} target="_blank" rel="noreferrer">
-                <Download className="w-5 h-5 mr-2" /> Resume
+                <Download className="w-4 h-4 mr-1.5" /> Resume
               </a>
             </Button>
             <ThemeToggle mode={mode} setMode={setMode} />
@@ -715,96 +724,17 @@ export default function App() {
       </header>
 
       <main>
-        <section id="home" className="py-20 sm:py-28">
+        <section id="home" className="pt-12 pb-10 sm:pt-16 sm:pb-12">
           <div className={CONTAINER}>
-            <div className="grid md:grid-cols-[1fr,240px] gap-12 items-center">
-              <div>
-                <motion.p
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="font-mono text-sm tracking-[0.3em] text-sky-500 dark:text-sky-400 uppercase mb-4"
-                >
-                  Hi, my name is
-                </motion.p>
-                <motion.h1
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.05 }}
-                  className="font-serif text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.95]"
-                >
-                  {INFO.name}.
-                </motion.h1>
-                <motion.h2
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.15 }}
-                  className={`font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight mt-4 ${muted}`}
-                >
-                  I build at the edge of ML & math.
-                </motion.h2>
-                <motion.p
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.25 }}
-                  className={`mt-6 max-w-2xl text-lg sm:text-xl leading-relaxed ${muted}`}
-                >
-                  {INFO.headline}
-                </motion.p>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.35 }}
-                  className="mt-8 flex flex-wrap gap-3"
-                >
-                  <Button
-                    asChild
-                    variant="secondary"
-                    className="rounded-md text-base px-4 py-2"
-                  >
-                    <a href={INFO.github} target="_blank" rel="noreferrer">
-                      <Github className="w-5 h-5 mr-2" /> GitHub
-                    </a>
-                  </Button>
-                  <Button
-                    asChild
-                    variant="secondary"
-                    className="rounded-md text-base px-4 py-2"
-                  >
-                    <a href={INFO.linkedin} target="_blank" rel="noreferrer">
-                      <Linkedin className="w-5 h-5 mr-2" /> LinkedIn
-                    </a>
-                  </Button>
-                  <Button asChild className="rounded-md text-base px-4 py-2">
-                    <a href={INFO.resumeUrl} target="_blank" rel="noreferrer">
-                      <Download className="w-5 h-5 mr-2" /> Resume
-                    </a>
-                  </Button>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.5 }}
-                  className={`mt-8 text-base flex items-center gap-2 ${muted}`}
-                >
-                  <GraduationCap className="w-5 h-5 text-sky-500" />
-                  <span>
-                    B.S. in Computer Science & Mathematics · Purdue University
-                    (Aug 2025 – May 2028)
-                  </span>
-                </motion.div>
-              </div>
-
+            <div className="grid md:grid-cols-[200px,1fr] gap-8 sm:gap-12 items-start">
               <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="justify-self-center md:justify-self-end"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="flex flex-col items-center md:items-start"
               >
                 <div
-                  className={`w-48 h-48 sm:w-56 sm:h-56 rounded-full overflow-hidden shadow-xl border-2 ${
+                  className={`w-44 h-44 sm:w-48 sm:h-48 rounded-full overflow-hidden shadow-lg border-2 ${
                     isDark ? "border-slate-700" : "border-slate-200"
                   }`}
                 >
@@ -814,6 +744,110 @@ export default function App() {
                     className="w-full h-full object-cover"
                   />
                 </div>
+                <h1 className="mt-4 font-serif text-2xl font-bold tracking-tight text-center md:text-left">
+                  {INFO.name}
+                </h1>
+                <p className={`text-sm ${muted} text-center md:text-left`}>
+                  {INFO.role}
+                </p>
+                <a
+                  href="https://www.purdue.edu"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm text-sky-500 hover:underline text-center md:text-left"
+                >
+                  {INFO.school}
+                </a>
+                <div className={`mt-2 flex items-center gap-1 text-xs ${subtle}`}>
+                  <MapPin className="w-3.5 h-3.5" />
+                  <span>{INFO.location}</span>
+                </div>
+                <div className="mt-3 flex items-center gap-3">
+                  <a
+                    href={INFO.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    title="GitHub"
+                    className="text-slate-500 hover:text-sky-500 transition-colors"
+                  >
+                    <Github className="w-5 h-5" />
+                  </a>
+                  <a
+                    href={INFO.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                    title="LinkedIn"
+                    className="text-slate-500 hover:text-sky-500 transition-colors"
+                  >
+                    <Linkedin className="w-5 h-5" />
+                  </a>
+                  <a
+                    href={`mailto:${INFO.email}`}
+                    title="Email"
+                    className="text-slate-500 hover:text-sky-500 transition-colors"
+                  >
+                    <Mail className="w-5 h-5" />
+                  </a>
+                  <a
+                    href={INFO.resumeUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    title="Resume"
+                    className="text-slate-500 hover:text-sky-500 transition-colors"
+                  >
+                    <Download className="w-5 h-5" />
+                  </a>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                <p className="font-mono text-xs tracking-[0.25em] text-sky-500 dark:text-sky-400 uppercase mb-2">
+                  Hi, my name is
+                </p>
+                <h2 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight leading-[1.05]">
+                  {INFO.name}.
+                </h2>
+                <p className={`mt-3 text-lg sm:text-xl ${muted}`}>
+                  I build at the edge of ML &amp; math.
+                </p>
+                <p className={`mt-4 max-w-2xl leading-relaxed ${muted}`}>
+                  {INFO.headline}
+                </p>
+
+                <div className="mt-5 grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs font-mono font-semibold tracking-[0.2em] text-sky-500 dark:text-sky-400 uppercase mb-2">
+                      Interests
+                    </p>
+                    <ul className={`space-y-1 text-sm ${muted} list-disc pl-5`}>
+                      {INTERESTS.map((i) => (
+                        <li key={i}>{i}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="text-xs font-mono font-semibold tracking-[0.2em] text-sky-500 dark:text-sky-400 uppercase mb-2">
+                      Education
+                    </p>
+                    <ul className="space-y-2">
+                      {EDUCATION.map((ed) => (
+                        <li key={ed.degree} className="flex items-start gap-2">
+                          <GraduationCap className="w-4 h-4 mt-0.5 shrink-0 text-sky-500" />
+                          <div>
+                            <p className="text-sm font-medium">{ed.degree}</p>
+                            <p className={`text-xs ${subtle}`}>
+                              {ed.school} · {ed.date}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
               </motion.div>
             </div>
           </div>
@@ -822,11 +856,7 @@ export default function App() {
         <Section id="about" number="01" title="Biography" isDark={isDark} tinted>
           <motion.div
             variants={itemVariants}
-            className={`rounded-2xl border p-8 sm:p-10 leading-relaxed text-lg sm:text-xl max-w-4xl ${
-              isDark
-                ? "bg-slate-900/60 border-slate-800"
-                : "bg-white border-slate-200"
-            }`}
+            className={`rounded-xl border p-6 leading-relaxed max-w-4xl ${cardBg}`}
           >
             <p className={muted}>
               I recently started at Purdue University (CS &amp; Math). I enjoy
@@ -847,38 +877,32 @@ export default function App() {
 
         <Section id="notes" number="02" title="Publications" isDark={isDark}>
           <motion.div variants={itemVariants}>
-            <div
-              className={`rounded-2xl border p-8 sm:p-10 max-w-4xl ${
-                isDark
-                  ? "bg-slate-900/60 border-slate-800"
-                  : "bg-white border-slate-200"
-              }`}
-            >
-              <p className="font-mono text-xs tracking-[0.2em] text-sky-500 dark:text-sky-400 uppercase mb-3">
+            <div className={`rounded-xl border p-6 max-w-4xl ${cardBg}`}>
+              <p className="font-mono text-[10px] tracking-[0.2em] text-sky-500 dark:text-sky-400 uppercase mb-2">
                 NAACL SRW 2025
               </p>
-              <h3 className="font-serif text-3xl sm:text-4xl font-semibold tracking-tight mb-4 leading-tight">
+              <h3 className="font-serif text-xl sm:text-2xl font-semibold tracking-tight mb-2 leading-snug">
                 TRUTH DECAY: Quantifying Multi-Turn Sycophancy in Language
                 Models
               </h3>
-              <p className={`text-base mb-5 ${muted}`}>
-                Liu, Jain, Takuri, <strong>Vege</strong>, Akalin, Zhu, O&apos;Brien,
-                Sharma.
+              <p className={`text-sm mb-3 ${muted}`}>
+                Liu, Jain, Takuri, <strong>Vege</strong>, Akalin, Zhu,
+                O&apos;Brien, Sharma.
               </p>
               <a
                 href="https://arxiv.org/abs/2503.11656"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 text-base text-sky-500 hover:underline"
+                className="inline-flex items-center gap-2 text-sm text-sky-500 hover:underline"
               >
-                <ExternalLink className="w-5 h-5" /> Read on arXiv
+                <ExternalLink className="w-4 h-4" /> Read on arXiv
               </a>
             </div>
           </motion.div>
         </Section>
 
         <Section id="projects" number="03" title="Projects" isDark={isDark} tinted>
-          <div className="space-y-6">
+          <div className="space-y-4">
             {PROJECTS.map((p, idx) => (
               <ProjectCard
                 key={p.title}
@@ -891,7 +915,7 @@ export default function App() {
         </Section>
 
         <Section id="experience" number="04" title="Experience" isDark={isDark}>
-          <div className="space-y-4 max-w-5xl">
+          <div className="space-y-3 max-w-5xl">
             {EXPERIENCE.map((e, idx) => (
               <ExperienceCard key={idx} e={e} isDark={isDark} />
             ))}
@@ -899,7 +923,7 @@ export default function App() {
         </Section>
 
         <Section id="skills" number="05" title="Skills" isDark={isDark} tinted>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {SKILL_CATEGORIES.map((cat) => (
               <SkillCard key={cat.label} cat={cat} isDark={isDark} />
             ))}
@@ -909,34 +933,30 @@ export default function App() {
         <Section id="contact" number="06" title="Contact" isDark={isDark}>
           <motion.div variants={itemVariants}>
             <div
-              className={`rounded-2xl border p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 max-w-5xl ${
-                isDark
-                  ? "bg-slate-900/60 border-slate-800"
-                  : "bg-white border-slate-200"
-              }`}
+              className={`rounded-xl border p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 max-w-5xl ${cardBg}`}
             >
               <div>
-                <p className="font-serif text-3xl sm:text-4xl font-semibold tracking-tight leading-tight">
+                <p className="font-serif text-xl sm:text-2xl font-semibold tracking-tight">
                   Interested in collaborating?
                 </p>
-                <p className={`mt-2 text-base sm:text-lg ${muted}`}>
+                <p className={`mt-1 text-sm ${muted}`}>
                   I'm always open to research, internships, or interesting
                   side-projects. Drop me a line.
                 </p>
               </div>
-              <div className="flex gap-3 shrink-0">
-                <Button asChild className="rounded-md text-base px-4 py-2">
+              <div className="flex gap-2 shrink-0">
+                <Button asChild className="rounded-md text-sm h-9 px-3">
                   <a href={`mailto:${INFO.email}`}>
-                    <Mail className="w-5 h-5 mr-2" /> Email
+                    <Mail className="w-4 h-4 mr-1.5" /> Email
                   </a>
                 </Button>
                 <Button
                   asChild
                   variant="secondary"
-                  className="rounded-md text-base px-4 py-2"
+                  className="rounded-md text-sm h-9 px-3"
                 >
                   <a href={INFO.linkedin} target="_blank" rel="noreferrer">
-                    <Linkedin className="w-5 h-5 mr-2" /> LinkedIn
+                    <Linkedin className="w-4 h-4 mr-1.5" /> LinkedIn
                   </a>
                 </Button>
               </div>
@@ -945,29 +965,24 @@ export default function App() {
         </Section>
       </main>
 
-      <footer
-        className={`border-t ${
-          isDark ? "border-slate-800" : "border-slate-200"
-        }`}
-      >
-        <div className={`${CONTAINER} py-8 text-base flex flex-wrap items-center justify-between gap-4`}>
-          <div className="flex items-center gap-5">
+      <footer className={`border-t ${isDark ? "border-slate-800" : "border-slate-200"}`}>
+        <div className={`${CONTAINER} py-6 text-sm flex flex-wrap items-center justify-between gap-3`}>
+          <div className="flex items-center gap-4">
             <LinkIcon href={INFO.github} title="GitHub">
-              <Github className="w-5 h-5" />
+              <Github className="w-4 h-4" />
               <span>GitHub</span>
             </LinkIcon>
             <LinkIcon href={INFO.linkedin} title="LinkedIn">
-              <Linkedin className="w-5 h-5" />
+              <Linkedin className="w-4 h-4" />
               <span>LinkedIn</span>
             </LinkIcon>
             <LinkIcon href={`mailto:${INFO.email}`} title="Email">
-              <Mail className="w-5 h-5" />
+              <Mail className="w-4 h-4" />
               <span>Email</span>
             </LinkIcon>
           </div>
-          <p className={footerTextClass}>
-            © {new Date().getFullYear()} {INFO.name}. Built with React, Tailwind,
-            and Framer Motion.
+          <p className={subtle}>
+            © {new Date().getFullYear()} {INFO.name}.
           </p>
         </div>
       </footer>
