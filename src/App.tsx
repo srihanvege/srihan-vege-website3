@@ -681,8 +681,8 @@ export default function App() {
     : "min-h-screen bg-white text-slate-900";
 
   const headerClass = isDark
-    ? "sticky top-0 z-50 backdrop-blur bg-slate-950/80 border-b border-slate-800"
-    : "sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-200";
+    ? "sticky top-0 z-50 backdrop-blur bg-slate-950/80"
+    : "sticky top-0 z-50 backdrop-blur bg-white/80";
 
   const muted = isDark ? "text-slate-400" : "text-slate-600";
   const subtle = isDark ? "text-slate-500" : "text-slate-500";
