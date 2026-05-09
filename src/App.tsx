@@ -692,7 +692,6 @@ export default function App() {
 
   return (
     <div className={`${mainClass} text-base overflow-x-hidden`}>
-      <ScrollProgress isDark={isDark} />
       <ScrollSpyNav isDark={isDark} />
 
       <header className={headerClass}>
