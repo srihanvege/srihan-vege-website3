@@ -1,5 +1,5 @@
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import {
   Github,
   Linkedin,
@@ -7,22 +7,16 @@ import {
   ExternalLink,
   GraduationCap,
   Download,
-  Sun,
-  Moon,
-  Monitor,
   ArrowUpRight,
-  Briefcase,
+  ArrowDown,
 } from "lucide-react";
-import { Button } from "./components/ui/button";
 
+// ─────────────────────────────────────────────────────────────
+//  Data
+// ─────────────────────────────────────────────────────────────
 const INFO = {
   name: "Srihan Vege",
-  role: "Computer Science & Mathematics",
-  school: "Purdue University",
-  location: "West Lafayette, IN",
   email: "svege@purdue.edu",
-  headline:
-    "Purdue CS + Math student interested in ML reliability and high-powered computing. Recent work spans LLM evaluation, medical imaging, and applied ML.",
   resumeUrl: "/srihan_vege_resume.pdf",
   github: "https://github.com/srihanvege",
   linkedin: "https://www.linkedin.com/in/srihan-vege/",
@@ -63,7 +57,7 @@ const PROJECTS: Project[] = [
   {
     title: "Credit Card Fraud Detection",
     description:
-      "Binary classification pipeline for fraudulent transactions, with feature engineering and model evaluation for reliable risk scoring. Work in progress.",
+      "Binary classification pipeline for fraudulent transactions, with feature engineering and model evaluation for reliable risk scoring.",
     tags: ["Python", "XGBoost", "Pandas"],
     year: "2025",
     link: "https://github.com/srihanvege/Credit-Card-Fraud-Detection",
@@ -86,7 +80,7 @@ const EXPERIENCE = [
     date: "Jun 2024 – Feb 2025",
     bullets: [
       "Developed CT imaging model for aortic peak enhancement timing; mode timing error ~0.3s (≈97% improvement).",
-      "Improved prediction accuracy on 272 scans; reduced error from ~200 HU to ~100 HU; EMBC paper submitted; patent pending.",
+      "Improved prediction accuracy on 272 scans; reduced error from ~200 HU to ~100 HU; EMBC submitted; patent pending.",
     ],
   },
   {
@@ -109,542 +103,455 @@ const EXPERIENCE = [
 ];
 
 const SKILLS = [
-  "Python",
-  "Java",
-  "JavaScript",
-  "TypeScript",
-  "HTML/CSS",
-  "Swift",
-  "PyTorch",
-  "MONAI",
-  "NumPy",
-  "Pandas",
-  "Matplotlib",
-  "scikit-learn",
-  "LLMs",
-  "FAISS",
-  "Git",
-  "Linux",
+  "Python", "Java", "JavaScript", "TypeScript", "HTML/CSS", "Swift",
+  "PyTorch", "MONAI", "NumPy", "Pandas", "Matplotlib", "scikit-learn",
+  "LLMs", "FAISS", "Git", "Linux",
 ];
 
-const NAV_SECTIONS = [
-  { id: "home", label: "Home" },
-  { id: "about", label: "Biography" },
-  { id: "notes", label: "Publications" },
-  { id: "projects", label: "Projects" },
-  { id: "experience", label: "Experience" },
-  { id: "skills", label: "Skills" },
-  { id: "contact", label: "Contact" },
-];
+// ─────────────────────────────────────────────────────────────
+//  Animation variants
+// ─────────────────────────────────────────────────────────────
+const fadeUp = {
+  hidden: { opacity: 0, y: 26 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] as const },
+  },
+};
 
-const CONTAINER = "w-full max-w-5xl mx-auto px-6 sm:px-10";
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
+};
 
-function ScrollSpyNav({ isDark }: { isDark: boolean }) {
-  const [activeId, setActiveId] = React.useState<string>("home");
-  const [hoveredId, setHoveredId] = React.useState<string | null>(null);
+// ─────────────────────────────────────────────────────────────
+//  Scroll progress bar
+// ─────────────────────────────────────────────────────────────
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  return (
+    <motion.div
+      style={{ scaleX: scrollYProgress, transformOrigin: "0%" }}
+      className="fixed top-0 left-0 right-0 h-[2px] z-[100] bg-gradient-to-r from-sky-400 via-indigo-400 to-violet-500"
+    />
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+//  Nav
+// ─────────────────────────────────────────────────────────────
+function Nav() {
+  const [scrolled, setScrolled] = React.useState(false);
 
   React.useEffect(() => {
-    const observers: IntersectionObserver[] = [];
-    const visibleSections = new Map<string, number>();
-    NAV_SECTIONS.forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              visibleSections.set(id, entry.boundingClientRect.top);
-            } else {
-              visibleSections.delete(id);
-            }
-            if (visibleSections.size > 0) {
-              const topmost = [...visibleSections.entries()].sort(
-                (a, b) => a[1] - b[1]
-              )[0][0];
-              setActiveId(topmost);
-            }
-          });
-        },
-        { threshold: 0.15, rootMargin: "-10% 0px -60% 0px" }
-      );
-      observer.observe(el);
-      observers.push(observer);
-    });
-    return () => observers.forEach((o) => o.disconnect());
+    const fn = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
   }, []);
-
-  const handleClick = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  const dotActive = isDark ? "#38bdf8" : "#0284c7";
-  const dotInactive = isDark ? "#475569" : "#cbd5e1";
-  const labelBg = isDark
-    ? "bg-slate-800 text-slate-100"
-    : "bg-white text-slate-800";
 
   return (
     <nav
-      className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-end gap-3"
-      aria-label="Page sections"
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
+        scrolled ? "bg-[#050511]/90 backdrop-blur-xl border-b border-white/[0.04]" : ""
+      }`}
     >
-      {NAV_SECTIONS.map(({ id, label }) => {
-        const isActive = activeId === id;
-        const isHovered = hoveredId === id;
-        return (
-          <button
-            key={id}
-            onClick={() => handleClick(id)}
-            onMouseEnter={() => setHoveredId(id)}
-            onMouseLeave={() => setHoveredId(null)}
-            className="flex items-center gap-3 group cursor-pointer bg-transparent border-0 p-0"
-            aria-label={`Go to ${label}`}
+      <div className="max-w-[1400px] mx-auto px-6 sm:px-10 xl:px-16 h-16 flex items-center justify-between">
+        <a
+          href="#home"
+          className="font-mono text-[11px] tracking-[0.35em] uppercase text-white/70 hover:text-white transition-colors"
+        >
+          Srihan Vege
+        </a>
+        <div className="hidden sm:flex items-center gap-8">
+          {(["Bio", "Projects", "Experience", "Contact"] as const).map((label) => (
+            <a
+              key={label}
+              href={`#${label.toLowerCase()}`}
+              className="font-mono text-[10px] tracking-[0.25em] uppercase text-white/60 hover:text-white transition-colors cursor-pointer"
+            >
+              {label}
+            </a>
+          ))}
+          <a
+            href={INFO.resumeUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="font-mono text-[10px] tracking-[0.25em] uppercase border border-sky-500/25 text-sky-400/65 hover:text-sky-300 hover:border-sky-400/45 px-3 py-1.5 rounded transition-all"
           >
-            <AnimatePresence>
-              {isHovered && (
-                <motion.span
-                  key="label"
-                  initial={{ opacity: 0, x: 8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 8 }}
-                  transition={{ duration: 0.15 }}
-                  className={`font-mono text-[11px] tracking-[0.2em] uppercase font-medium px-2 py-0.5 rounded shadow-sm ${labelBg}`}
-                >
-                  {label}
-                </motion.span>
-              )}
-            </AnimatePresence>
-            <motion.span
-              animate={{
-                width: isActive ? 9 : 7,
-                height: isActive ? 9 : 7,
-                backgroundColor: isActive ? dotActive : dotInactive,
-                scale: isHovered ? 1.3 : 1,
-              }}
-              transition={{ duration: 0.2 }}
-              style={{ borderRadius: "50%", display: "block", flexShrink: 0 }}
-            />
-          </button>
-        );
-      })}
+            Resume ↗
+          </a>
+        </div>
+      </div>
     </nav>
   );
 }
 
-type Mode = "light" | "dark" | "system";
-function ThemeToggle({
-  mode,
-  setMode,
-  isDark,
-}: {
-  mode: Mode;
-  setMode: (m: Mode) => void;
-  isDark: boolean;
-}) {
-  const ringActive = isDark ? "ring-1 ring-sky-400" : "ring-1 ring-sky-600";
-  const base =
-    "h-8 w-8 inline-flex items-center justify-center rounded transition-colors";
-  const inactive = isDark
-    ? "text-slate-400 hover:text-slate-100"
-    : "text-slate-500 hover:text-slate-900";
+// ─────────────────────────────────────────────────────────────
+//  Hero Section
+// ─────────────────────────────────────────────────────────────
+function HeroSection() {
+  const { scrollY } = useScroll();
+  const textY = useTransform(scrollY, [0, 700], [0, -140]);
+  const textOpacity = useTransform(scrollY, [0, 400], [1, 0]);
+  const photoY = useTransform(scrollY, [0, 700], [0, 95]);
+  const photoOpacity = useTransform(scrollY, [0, 480], [1, 0]);
+
   return (
-    <div className="inline-flex items-center gap-1">
-      <button
-        onClick={() => setMode("light")}
-        className={`${base} ${inactive} ${mode === "light" ? ringActive : ""}`}
-        title="Light"
+    <section
+      id="home"
+      className="relative h-screen flex items-center overflow-hidden"
+      style={{ background: "#050511" }}
+    >
+      {/* Animated background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="hero-orb-1" />
+        <div className="hero-orb-2" />
+        <div className="hero-orb-3" />
+        <div className="hero-grain" />
+      </div>
+
+      {/* Text content */}
+      <motion.div
+        style={{ y: textY, opacity: textOpacity }}
+        className="relative z-10 max-w-[1400px] mx-auto px-6 sm:px-10 xl:px-16 w-full"
       >
-        <Sun className="w-4 h-4" />
-      </button>
-      <button
-        onClick={() => setMode("dark")}
-        className={`${base} ${inactive} ${mode === "dark" ? ringActive : ""}`}
-        title="Dark"
+        <div className="max-w-3xl">
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="font-mono text-[10px] sm:text-[11px] tracking-[0.4em] uppercase text-sky-400/75 mb-8"
+          >
+            CS · Mathematics · Purdue University
+          </motion.p>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 56 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="font-display font-black leading-[0.87] tracking-tight text-white"
+            style={{ fontSize: "clamp(4rem, 12.5vw, 10.5rem)" }}
+          >
+            Srihan
+            <br />
+            Vege.
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.5 }}
+            className="mt-8 text-lg sm:text-xl text-white/40 max-w-lg leading-relaxed"
+          >
+            ML researcher. Building at the intersection of AI reliability and
+            real-world impact — sycophancy reduction, medical imaging, fraud
+            detection.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.7 }}
+            className="mt-10 flex flex-wrap gap-3"
+          >
+            <a href={INFO.github} target="_blank" rel="noreferrer" className="hero-btn">
+              <Github className="w-3.5 h-3.5" /> GitHub
+            </a>
+            <a href={INFO.linkedin} target="_blank" rel="noreferrer" className="hero-btn">
+              <Linkedin className="w-3.5 h-3.5" /> LinkedIn
+            </a>
+            <a href={INFO.resumeUrl} target="_blank" rel="noreferrer" className="hero-btn-accent">
+              <Download className="w-3.5 h-3.5" /> Resume
+            </a>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* Profile photo — desktop, fades/parallaxes on scroll */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.4, delay: 0.3 }}
+        style={{ y: photoY, opacity: photoOpacity }}
+        className="absolute inset-y-0 right-[12%] xl:right-[16%] hidden lg:flex items-center pointer-events-none z-[5]"
       >
-        <Moon className="w-4 h-4" />
-      </button>
-      <button
-        onClick={() => setMode("system")}
-        className={`${base} ${inactive} ${mode === "system" ? ringActive : ""}`}
-        title="Auto"
+        <div className="relative w-[310px] h-[310px] xl:w-[360px] xl:h-[360px]">
+          <div className="absolute -inset-8 bg-gradient-to-br from-sky-500/10 to-indigo-500/8 rounded-full blur-3xl" />
+          <img
+            src="/1778867844831.png"
+            alt="Srihan Vege"
+            className="relative w-full h-full object-cover object-top rounded-full ring-1 ring-white/10"
+          />
+        </div>
+      </motion.div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.7 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
-        <Monitor className="w-4 h-4" />
-      </button>
+        <span className="font-mono text-[9px] tracking-[0.45em] uppercase text-white/20">
+          scroll
+        </span>
+        <motion.div
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ArrowDown className="w-3 h-3 text-white/20" />
+        </motion.div>
+      </motion.div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+//  Section wrapper
+// ─────────────────────────────────────────────────────────────
+interface SectionProps {
+  id: string;
+  number: string;
+  title: string;
+  children: React.ReactNode;
+}
+
+function Section({ id, number, title, children }: SectionProps) {
+  return (
+    <section id={id} className="py-28 sm:py-36 scroll-mt-16">
+      <div className="max-w-[1400px] mx-auto px-6 sm:px-10 xl:px-16">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={stagger}
+          className="mb-16 sm:mb-20"
+        >
+          <motion.div variants={fadeUp} className="flex items-center gap-4 mb-5">
+            <span className="font-mono text-[9px] tracking-[0.35em] uppercase text-white/20">
+              {number}
+            </span>
+            <div className="flex-1 h-px bg-gradient-to-r from-white/[0.08] to-transparent" />
+          </motion.div>
+          <motion.h2
+            variants={fadeUp}
+            className="font-display font-black tracking-tight text-white leading-[0.9]"
+            style={{ fontSize: "clamp(2.8rem, 7vw, 6rem)" }}
+          >
+            {title}
+          </motion.h2>
+        </motion.div>
+
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-60px" }}
+          variants={stagger}
+        >
+          {children}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+//  Project card
+// ─────────────────────────────────────────────────────────────
+function ProjectCard({ project }: { project: Project }) {
+  const inner = (
+    <>
+      <div className="absolute -top-20 -right-20 w-52 h-52 rounded-full bg-sky-500/[0.06] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+      <div className="flex items-center justify-between mb-7">
+        <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-white/20">
+          {project.year}
+        </span>
+        {project.link && (
+          <ArrowUpRight className="w-4 h-4 text-white/20 group-hover:text-sky-400 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all duration-300" />
+        )}
+      </div>
+
+      <h3 className="font-display font-bold text-xl sm:text-2xl text-white/75 group-hover:text-white mb-3 transition-colors leading-tight">
+        {project.title}
+      </h3>
+      <p className="text-sm leading-relaxed text-white/55 flex-1 mb-7">
+        {project.description}
+      </p>
+      <div className="flex flex-wrap gap-1.5">
+        {project.tags.map((tag) => (
+          <span
+            key={tag}
+            className="font-mono text-[10px] tracking-wide px-2.5 py-1 rounded-md bg-white/[0.03] text-white/30 border border-white/[0.05]"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+    </>
+  );
+
+  const cls =
+    "group relative rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 sm:p-7 flex flex-col overflow-hidden transition-all duration-500 hover:border-white/10 hover:bg-white/[0.03]";
+
+  if (project.link) {
+    return (
+      <motion.a
+        variants={fadeUp}
+        href={project.link}
+        target="_blank"
+        rel="noreferrer"
+        className={cls}
+      >
+        {inner}
+      </motion.a>
+    );
+  }
+  return (
+    <motion.div variants={fadeUp} className={cls}>
+      {inner}
+    </motion.div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+//  Skills marquee
+// ─────────────────────────────────────────────────────────────
+function SkillsMarquee() {
+  const tripled = [...SKILLS, ...SKILLS, ...SKILLS];
+  return (
+    <div className="relative overflow-hidden -mx-6 sm:-mx-10 xl:-mx-16">
+      <div className="marquee-track flex gap-3 py-1">
+        {tripled.map((skill, i) => (
+          <span
+            key={i}
+            className="flex-shrink-0 font-mono text-[12px] tracking-wide px-4 py-2.5 rounded-xl border border-white/[0.06] text-white/50 bg-white/[0.015] whitespace-nowrap hover:border-sky-500/25 hover:text-sky-400/80 transition-colors cursor-default"
+          >
+            {skill}
+          </span>
+        ))}
+      </div>
+      <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#050511] to-transparent pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#050511] to-transparent pointer-events-none" />
     </div>
   );
 }
 
-interface SectionHeaderProps {
-  title: string;
-  isDark: boolean;
-}
-const SectionHeader: React.FC<SectionHeaderProps> = ({ title, isDark }) => (
-  <div className="mb-8">
-    <motion.div
-      initial={{ scaleX: 0 }}
-      whileInView={{ scaleX: 1 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.5 }}
-      style={{ transformOrigin: "0% 50%" }}
-      className={`h-px mb-5 w-16 ${isDark ? "bg-sky-400" : "bg-sky-600"}`}
-    />
-    <motion.h2
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.5, delay: 0.1 }}
-      className="text-4xl sm:text-5xl font-bold tracking-tight"
-    >
-      {title}
-    </motion.h2>
-  </div>
-);
-
-interface SectionProps {
-  id: string;
-  title: string;
-  isDark: boolean;
-  children: React.ReactNode;
-}
-const Section: React.FC<SectionProps> = ({ id, title, isDark, children }) => (
-  <section id={id} className="scroll-mt-24 py-16 sm:py-20">
-    <div className={CONTAINER}>
-      <SectionHeader title={title} isDark={isDark} />
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-80px" }}
-        variants={{
-          hidden: {},
-          visible: {
-            transition: { staggerChildren: 0.08, delayChildren: 0.1 },
-          },
-        }}
-      >
-        {children}
-      </motion.div>
-    </div>
-  </section>
-);
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
-
-interface LinkIconProps {
-  href: string;
-  title?: string;
-  children: React.ReactNode;
-}
-const LinkIcon: React.FC<LinkIconProps> = ({ href, children, title }) => (
-  <a
-    href={href}
-    target="_blank"
-    rel="noreferrer"
-    title={title}
-    className="inline-flex items-center gap-2 hover:text-sky-500 transition-colors"
-  >
-    {children}
-  </a>
-);
-
+// ─────────────────────────────────────────────────────────────
+//  App
+// ─────────────────────────────────────────────────────────────
 export default function App() {
-  const [mode, setMode] = React.useState<Mode>(() => {
-    if (typeof window === "undefined") return "system";
-    return (localStorage.getItem("theme") as Mode) ?? "system";
-  });
-
-  const isDark = React.useMemo(() => {
-    if (mode === "dark") return true;
-    if (mode === "light") return false;
-    if (typeof window !== "undefined") {
-      return window.matchMedia("(prefers-color-scheme: dark)").matches;
-    }
-    return false;
-  }, [mode]);
-
-  React.useEffect(() => {
-    localStorage.setItem("theme", mode);
-  }, [mode]);
-
-  React.useEffect(() => {
-    const bg = isDark ? "#020617" : "#ffffff";
-    document.documentElement.style.backgroundColor = bg;
-    document.body.style.backgroundColor = bg;
-  }, [isDark]);
-
-  const mainClass = isDark
-    ? "min-h-screen bg-slate-950 text-slate-100"
-    : "min-h-screen bg-white text-slate-900";
-
-  const headerClass = isDark
-    ? "sticky top-0 z-50 backdrop-blur bg-slate-950/85"
-    : "sticky top-0 z-50 backdrop-blur bg-white/85";
-
-  const muted = isDark ? "text-slate-400" : "text-slate-600";
-  const subtle = isDark ? "text-slate-500" : "text-slate-500";
-  const cardBg = isDark
-    ? "bg-slate-900/40 border-slate-800 hover:border-slate-700"
-    : "bg-white border-slate-200 hover:border-slate-400";
-  const tagPill = isDark
-    ? "border-slate-700 text-slate-400"
-    : "border-slate-300 text-slate-600";
-
   return (
-    <div className={`${mainClass} text-base overflow-x-hidden`}>
-      <ScrollSpyNav isDark={isDark} />
-
-      <header className={headerClass}>
-        <nav className={`${CONTAINER} h-16 flex items-center justify-between`}>
-          <a
-            href="#home"
-            className="font-mono text-xs sm:text-sm tracking-[0.3em] uppercase font-semibold"
-          >
-            {INFO.name}
-          </a>
-          <div className="hidden sm:flex items-center gap-7 font-mono text-[11px] sm:text-xs tracking-[0.25em] uppercase">
-            <a href="#about" className="hover:text-sky-500 transition-colors">
-              Bio
-            </a>
-            <a href="#projects" className="hover:text-sky-500 transition-colors">
-              Projects
-            </a>
-            <a
-              href="#experience"
-              className="hover:text-sky-500 transition-colors"
-            >
-              Experience
-            </a>
-            <a href="#skills" className="hover:text-sky-500 transition-colors">
-              Skills
-            </a>
-            <a
-              href={INFO.resumeUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-sky-500 transition-colors"
-            >
-              Resume
-            </a>
-            <ThemeToggle mode={mode} setMode={setMode} isDark={isDark} />
-          </div>
-        </nav>
-      </header>
+    <div className="min-h-screen bg-[#050511] text-white overflow-x-hidden">
+      <ScrollProgress />
+      <Nav />
+      <HeroSection />
 
       <main>
-        <section id="home" className="pt-16 pb-12 sm:pt-24 sm:pb-16">
-          <div className={CONTAINER}>
-            <div className="grid md:grid-cols-[1fr,240px] gap-10 sm:gap-16 items-start">
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+        {/* ── About ── */}
+        <Section id="bio" number="01" title="About.">
+          <motion.div variants={fadeUp} className="space-y-5 max-w-3xl">
+            <p className="text-lg sm:text-xl leading-relaxed text-white/65">
+              I'm a first-year at Purdue University studying CS and Math. I
+              enjoy building at the intersection of ML reliability and usable
+              products — from evaluation harnesses to medical imaging models.
+            </p>
+            <p className="text-lg sm:text-xl leading-relaxed text-white/65">
+              Recent work: a multi-turn sycophancy evaluation harness (NAACL
+              SRW 2025) and a CT imaging model with a ~97% improvement in
+              timing prediction. If any of this connects to your work, reach
+              out at{" "}
+              <a
+                href={`mailto:${INFO.email}`}
+                className="text-sky-400 hover:text-sky-300 transition-colors"
               >
-                <p className="font-mono text-xs sm:text-sm tracking-[0.3em] uppercase text-sky-500 dark:text-sky-400 mb-5">
-                  CS · Math · Purdue
-                </p>
-                <h1 className="text-5xl sm:text-6xl font-bold tracking-tight leading-[1.05]">
-                  {INFO.name}
-                </h1>
-                <p className={`mt-4 text-xl sm:text-2xl ${muted}`}>
-                  {INFO.role}
-                </p>
-                <p className={`mt-6 max-w-2xl text-lg leading-relaxed ${muted}`}>
-                  {INFO.headline}
-                </p>
-
-                <div className="mt-8 flex flex-wrap gap-3">
-                  <Button
-                    asChild
-                    variant="secondary"
-                    className="rounded-md text-base h-11 px-5"
-                  >
-                    <a href={INFO.github} target="_blank" rel="noreferrer">
-                      <Github className="w-5 h-5 mr-2" /> GitHub
-                    </a>
-                  </Button>
-                  <Button
-                    asChild
-                    variant="secondary"
-                    className="rounded-md text-base h-11 px-5"
-                  >
-                    <a href={INFO.linkedin} target="_blank" rel="noreferrer">
-                      <Linkedin className="w-5 h-5 mr-2" /> LinkedIn
-                    </a>
-                  </Button>
-                  <Button asChild className="rounded-md text-base h-11 px-5">
-                    <a href={INFO.resumeUrl} target="_blank" rel="noreferrer">
-                      <Download className="w-5 h-5 mr-2" /> Resume
-                    </a>
-                  </Button>
-                </div>
-
-                <div
-                  className={`mt-7 flex items-center gap-2 text-base ${subtle}`}
-                >
-                  <GraduationCap className="w-5 h-5 text-sky-500" />
-                  <span>
-                    B.S. Computer Science &amp; Mathematics · Purdue University
-                    (Aug 2025 – May 2028)
-                  </span>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="justify-self-center md:justify-self-end"
-              >
-                <div
-                  className={`w-56 h-56 sm:w-60 sm:h-60 rounded-full overflow-hidden shadow-lg ${
-                    isDark ? "ring-1 ring-slate-800" : "ring-1 ring-slate-200"
-                  }`}
-                >
-                  <img
-                    src="/1753369044349.jpeg"
-                    alt="Srihan Vege"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        <Section id="about" title="Biography" isDark={isDark}>
-          <motion.p
-            variants={itemVariants}
-            className={`max-w-3xl text-lg leading-relaxed ${muted}`}
+                {INFO.email}
+              </a>
+              .
+            </p>
+          </motion.div>
+          <motion.div
+            variants={fadeUp}
+            className="mt-8 inline-flex items-center gap-3 font-mono text-sm tracking-wide text-white/55"
           >
-            I recently started at Purdue University (CS &amp; Math). I enjoy
-            building things at the intersection of ML reliability and usable
-            products. Recent projects include a credit card fraud detection
-            pipeline and research on mitigating multi-turn sycophancy in LLMs.
-            If any of this connects to your work, feel free to reach out at{" "}
-            <a
-              className="text-sky-500 hover:underline"
-              href={`mailto:${INFO.email}`}
-            >
-              {INFO.email}
-            </a>
-            .
-          </motion.p>
+            <GraduationCap className="w-5 h-5 text-sky-400/70" />
+            <span>B.S. Computer Science &amp; Mathematics · Purdue · Aug 2025 – May 2028</span>
+          </motion.div>
         </Section>
 
-        <Section id="notes" title="Publications" isDark={isDark}>
+        {/* ── Publications ── */}
+        <Section id="publications" number="02" title="Publications.">
           <motion.div
-            variants={itemVariants}
-            className={`rounded-xl border p-6 sm:p-8 max-w-3xl ${cardBg}`}
+            variants={fadeUp}
+            className="group relative rounded-2xl border border-white/[0.05] bg-white/[0.015] p-8 sm:p-10 max-w-3xl overflow-hidden hover:border-white/10 transition-all duration-500"
           >
-            <p className="font-mono text-xs tracking-[0.25em] uppercase text-sky-500 dark:text-sky-400 mb-2">
+            <div className="absolute -top-20 -left-10 w-60 h-60 bg-indigo-500/[0.06] rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+            <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-sky-400/75 mb-5">
               NAACL SRW · 2025
             </p>
-            <h3 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-3 leading-snug">
+            <h3 className="font-display font-bold text-2xl sm:text-3xl text-white mb-4 leading-snug">
               TRUTH DECAY: Quantifying Multi-Turn Sycophancy in Language Models
             </h3>
-            <p className={`text-base mb-4 ${muted}`}>
-              Liu, Jain, Takuri, <strong>Vege</strong>, Akalin, Zhu,
-              O&apos;Brien, Sharma.
+            <p className="text-base text-white/55 mb-7 leading-relaxed">
+              Liu, Jain, Takuri,{" "}
+              <strong className="text-white/75 font-semibold">Vege</strong>,
+              Akalin, Zhu, O&apos;Brien, Sharma.
             </p>
             <a
               href="https://arxiv.org/abs/2503.11656"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 text-base text-sky-500 hover:underline"
+              className="inline-flex items-center gap-2 font-mono text-[12px] tracking-wide text-sky-400 hover:text-sky-300 transition-colors"
             >
-              <ExternalLink className="w-4 h-4" /> Read on arXiv
+              <ExternalLink className="w-3.5 h-3.5" />
+              Read on arXiv
             </a>
           </motion.div>
         </Section>
 
-        <Section id="projects" title="Projects" isDark={isDark}>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {PROJECTS.map((p) => (
-              <motion.a
-                key={p.title}
-                href={p.link || "#"}
-                target={p.link ? "_blank" : undefined}
-                rel={p.link ? "noreferrer" : undefined}
-                variants={itemVariants}
-                className={`group rounded-xl border p-6 transition-colors duration-300 flex flex-col ${cardBg} ${
-                  p.link ? "" : "pointer-events-none"
-                }`}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <span
-                    className={`font-mono text-xs tracking-[0.2em] uppercase ${subtle}`}
-                  >
-                    {p.year}
-                  </span>
-                  {p.link && (
-                    <ArrowUpRight
-                      className={`w-5 h-5 ${subtle} group-hover:text-sky-500 transition-colors`}
-                    />
-                  )}
-                </div>
-                <h3 className="text-xl sm:text-2xl font-semibold tracking-tight mb-3 group-hover:text-sky-500 transition-colors">
-                  {p.title}
-                </h3>
-                <p className={`text-base leading-relaxed mb-5 flex-1 ${muted}`}>
-                  {p.description}
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {p.tags.map((t) => (
-                    <span
-                      key={t}
-                      className={`font-mono text-xs tracking-wide px-2 py-1 rounded border ${tagPill}`}
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </motion.a>
+        {/* ── Projects ── */}
+        <Section id="projects" number="03" title="Projects.">
+          <div className="grid sm:grid-cols-2 gap-4 max-w-5xl">
+            {PROJECTS.map((project) => (
+              <ProjectCard key={project.title} project={project} />
             ))}
           </div>
         </Section>
 
-        <Section id="experience" title="Experience" isDark={isDark}>
-          <div className="space-y-4 max-w-4xl">
+        {/* ── Experience ── */}
+        <Section id="experience" number="04" title="Experience.">
+          <div className="max-w-2xl">
             {EXPERIENCE.map((e, idx) => (
               <motion.div
                 key={idx}
-                variants={itemVariants}
-                className={`rounded-xl border p-6 sm:p-7 transition-colors duration-300 ${cardBg}`}
+                variants={fadeUp}
+                className="relative pl-10 pb-14 last:pb-0"
               >
-                <div className="flex items-start gap-3 mb-2">
-                  <div
-                    className={`mt-1 shrink-0 w-9 h-9 rounded-md flex items-center justify-center ${
-                      isDark ? "bg-sky-500/10" : "bg-sky-50"
-                    }`}
-                  >
-                    <Briefcase
-                      className={`w-4.5 h-4.5 ${
-                        isDark ? "text-sky-400" : "text-sky-600"
-                      }`}
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex flex-wrap items-baseline justify-between gap-2">
-                      <h3 className="text-xl sm:text-2xl font-semibold tracking-tight">
-                        {e.role}
-                      </h3>
-                      <span
-                        className={`font-mono text-xs tracking-[0.2em] uppercase ${subtle}`}
-                      >
-                        {e.date}
-                      </span>
-                    </div>
-                    <p className={`text-base mt-1 ${muted}`}>{e.org}</p>
-                  </div>
+                {idx < EXPERIENCE.length - 1 && (
+                  <div className="absolute left-[9px] top-[22px] bottom-0 w-px bg-gradient-to-b from-white/10 to-transparent" />
+                )}
+                <div className="absolute left-0 top-[5px] w-[19px] h-[19px] rounded-full border border-sky-500/35 bg-[#050511] flex items-center justify-center">
+                  <div className="w-[7px] h-[7px] rounded-full bg-sky-500/55" />
                 </div>
-                <ul
-                  className={`list-disc pl-12 mt-4 space-y-1.5 text-base leading-relaxed ${muted}`}
-                >
+
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 mb-1">
+                  <h3 className="font-display font-bold text-lg text-white/80">
+                    {e.role}
+                  </h3>
+                  <span className="font-mono text-[10px] tracking-wider text-white/25">
+                    {e.date}
+                  </span>
+                </div>
+                <p className="font-mono text-[11px] tracking-wide text-sky-400/75 mb-4">
+                  {e.org}
+                </p>
+                <ul className="space-y-2.5">
                   {e.bullets.map((b, i) => (
-                    <li key={i}>{b}</li>
+                    <li key={i} className="flex gap-3 text-sm text-white/55 leading-relaxed">
+                      <span className="text-white/15 flex-shrink-0 mt-0.5 select-none">›</span>
+                      <span>{b}</span>
+                    </li>
                   ))}
                 </ul>
               </motion.div>
@@ -652,83 +559,66 @@ export default function App() {
           </div>
         </Section>
 
-        <Section id="skills" title="Skills" isDark={isDark}>
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-wrap gap-2 max-w-3xl"
-          >
-            {SKILLS.map((s) => (
-              <span
-                key={s}
-                className={`font-mono text-sm px-3 py-1.5 rounded-md border ${tagPill}`}
-              >
-                {s}
-              </span>
-            ))}
-          </motion.div>
+        {/* ── Skills ── */}
+        <Section id="skills" number="05" title="Skills.">
+          <SkillsMarquee />
         </Section>
 
-        <Section id="contact" title="Contact" isDark={isDark}>
-          <motion.div variants={itemVariants} className="max-w-3xl">
-            <p className={`text-lg leading-relaxed ${muted}`}>
-              Open to research, internships, and interesting side-projects.
-              Reach me at{" "}
+        {/* ── Contact ── */}
+        <Section id="contact" number="06" title="Let's Talk.">
+          <motion.div variants={fadeUp} className="max-w-2xl">
+            <p className="text-lg sm:text-xl text-white/60 leading-relaxed mb-9">
+              Open to research collaborations, internships, and interesting
+              side-projects. Best reached at{" "}
               <a
-                className="text-sky-500 hover:underline"
                 href={`mailto:${INFO.email}`}
+                className="text-sky-400 hover:text-sky-300 underline underline-offset-4 decoration-sky-400/30 transition-colors"
               >
                 {INFO.email}
               </a>{" "}
               or on{" "}
               <a
-                className="text-sky-500 hover:underline"
                 href={INFO.linkedin}
                 target="_blank"
                 rel="noreferrer"
+                className="text-sky-400 hover:text-sky-300 underline underline-offset-4 decoration-sky-400/30 transition-colors"
               >
                 LinkedIn
               </a>
               .
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button asChild className="rounded-md text-base h-11 px-5">
-                <a href={`mailto:${INFO.email}`}>
-                  <Mail className="w-5 h-5 mr-2" /> Email
-                </a>
-              </Button>
-              <Button
-                asChild
-                variant="secondary"
-                className="rounded-md text-base h-11 px-5"
-              >
-                <a href={INFO.linkedin} target="_blank" rel="noreferrer">
-                  <Linkedin className="w-5 h-5 mr-2" /> LinkedIn
-                </a>
-              </Button>
+            <div className="flex flex-wrap gap-3">
+              <a href={`mailto:${INFO.email}`} className="hero-btn-accent">
+                <Mail className="w-3.5 h-3.5" /> Send Email
+              </a>
+              <a href={INFO.linkedin} target="_blank" rel="noreferrer" className="hero-btn">
+                <Linkedin className="w-3.5 h-3.5" /> LinkedIn
+              </a>
             </div>
           </motion.div>
         </Section>
       </main>
 
-      <footer className="py-10">
-        <div
-          className={`${CONTAINER} flex flex-wrap items-center justify-between gap-3 font-mono text-[11px] tracking-[0.25em] uppercase ${subtle}`}
-        >
+      <footer className="py-12 border-t border-white/[0.04]">
+        <div className="max-w-[1400px] mx-auto px-6 sm:px-10 xl:px-16 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-6">
-            <LinkIcon href={INFO.github} title="GitHub">
-              <Github className="w-4 h-4" />
-              <span>GitHub</span>
-            </LinkIcon>
-            <LinkIcon href={INFO.linkedin} title="LinkedIn">
-              <Linkedin className="w-4 h-4" />
-              <span>LinkedIn</span>
-            </LinkIcon>
-            <LinkIcon href={`mailto:${INFO.email}`} title="Email">
-              <Mail className="w-4 h-4" />
-              <span>Email</span>
-            </LinkIcon>
+            {([
+              { href: INFO.github, Icon: Github },
+              { href: INFO.linkedin, Icon: Linkedin },
+              { href: `mailto:${INFO.email}`, Icon: Mail },
+            ] as const).map(({ href, Icon }) => (
+              <a
+                key={href}
+                href={href}
+                target={href.startsWith("http") ? "_blank" : undefined}
+                rel={href.startsWith("http") ? "noreferrer" : undefined}
+                className="text-white/20 hover:text-white/55 transition-colors cursor-pointer"
+              >
+                <Icon className="w-4 h-4" />
+              </a>
+            ))}
           </div>
-          <span>
+          <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/15">
             © {new Date().getFullYear()} {INFO.name}
           </span>
         </div>
