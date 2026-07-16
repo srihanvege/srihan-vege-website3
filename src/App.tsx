@@ -66,6 +66,24 @@ const PROJECTS: Project[] = [
 
 const EXPERIENCE = [
   {
+    org: "Bioqore",
+    role: "Software Engineering Intern",
+    date: "Jun 2026 to Present",
+    bullets: [
+      "Built a synthetic biomanufacturing data framework in Python using SDV's Gaussian Copula and CTGAN models, achieving 85% fidelity against real process data.",
+      "Designed a biological validity rule engine and model bake-off harness enforcing domain plausibility constraints; flagged 93% of implausible synthetic records across 8 validation rules.",
+    ],
+  },
+  {
+    org: "NuStudio.AI",
+    role: "AI/ML Intern",
+    date: "May 2026 to Present",
+    bullets: [
+      "Engineered an LLM-powered agent for automated cross-language code migration under the Apex team, reaching 95% translation accuracy on test conversions.",
+      "Designed and implemented REST endpoints for Sarvos's Action Broker, enabling deterministic, auditable execution of agent-proposed actions across billing, document, and matter-intake domains.",
+    ],
+  },
+  {
     org: "Algoverse AI Research",
     role: "Machine Learning Researcher",
     date: "Aug 2024 to Apr 2025",
