@@ -1,5 +1,5 @@
 import React from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import {
   Github,
   Linkedin,
@@ -34,7 +34,7 @@ const PROJECTS: Project[] = [
   {
     title: "TRUTH DECAY",
     description:
-      "Co-first authored study on multi-turn sycophancy in LLMs. Built the evaluation harness; reduced accuracy degradation by ~43%. NAACL SRW 2025.",
+      "Joint first author of a study on multiturn sycophancy in LLMs. Built the evaluation harness; reduced accuracy degradation by ~43%. NAACL SRW 2025.",
     tags: ["LLM Eval", "NLP", "Python"],
     year: "2025",
     link: "https://arxiv.org/abs/2503.11656",
@@ -49,7 +49,7 @@ const PROJECTS: Project[] = [
   {
     title: "REALestate.ai",
     description:
-      "AI-driven real estate valuation system that automates property value estimation by combining tabular features with location and market signals.",
+      "AI powered real estate valuation system that automates property value estimation by combining tabular features with location and market signals.",
     tags: ["Machine Learning", "Real Estate"],
     year: "2024",
     link: "https://github.com/S-K-23/REALestate.ai",
@@ -68,16 +68,16 @@ const EXPERIENCE = [
   {
     org: "Algoverse AI Research",
     role: "Machine Learning Researcher",
-    date: "Aug 2024 – Apr 2025",
+    date: "Aug 2024 to Apr 2025",
     bullets: [
-      "Built multi-turn LLM evaluation harness; reduced accuracy degradation from sycophancy by ~43% via prompt strategies.",
-      "Co-first authored TRUTH DECAY; accepted to NAACL SRW 2025.",
+      "Built multiturn LLM evaluation harness; reduced accuracy degradation from sycophancy by ~43% via prompt strategies.",
+      "Joint first author of TRUTH DECAY; accepted to NAACL SRW 2025.",
     ],
   },
   {
     org: "Northwestern University · Bagci Lab (MHIL)",
     role: "Machine Learning Engineer",
-    date: "Jun 2024 – Feb 2025",
+    date: "Jun 2024 to Feb 2025",
     bullets: [
       "Developed CT imaging model for aortic peak enhancement timing; mode timing error ~0.3s (≈97% improvement).",
       "Improved prediction accuracy on 272 scans; reduced error from ~200 HU to ~100 HU; EMBC submitted; patent pending.",
@@ -85,17 +85,17 @@ const EXPERIENCE = [
   },
   {
     org: "FireFly EDU (501c3)",
-    role: "Co-Founder & Vice President",
-    date: "Jun 2023 – Aug 2024",
+    role: "Cofounder & Vice President",
+    date: "Jun 2023 to Aug 2024",
     bullets: [
-      "Built and led education nonprofit serving under-resourced youth; recruited exec team across marketing and finance.",
-      "Taught CS, Math, Biology, English, Physics to students aged 5–15 at Heal Paradise school.",
+      "Built and led education nonprofit serving underserved youth; recruited exec team across marketing and finance.",
+      "Taught CS, Math, Biology, English, Physics to students aged 5 to 15 at Heal Paradise school.",
     ],
   },
   {
     org: "Stanford ML/Molecular Imaging Fellowship",
     role: "Research Student",
-    date: "Jun 2023 – Aug 2023",
+    date: "Jun 2023 to Aug 2023",
     bullets: [
       "Studied AI/deep learning applications in PET/MRI/SPECT under Dr. Frezghi Habte; surveyed CNN/RNN imaging tools.",
     ],
@@ -104,7 +104,7 @@ const EXPERIENCE = [
 
 const SKILLS = [
   "Python", "Java", "JavaScript", "TypeScript", "HTML/CSS", "Swift",
-  "PyTorch", "MONAI", "NumPy", "Pandas", "Matplotlib", "scikit-learn",
+  "PyTorch", "MONAI", "NumPy", "Pandas", "Matplotlib", "scikit learn",
   "LLMs", "FAISS", "Git", "Linux",
 ];
 
@@ -139,6 +139,32 @@ function ScrollProgress() {
 }
 
 // ─────────────────────────────────────────────────────────────
+//  Magnetic nav link
+// ─────────────────────────────────────────────────────────────
+function MagneticLink({ href, children }: { href: string; children: React.ReactNode }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 200, damping: 20 });
+  const sy = useSpring(y, { stiffness: 200, damping: 20 });
+
+  return (
+    <motion.a
+      href={href}
+      style={{ x: sx, y: sy }}
+      onMouseMove={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        x.set((e.clientX - (rect.left + rect.width / 2)) * 0.3);
+        y.set((e.clientY - (rect.top + rect.height / 2)) * 0.3);
+      }}
+      onMouseLeave={() => { x.set(0); y.set(0); }}
+      className="font-mono text-[10px] tracking-[0.25em] uppercase text-white/60 hover:text-white transition-colors cursor-pointer"
+    >
+      {children}
+    </motion.a>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
 //  Nav
 // ─────────────────────────────────────────────────────────────
 function Nav() {
@@ -165,13 +191,9 @@ function Nav() {
         </a>
         <div className="hidden sm:flex items-center gap-8">
           {(["Bio", "Projects", "Experience", "Contact"] as const).map((label) => (
-            <a
-              key={label}
-              href={`#${label.toLowerCase()}`}
-              className="font-mono text-[10px] tracking-[0.25em] uppercase text-white/60 hover:text-white transition-colors cursor-pointer"
-            >
+            <MagneticLink key={label} href={`#${label.toLowerCase()}`}>
               {label}
-            </a>
+            </MagneticLink>
           ))}
           <a
             href={INFO.resumeUrl}
@@ -245,7 +267,7 @@ function HeroSection() {
             className="mt-8 text-lg sm:text-xl text-white/40 max-w-lg leading-relaxed"
           >
             ML researcher. Building at the intersection of AI reliability and
-            real-world impact — sycophancy reduction, medical imaging, fraud
+            real world impact: sycophancy reduction, medical imaging, fraud
             detection.
           </motion.p>
 
@@ -360,6 +382,21 @@ function Section({ id, number, title, children }: SectionProps) {
 //  Project card
 // ─────────────────────────────────────────────────────────────
 function ProjectCard({ project }: { project: Project }) {
+  const rotX = useMotionValue(0);
+  const rotY = useMotionValue(0);
+  const springX = useSpring(rotX, { stiffness: 150, damping: 18 });
+  const springY = useSpring(rotY, { stiffness: 150, damping: 18 });
+
+  function onTiltMove(e: React.MouseEvent) {
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    rotX.set(-(e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2) * 7);
+    rotY.set((e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2) * 7);
+  }
+
+  function onTiltLeave() { rotX.set(0); rotY.set(0); }
+
+  const tiltStyle = { rotateX: springX, rotateY: springY, transformPerspective: 900 };
+
   const inner = (
     <>
       <div className="absolute -top-20 -right-20 w-52 h-52 rounded-full bg-sky-500/[0.06] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
@@ -403,13 +440,16 @@ function ProjectCard({ project }: { project: Project }) {
         target="_blank"
         rel="noreferrer"
         className={cls}
+        style={tiltStyle}
+        onMouseMove={onTiltMove}
+        onMouseLeave={onTiltLeave}
       >
         {inner}
       </motion.a>
     );
   }
   return (
-    <motion.div variants={fadeUp} className={cls}>
+    <motion.div variants={fadeUp} className={cls} style={tiltStyle} onMouseMove={onTiltMove} onMouseLeave={onTiltLeave}>
       {inner}
     </motion.div>
   );
@@ -453,12 +493,12 @@ export default function App() {
         <Section id="bio" number="01" title="About.">
           <motion.div variants={fadeUp} className="space-y-5 max-w-3xl">
             <p className="text-lg sm:text-xl leading-relaxed text-white/65">
-              I'm a first-year at Purdue University studying CS and Math. I
+              I'm a first year at Purdue University studying CS and Math. I
               enjoy building at the intersection of ML reliability and usable
-              products — from evaluation harnesses to medical imaging models.
+              products, from evaluation harnesses to medical imaging models.
             </p>
             <p className="text-lg sm:text-xl leading-relaxed text-white/65">
-              Recent work: a multi-turn sycophancy evaluation harness (NAACL
+              Recent work: a multiturn sycophancy evaluation harness (NAACL
               SRW 2025) and a CT imaging model with a ~97% improvement in
               timing prediction. If any of this connects to your work, reach
               out at{" "}
@@ -476,7 +516,7 @@ export default function App() {
             className="mt-8 inline-flex items-center gap-3 font-mono text-sm tracking-wide text-white/55"
           >
             <GraduationCap className="w-5 h-5 text-sky-400/70" />
-            <span>B.S. Computer Science &amp; Mathematics · Purdue · Aug 2025 – May 2028</span>
+            <span>B.S. Computer Science &amp; Mathematics · Purdue · Aug 2025 to May 2028</span>
           </motion.div>
         </Section>
 
@@ -491,7 +531,7 @@ export default function App() {
               NAACL SRW · 2025
             </p>
             <h3 className="font-display font-bold text-2xl sm:text-3xl text-white mb-4 leading-snug">
-              TRUTH DECAY: Quantifying Multi-Turn Sycophancy in Language Models
+              TRUTH DECAY: Quantifying Multiturn Sycophancy in Language Models
             </h3>
             <p className="text-base text-white/55 mb-7 leading-relaxed">
               Liu, Jain, Takuri,{" "}
@@ -569,7 +609,7 @@ export default function App() {
           <motion.div variants={fadeUp} className="max-w-2xl">
             <p className="text-lg sm:text-xl text-white/60 leading-relaxed mb-9">
               Open to research collaborations, internships, and interesting
-              side-projects. Best reached at{" "}
+              side projects. Best reached at{" "}
               <a
                 href={`mailto:${INFO.email}`}
                 className="text-sky-400 hover:text-sky-300 underline underline-offset-4 decoration-sky-400/30 transition-colors"

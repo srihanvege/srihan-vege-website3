@@ -132,6 +132,10 @@ body {
   color: rgba(255,255,255,0.88);
   transform: translateY(-1px);
 }
+.hero-btn:active {
+  transform: scale(0.97);
+  transition: transform 100ms cubic-bezier(0.23, 1, 0.32, 1), border-color 0.25s, background 0.25s, color 0.25s;
+}
 
 .hero-btn-accent {
   display: inline-flex;
@@ -156,6 +160,10 @@ body {
   color: #38bdf8;
   transform: translateY(-1px);
   box-shadow: 0 0 24px rgba(56, 189, 248, 0.1);
+}
+.hero-btn-accent:active {
+  transform: scale(0.97);
+  transition: transform 100ms cubic-bezier(0.23, 1, 0.32, 1), border-color 0.25s, background 0.25s, color 0.25s;
 }
 
 /* ── Skills marquee (triple the list, animate -33.33%) ── */
