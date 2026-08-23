@@ -266,7 +266,7 @@ function HeroSection() {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="font-mono text-[10px] sm:text-[11px] tracking-[0.4em] uppercase text-sky-400/75 mb-8"
           >
-            Agentic AI · Synthetic Data
+            CS · Mathematics · Purdue University
           </motion.p>
 
           <motion.h1
@@ -287,9 +287,9 @@ function HeroSection() {
             transition={{ duration: 0.75, delay: 0.5 }}
             className="mt-8 text-lg sm:text-xl text-white/40 max-w-lg leading-relaxed"
           >
-            CS + Math at Purdue. I build agentic AI systems and synthetic
-            data pipelines: LLM agents at NuStudio.AI, generative models for
-            biomanufacturing data at Bioqore.
+            I build agentic AI systems and synthetic data pipelines: agents
+            that plan and call real APIs, and generative models for domains
+            where real data is scarce.
           </motion.p>
 
           <motion.div
@@ -514,14 +514,17 @@ export default function App() {
         <Section id="bio" number="01" title="About.">
           <motion.div variants={fadeUp} className="space-y-5 max-w-3xl">
             <p className="text-lg sm:text-xl leading-relaxed text-white/65">
-              I study CS and Math at Purdue. Most of my time goes to{" "}
-              <span className="text-white/85">agentic AI systems</span> and{" "}
-              <span className="text-white/85">synthetic data engineering</span>.
+              I study CS and Math at Purdue. Most of my work comes down to
+              whether a model can be trusted with something real: an agent
+              handed a live API, a synthetic dataset someone will decide on,
+              a scan a radiologist has to read.
             </p>
             <p className="text-lg sm:text-xl leading-relaxed text-white/65">
-              Right now that means LLM agents and action-broker APIs at
-              NuStudio.AI, and synthetic biomanufacturing data at Bioqore.
-              Reach me at{" "}
+              Recent work spans{" "}
+              <span className="text-white/85">agentic AI systems</span> and{" "}
+              <span className="text-white/85">synthetic data engineering</span>{" "}
+              at NuStudio.AI and Bioqore, a multiturn sycophancy benchmark
+              (NAACL SRW 2025), and CT imaging at Northwestern. Reach me at{" "}
               <a
                 href={`mailto:${INFO.email}`}
                 className="text-sky-400 hover:text-sky-300 transition-colors"
