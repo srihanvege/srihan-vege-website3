@@ -514,16 +514,19 @@ export default function App() {
         <Section id="bio" number="01" title="About.">
           <motion.div variants={fadeUp} className="space-y-5 max-w-3xl">
             <p className="text-lg sm:text-xl leading-relaxed text-white/65">
-              I study CS and Math at Purdue. I enjoy building at the
-              intersection of ML reliability and systems people actually use,
-              from agent frameworks to generative data pipelines.
+              I study CS and Math at Purdue. I'm drawn to the infrastructure
+              side of AI: the action APIs, evaluation harnesses, and data
+              pipelines that decide whether a model survives contact with
+              production. Longer term I want to build agent systems dependable
+              enough for regulated, high-stakes domains.
             </p>
             <p className="text-lg sm:text-xl leading-relaxed text-white/65">
-              Recent work spans{" "}
-              <span className="text-white/85">agentic AI systems</span> and{" "}
-              <span className="text-white/85">synthetic data engineering</span>,
-              a multiturn sycophancy benchmark (NAACL SRW 2025), and CT imaging
-              at Northwestern. Reach me at{" "}
+              Recent work:{" "}
+              <span className="text-white/85">agentic AI infrastructure</span>{" "}
+              at NuStudio.AI,{" "}
+              <span className="text-white/85">synthetic data engineering</span>{" "}
+              at Bioqore, a multiturn sycophancy benchmark (NAACL SRW 2025),
+              and CT imaging at Northwestern. Reach me at{" "}
               <a
                 href={`mailto:${INFO.email}`}
                 className="text-sky-400 hover:text-sky-300 transition-colors"
