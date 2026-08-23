@@ -515,8 +515,9 @@ export default function App() {
             <p className="text-lg sm:text-xl leading-relaxed text-white/65">
               I'm interested in AI infrastructure: action APIs, evaluation
               harnesses, and the data pipelines that decide whether a model
-              survives contact with production. Longer term I want to build agent systems dependable
-              enough for regulated, high-stakes domains.
+              survives contact with production. Longer term I want to build
+              agentic systems dependable enough for regulated, high-stakes
+              domains.
             </p>
             <p className="text-lg sm:text-xl leading-relaxed text-white/65">
               Recent work:{" "}
