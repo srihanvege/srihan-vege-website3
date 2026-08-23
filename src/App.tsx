@@ -287,9 +287,8 @@ function HeroSection() {
             transition={{ duration: 0.75, delay: 0.5 }}
             className="mt-8 text-lg sm:text-xl text-white/40 max-w-lg leading-relaxed"
           >
-            CS + Math at Purdue. I build agentic AI systems and synthetic
-            data pipelines: LLM agents at NuStudio.AI, generative models for
-            biomanufacturing data at Bioqore.
+            CS + Math at Purdue. I built AI agents at NuStudio.AI, and
+            generative models for biomanufacturing data at Bioqore.
           </motion.p>
 
           <motion.div
