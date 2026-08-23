@@ -329,7 +329,6 @@ function HeroSection() {
             className="font-mono text-[10px] sm:text-[11px] tracking-[0.4em] uppercase text-sky-400/75 mb-8"
           >
             Agentic AI · Synthetic Data
-            <span className="hidden sm:inline"> · CS + Math @ Purdue</span>
           </motion.p>
 
           <motion.h1
@@ -350,7 +349,7 @@ function HeroSection() {
             transition={{ duration: 0.75, delay: 0.5 }}
             className="mt-8 text-lg sm:text-xl text-white/40 max-w-lg leading-relaxed"
           >
-            Software and ML engineer. I build agentic AI systems and synthetic
+            CS + Math at Purdue. I build agentic AI systems and synthetic
             data pipelines: LLM agents at NuStudio.AI, generative models for
             biomanufacturing data at Bioqore.
           </motion.p>
