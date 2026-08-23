@@ -9,9 +9,6 @@ import {
   Download,
   ArrowUpRight,
   ArrowDown,
-  Bot,
-  Database,
-  ShieldCheck,
 } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────
@@ -25,30 +22,6 @@ const INFO = {
   linkedin: "https://www.linkedin.com/in/srihan-vege/",
 };
 
-const FOCUS = [
-  {
-    Icon: Bot,
-    title: "Agentic AI Systems",
-    body:
-      "LLM agents that plan, call tools, and execute against real APIs. Cross-language code migration agents, typed action proposal contracts, and validate/execute flows that keep agent behavior deterministic and auditable.",
-    tags: ["LLM agents", "Tool use", "Agentic workflows", "REST APIs"],
-  },
-  {
-    Icon: Database,
-    title: "Synthetic Data Engineering",
-    body:
-      "Generative pipelines for regulated, low-volume process data. CTGAN and Gaussian Copula models benchmarked on statistical fidelity, domain validity, downstream utility, and privacy, with rule engines gating implausible records before model selection.",
-    tags: ["CTGAN", "Gaussian Copula", "SDV", "Data validity"],
-  },
-  {
-    Icon: ShieldCheck,
-    title: "ML Reliability & Evaluation",
-    body:
-      "Eval harnesses and bake-off frameworks that turn \"seems fine\" into a number. Multiturn LLM evaluation, model selection under hard domain constraints, and failure-mode surfacing across production workflows.",
-    tags: ["Evaluation", "Benchmarking", "Model selection"],
-  },
-];
-
 interface Project {
   title: string;
   description: string;
@@ -59,47 +32,12 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
-    title: "Synthetic Biomanufacturing Data Framework",
-    description:
-      "Python framework generating synthetic USP upstream process data with SDV's Gaussian Copula and CTGAN. Benchmarked on statistical fidelity, domain validity, utility, and privacy; reached 85% fidelity against real process data.",
-    tags: ["Synthetic Data", "CTGAN", "SDV", "Python"],
-    year: "2026",
-  },
-  {
-    title: "Biological Validity Rule Engine",
-    description:
-      "Rule engine and model bake-off harness enforcing domain plausibility constraints (titer/IVCD consistency, metabolite endpoint bounds) as hard gates. Flagged 93% of implausible synthetic records across 8 validation rules before model selection.",
-    tags: ["Data Validation", "Model Selection", "Python"],
-    year: "2026",
-  },
-  {
-    title: "Cross-Language Code Migration Agent",
-    description:
-      "LLM-powered agent that migrates code across languages automatically, reaching 95% translation accuracy on test conversions. Built under NuStudio.AI's Apex team.",
-    tags: ["LLM Agents", "Agentic Workflows", "Python"],
-    year: "2026",
-  },
-  {
-    title: "Action Broker API",
-    description:
-      "REST endpoints for Sarvos's Action Broker: typed action proposal contracts plus validate/execute flows across billing, document, and matter-intake domains, making agent-proposed actions deterministic and auditable.",
-    tags: ["API Design", "Agentic Systems", "TypeScript"],
-    year: "2026",
-  },
-  {
     title: "TRUTH DECAY",
     description:
       "Joint first author of a study on multiturn sycophancy in LLMs. Built the evaluation harness; reduced accuracy degradation by ~43%. NAACL SRW 2025.",
     tags: ["LLM Eval", "NLP", "Python"],
     year: "2025",
     link: "https://arxiv.org/abs/2503.11656",
-  },
-  {
-    title: "Vela · YC W26",
-    description:
-      "Built and deployed GA4 event tracking infrastructure across Vela's website to measure user workflows, conversion funnels, and retention.",
-    tags: ["TypeScript", "GA4", "Analytics"],
-    year: "2026",
   },
   {
     title: "ContrastIQ",
@@ -109,20 +47,20 @@ const PROJECTS: Project[] = [
     year: "2024",
   },
   {
-    title: "Credit Card Fraud Detection",
-    description:
-      "ML pipeline for real-time fraud detection over 284,807 imbalanced transactions. 97.6% ROC AUC and 86% F1 on the fraud class, comparing logistic regression against XGBoost.",
-    tags: ["Python", "XGBoost", "scikit-learn"],
-    year: "2026",
-    link: "https://github.com/srihanvege/Credit-Card-Fraud-Detection",
-  },
-  {
     title: "REALestate.ai",
     description:
       "AI powered real estate valuation system that automates property value estimation by combining tabular features with location and market signals.",
     tags: ["Machine Learning", "Real Estate"],
     year: "2024",
     link: "https://github.com/S-K-23/REALestate.ai",
+  },
+  {
+    title: "Credit Card Fraud Detection",
+    description:
+      "Binary classification pipeline for fraudulent transactions, with feature engineering and model evaluation for reliable risk scoring.",
+    tags: ["Python", "XGBoost", "Pandas"],
+    year: "2025",
+    link: "https://github.com/srihanvege/Credit-Card-Fraud-Detection",
   },
 ];
 
@@ -576,21 +514,14 @@ export default function App() {
         <Section id="bio" number="01" title="About.">
           <motion.div variants={fadeUp} className="space-y-5 max-w-3xl">
             <p className="text-lg sm:text-xl leading-relaxed text-white/65">
-              I study CS and Math at Purdue, and I spend most of my time on two
-              things: <span className="text-white/85">agentic AI systems</span>{" "}
-              and <span className="text-white/85">synthetic data engineering</span>.
-              Agents that plan and take real actions against real APIs, and
-              generative pipelines that produce data you can actually trust.
+              I study CS and Math at Purdue. Most of my time goes to{" "}
+              <span className="text-white/85">agentic AI systems</span> and{" "}
+              <span className="text-white/85">synthetic data engineering</span>.
             </p>
             <p className="text-lg sm:text-xl leading-relaxed text-white/65">
-              At NuStudio.AI I build LLM agents for automated cross-language
-              code migration and typed action-broker APIs that make
-              agent-proposed actions deterministic and auditable. At Bioqore I
-              build synthetic biomanufacturing data with CTGAN and Gaussian
-              Copula models, plus the validity rule engine and bake-off harness
-              that decide which model is good enough to ship. Earlier work in
-              LLM evaluation and medical imaging is below. If any of this
-              connects to your work, reach out at{" "}
+              Right now that means LLM agents and action-broker APIs at
+              NuStudio.AI, and synthetic biomanufacturing data at Bioqore.
+              Reach me at{" "}
               <a
                 href={`mailto:${INFO.email}`}
                 className="text-sky-400 hover:text-sky-300 transition-colors"
@@ -607,34 +538,6 @@ export default function App() {
             <GraduationCap className="w-5 h-5 text-sky-400/70 flex-shrink-0 mt-0.5" />
             <span>B.S. Computer Science &amp; Mathematics · Purdue · Aug 2025 to Dec 2028</span>
           </motion.div>
-
-          {/* Focus areas */}
-          <div className="mt-16 grid md:grid-cols-3 gap-4 max-w-5xl">
-            {FOCUS.map(({ Icon, title, body, tags }) => (
-              <motion.div
-                key={title}
-                variants={fadeUp}
-                className="group relative rounded-2xl border border-white/[0.05] bg-white/[0.015] p-6 sm:p-7 overflow-hidden transition-all duration-500 hover:border-white/10 hover:bg-white/[0.03]"
-              >
-                <div className="absolute -top-20 -right-20 w-52 h-52 rounded-full bg-sky-500/[0.06] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-                <Icon className="w-5 h-5 text-sky-400/70 mb-5" />
-                <h3 className="font-display font-bold text-lg text-white/80 group-hover:text-white mb-3 transition-colors leading-tight">
-                  {title}
-                </h3>
-                <p className="text-sm leading-relaxed text-white/55 mb-6">{body}</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="font-mono text-[10px] tracking-wide px-2.5 py-1 rounded-md bg-white/[0.03] text-white/30 border border-white/[0.05]"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
         </Section>
 
         {/* ── Publications ── */}
@@ -669,7 +572,7 @@ export default function App() {
 
         {/* ── Projects ── */}
         <Section id="projects" number="03" title="Projects.">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl">
+          <div className="grid sm:grid-cols-2 gap-4 max-w-5xl">
             {PROJECTS.map((project) => (
               <ProjectCard key={project.title} project={project} />
             ))}
