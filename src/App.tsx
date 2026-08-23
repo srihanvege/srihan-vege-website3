@@ -287,9 +287,9 @@ function HeroSection() {
             transition={{ duration: 0.75, delay: 0.5 }}
             className="mt-8 text-lg sm:text-xl text-white/40 max-w-lg leading-relaxed"
           >
-            I build agentic AI systems and synthetic data pipelines: agents
-            that plan and call real APIs, and generative models for domains
-            where real data is scarce.
+            I build agentic AI systems and synthetic data pipelines: LLM
+            agents at NuStudio.AI, generative models for biomanufacturing
+            data at Bioqore.
           </motion.p>
 
           <motion.div
@@ -514,17 +514,16 @@ export default function App() {
         <Section id="bio" number="01" title="About.">
           <motion.div variants={fadeUp} className="space-y-5 max-w-3xl">
             <p className="text-lg sm:text-xl leading-relaxed text-white/65">
-              I study CS and Math at Purdue. Most of my work comes down to
-              whether a model can be trusted with something real: an agent
-              handed a live API, a synthetic dataset someone will decide on,
-              a scan a radiologist has to read.
+              I study CS and Math at Purdue. I enjoy building at the
+              intersection of ML reliability and systems people actually use,
+              from agent frameworks to generative data pipelines.
             </p>
             <p className="text-lg sm:text-xl leading-relaxed text-white/65">
               Recent work spans{" "}
               <span className="text-white/85">agentic AI systems</span> and{" "}
-              <span className="text-white/85">synthetic data engineering</span>{" "}
-              at NuStudio.AI and Bioqore, a multiturn sycophancy benchmark
-              (NAACL SRW 2025), and CT imaging at Northwestern. Reach me at{" "}
+              <span className="text-white/85">synthetic data engineering</span>,
+              a multiturn sycophancy benchmark (NAACL SRW 2025), and CT imaging
+              at Northwestern. Reach me at{" "}
               <a
                 href={`mailto:${INFO.email}`}
                 className="text-sky-400 hover:text-sky-300 transition-colors"
