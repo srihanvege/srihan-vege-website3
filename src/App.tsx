@@ -285,7 +285,7 @@ function HeroSection() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, delay: 0.5 }}
-            className="mt-8 text-lg sm:text-xl text-white/40 max-w-lg leading-relaxed"
+            className="mt-8 text-xl sm:text-[1.375rem] text-white/40 max-w-lg leading-relaxed"
           >
             CS + Math at Purdue. Built agentic infra at NuStudio.AI, and
             generative models for biomanufacturing data at Bioqore.
@@ -512,14 +512,14 @@ export default function App() {
         {/* ── About ── */}
         <Section id="bio" number="01" title="About.">
           <motion.div variants={fadeUp} className="space-y-5 max-w-3xl">
-            <p className="text-lg sm:text-xl leading-relaxed text-white/65">
+            <p className="text-xl sm:text-[1.375rem] leading-relaxed text-white/65">
               I'm interested in AI infrastructure: action APIs, evaluation
               harnesses, and the data pipelines that decide whether a model
               survives contact with production. Longer term I want to build
               agentic systems dependable enough for regulated, high stakes
               domains.
             </p>
-            <p className="text-lg sm:text-xl leading-relaxed text-white/65">
+            <p className="text-xl sm:text-[1.375rem] leading-relaxed text-white/65">
               Recent work:{" "}
               <span className="text-white/85">agentic AI infrastructure</span>{" "}
               at NuStudio.AI,{" "}
@@ -631,7 +631,7 @@ export default function App() {
         {/* ── Contact ── */}
         <Section id="contact" number="06" title="Let's Talk.">
           <motion.div variants={fadeUp} className="max-w-2xl">
-            <p className="text-lg sm:text-xl text-white/60 leading-relaxed mb-9">
+            <p className="text-xl sm:text-[1.375rem] text-white/60 leading-relaxed mb-9">
               Open to research collaborations, internships, and interesting
               side projects. Best reached at{" "}
               <a
