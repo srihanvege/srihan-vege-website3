@@ -66,6 +66,14 @@ const PROJECTS: Project[] = [
 
 const EXPERIENCE = [
   {
+    org: "Microsoft",
+    role: "Undergraduate Data Science Researcher",
+    date: "Aug 2026 to Present",
+    bullets: [
+      "Researching through Purdue's Data Mine Corporate Partners Learning Community.",
+    ],
+  },
+  {
     org: "Bioqore",
     role: "Software Engineering Intern",
     date: "Jun 2026 to Present",
@@ -211,7 +219,7 @@ function Nav() {
           Srihan Vege
         </a>
         <div className="hidden sm:flex items-center gap-8">
-          {(["Bio", "Projects", "Experience", "Contact"] as const).map((label) => (
+          {(["Bio", "Experience", "Projects", "Contact"] as const).map((label) => (
             <MagneticLink key={label} href={`#${label.toLowerCase()}`}>
               {label}
             </MagneticLink>
@@ -544,47 +552,8 @@ export default function App() {
           </motion.div>
         </Section>
 
-        {/* ── Publications ── */}
-        <Section id="publications" number="02" title="Publications.">
-          <motion.div
-            variants={fadeUp}
-            className="group relative rounded-2xl border border-white/[0.05] bg-white/[0.015] p-8 sm:p-10 max-w-3xl overflow-hidden hover:border-white/10 transition-all duration-500"
-          >
-            <div className="absolute -top-20 -left-10 w-60 h-60 bg-indigo-500/[0.06] rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-            <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-sky-400/75 mb-5">
-              NAACL SRW · 2025
-            </p>
-            <h3 className="font-display font-bold text-2xl sm:text-3xl text-white mb-4 leading-snug">
-              TRUTH DECAY: Quantifying Multiturn Sycophancy in Language Models
-            </h3>
-            <p className="text-base text-white/55 mb-7 leading-relaxed">
-              Liu, Jain, Takuri,{" "}
-              <strong className="text-white/75 font-semibold">Vege</strong>,
-              Akalin, Zhu, O&apos;Brien, Sharma.
-            </p>
-            <a
-              href="https://arxiv.org/abs/2503.11656"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 font-mono text-[12px] tracking-wide text-sky-400 hover:text-sky-300 transition-colors"
-            >
-              <ExternalLink className="w-3.5 h-3.5" />
-              Read on arXiv
-            </a>
-          </motion.div>
-        </Section>
-
-        {/* ── Projects ── */}
-        <Section id="projects" number="03" title="Projects.">
-          <div className="grid sm:grid-cols-2 gap-4 max-w-5xl">
-            {PROJECTS.map((project) => (
-              <ProjectCard key={project.title} project={project} />
-            ))}
-          </div>
-        </Section>
-
         {/* ── Experience ── */}
-        <Section id="experience" number="04" title="Experience.">
+        <Section id="experience" number="02" title="Experience.">
           <div className="max-w-2xl">
             {EXPERIENCE.map((e, idx) => (
               <motion.div
@@ -619,6 +588,45 @@ export default function App() {
                   ))}
                 </ul>
               </motion.div>
+            ))}
+          </div>
+        </Section>
+
+        {/* ── Publications ── */}
+        <Section id="publications" number="03" title="Publications.">
+          <motion.div
+            variants={fadeUp}
+            className="group relative rounded-2xl border border-white/[0.05] bg-white/[0.015] p-8 sm:p-10 max-w-3xl overflow-hidden hover:border-white/10 transition-all duration-500"
+          >
+            <div className="absolute -top-20 -left-10 w-60 h-60 bg-indigo-500/[0.06] rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+            <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-sky-400/75 mb-5">
+              NAACL SRW · 2025
+            </p>
+            <h3 className="font-display font-bold text-2xl sm:text-3xl text-white mb-4 leading-snug">
+              TRUTH DECAY: Quantifying Multiturn Sycophancy in Language Models
+            </h3>
+            <p className="text-base text-white/55 mb-7 leading-relaxed">
+              Liu, Jain, Takuri,{" "}
+              <strong className="text-white/75 font-semibold">Vege</strong>,
+              Akalin, Zhu, O&apos;Brien, Sharma.
+            </p>
+            <a
+              href="https://arxiv.org/abs/2503.11656"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 font-mono text-[12px] tracking-wide text-sky-400 hover:text-sky-300 transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              Read on arXiv
+            </a>
+          </motion.div>
+        </Section>
+
+        {/* ── Projects ── */}
+        <Section id="projects" number="04" title="Projects.">
+          <div className="grid sm:grid-cols-2 gap-4 max-w-5xl">
+            {PROJECTS.map((project) => (
+              <ProjectCard key={project.title} project={project} />
             ))}
           </div>
         </Section>
