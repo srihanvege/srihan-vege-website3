@@ -178,7 +178,7 @@ function MagneticLink({ href, children }: { href: string; children: React.ReactN
         y.set((e.clientY - (rect.top + rect.height / 2)) * 0.3);
       }}
       onMouseLeave={() => { x.set(0); y.set(0); }}
-      className="font-mono text-[10px] tracking-[0.25em] uppercase text-white/60 hover:text-white transition-colors cursor-pointer"
+      className="font-mono text-[11px] tracking-[0.25em] uppercase text-white/60 hover:text-white transition-colors cursor-pointer"
     >
       {children}
     </motion.a>
@@ -206,7 +206,7 @@ function Nav() {
       <div className="max-w-[1400px] mx-auto px-6 sm:px-10 xl:px-16 h-16 flex items-center justify-between">
         <a
           href="#home"
-          className="font-mono text-[11px] tracking-[0.35em] uppercase text-white/70 hover:text-white transition-colors"
+          className="font-mono text-[12px] tracking-[0.35em] uppercase text-white/70 hover:text-white transition-colors"
         >
           Srihan Vege
         </a>
@@ -220,7 +220,7 @@ function Nav() {
             href={INFO.resumeUrl}
             target="_blank"
             rel="noreferrer"
-            className="font-mono text-[10px] tracking-[0.25em] uppercase border border-sky-500/25 text-sky-400/65 hover:text-sky-300 hover:border-sky-400/45 px-3 py-1.5 rounded transition-all"
+            className="font-mono text-[11px] tracking-[0.25em] uppercase border border-sky-500/25 text-sky-400/65 hover:text-sky-300 hover:border-sky-400/45 px-3 py-1.5 rounded transition-all"
           >
             Resume ↗
           </a>
@@ -264,7 +264,7 @@ function HeroSection() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="font-mono text-[11px] sm:text-xs tracking-[0.4em] uppercase text-sky-400/80 mb-8"
+            className="font-mono text-xs sm:text-[13px] tracking-[0.4em] uppercase text-sky-400/80 mb-8"
           >
             Agentic AI · Synthetic Data
           </motion.p>
