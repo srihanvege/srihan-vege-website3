@@ -264,7 +264,7 @@ function HeroSection() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="font-mono text-[10px] sm:text-[11px] tracking-[0.4em] uppercase text-sky-400/75 mb-8"
+            className="font-mono text-[11px] sm:text-xs tracking-[0.4em] uppercase text-sky-400/80 mb-8"
           >
             Agentic AI · Synthetic Data
           </motion.p>
@@ -274,7 +274,7 @@ function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="font-display font-black leading-[0.87] tracking-tight text-white"
-            style={{ fontSize: "clamp(4rem, 12.5vw, 10.5rem)" }}
+            style={{ fontSize: "clamp(3.5rem, 9.5vw, 8rem)" }}
           >
             Srihan
             <br />
@@ -285,7 +285,7 @@ function HeroSection() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, delay: 0.5 }}
-            className="mt-8 text-lg sm:text-xl text-white/40 max-w-lg leading-relaxed"
+            className="mt-8 text-xl sm:text-2xl text-white/60 max-w-xl leading-relaxed"
           >
             CS + Math at Purdue. Built agentic infra at NuStudio.AI, and
             generative models for biomanufacturing data at Bioqore.
