@@ -67,7 +67,7 @@ const PROJECTS: Project[] = [
 const EXPERIENCE = [
   {
     org: "Microsoft",
-    role: "Undergraduate Data Science Researcher",
+    role: "Data Science Researcher",
     date: "Aug 2026 to Present",
     bullets: [
       "Researching through Purdue's Data Mine Corporate Partners Learning Community.",
