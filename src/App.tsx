@@ -98,7 +98,7 @@ const EXPERIENCE = [
     date: "Aug 2024 to Apr 2025",
     bullets: [
       "Built multiturn LLM evaluation harness; reduced accuracy degradation from sycophancy by ~43% via prompt strategies.",
-      "Joint first author of TRUTH DECAY; accepted to NAACL SRW 2025.",
+      "Joint first author of TRUTH DECAY, presented at NAACL SRW 2025; 25+ citations, including work from Harvard and Google DeepMind.",
     ],
   },
   {
