@@ -18,6 +18,7 @@ const INFO = {
   name: "Srihan Vege",
   email: "svege@purdue.edu",
   resumeUrl: "/srihan_vege_resume.pdf",
+  cvUrl: "/srihan_vege_cv.pdf",
   github: "https://github.com/srihanvege",
   linkedin: "https://www.linkedin.com/in/srihan-vege/",
 };
@@ -239,6 +240,14 @@ function Nav() {
           >
             Resume ↗
           </a>
+          <a
+            href={INFO.cvUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="font-mono text-[11px] tracking-[0.25em] uppercase border border-sky-500/25 text-sky-400/65 hover:text-sky-300 hover:border-sky-400/45 px-3 py-1.5 rounded transition-all"
+          >
+            CV ↗
+          </a>
         </div>
       </div>
     </nav>
@@ -320,6 +329,9 @@ function HeroSection() {
             </a>
             <a href={INFO.resumeUrl} target="_blank" rel="noreferrer" className="hero-btn-accent">
               <Download className="w-3.5 h-3.5" /> Resume
+            </a>
+            <a href={INFO.cvUrl} target="_blank" rel="noreferrer" className="hero-btn-accent">
+              <Download className="w-3.5 h-3.5" /> CV
             </a>
           </motion.div>
         </div>
