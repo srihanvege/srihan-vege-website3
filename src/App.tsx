@@ -40,6 +40,13 @@ const PROJECTS: Project[] = [
     link: "https://arxiv.org/abs/2503.11656",
   },
   {
+    title: "Vela · YC W26",
+    description:
+      "Built and deployed GA4 event tracking infrastructure across Vela's website to measure user workflows, conversion funnels, and retention.",
+    tags: ["TypeScript", "GA4", "Analytics"],
+    year: "2026",
+  },
+  {
     title: "ContrastIQ",
     description:
       "CT imaging model combining a CNN with pharmacokinetic priors to predict aortic peak enhancement timing. ~97% improvement on 272 patient scans. EMBC submitted, patent pending.",
@@ -59,7 +66,7 @@ const PROJECTS: Project[] = [
     description:
       "Binary classification pipeline for fraudulent transactions, with feature engineering and model evaluation for reliable risk scoring.",
     tags: ["Python", "XGBoost", "Pandas"],
-    year: "2025",
+    year: "2026",
     link: "https://github.com/srihanvege/Credit-Card-Fraud-Detection",
   },
 ];
