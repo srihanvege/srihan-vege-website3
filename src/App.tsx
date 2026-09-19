@@ -142,14 +142,14 @@ interface Tool {
   level: number; // 0-100
 }
 
-interface ToolboxFile {
-  file: string;
+interface ToolboxGroup {
+  group: string;
   items: Tool[];
 }
 
-const TOOLBOX: ToolboxFile[] = [
+const TOOLBOX: ToolboxGroup[] = [
   {
-    file: "languages.txt",
+    group: "languages",
     items: [
       { name: "Python", level: 95 },
       { name: "TypeScript", level: 85 },
@@ -160,7 +160,7 @@ const TOOLBOX: ToolboxFile[] = [
     ],
   },
   {
-    file: "ml_&_agents.txt",
+    group: "ml & agents",
     items: [
       { name: "PyTorch", level: 80 },
       { name: "scikit-learn", level: 85 },
@@ -170,7 +170,7 @@ const TOOLBOX: ToolboxFile[] = [
     ],
   },
   {
-    file: "web_&_infra.txt",
+    group: "web & infra",
     items: [
       { name: "React · Next.js", level: 80 },
       { name: "Tailwind", level: 85 },
@@ -540,59 +540,63 @@ function ProjectCard({ project }: { project: Project }) {
 }
 
 // ─────────────────────────────────────────────────────────────
-//  Toolbox (terminal-window skill cards)
+//  Toolbox (one panel, three columns, segmented level blocks)
 // ─────────────────────────────────────────────────────────────
-function ToolboxCard({ file, items }: ToolboxFile) {
+const BLOCKS = 10;
+// stepped sky → indigo → violet, one entry per block position
+const BLOCK_COLORS = [
+  "bg-sky-400", "bg-sky-400", "bg-sky-400",
+  "bg-indigo-400", "bg-indigo-400", "bg-indigo-400", "bg-indigo-400",
+  "bg-violet-500", "bg-violet-500", "bg-violet-500",
+];
+
+function LevelBlocks({ level }: { level: number }) {
+  const filled = Math.round((level / 100) * BLOCKS);
   return (
-    <motion.div
-      variants={fadeUp}
-      className="group relative rounded-2xl border border-white/[0.05] bg-white/[0.015] overflow-hidden transition-all duration-500 hover:border-white/10 hover:bg-white/[0.03]"
-    >
-      <div className="absolute -top-20 -right-20 w-52 h-52 rounded-full bg-sky-500/[0.06] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-
-      {/* title bar */}
-      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-white/[0.05]">
-        <div className="flex gap-1.5 flex-shrink-0">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-          <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-          <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-        </div>
-        <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-white/35 leading-relaxed">
-          srihan@purdue:~ $ cat {file}
-        </span>
-      </div>
-
-      {/* rows */}
-      <ul className="px-5 py-4 space-y-3.5">
-        {items.map(({ name, level }) => (
-          <li key={name} className="flex items-center gap-4">
-            <span className="text-white/20 font-mono text-[10px] select-none flex-shrink-0">▹</span>
-            <span className="font-mono text-[12px] sm:text-[13px] text-white/70 flex-1 min-w-0 truncate">
-              {name}
-            </span>
-            <div className="w-20 sm:w-28 h-[3px] rounded-full bg-white/[0.06] overflow-hidden flex-shrink-0">
-              <motion.div
-                initial={{ width: 0 }}
-                whileInView={{ width: `${level}%` }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-                className="h-full rounded-full bg-gradient-to-r from-sky-400 via-indigo-400 to-violet-500"
-              />
-            </div>
-          </li>
-        ))}
-      </ul>
-    </motion.div>
+    <div className="flex gap-[3px] flex-shrink-0" aria-label={`${level} out of 100`}>
+      {Array.from({ length: BLOCKS }, (_, i) => {
+        const on = i < filled;
+        return (
+          <motion.span
+            key={i}
+            initial={{ opacity: 0, scaleY: 0.4 }}
+            whileInView={{ opacity: 1, scaleY: 1 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.35, delay: 0.1 + i * 0.035, ease: [0.16, 1, 0.3, 1] }}
+            className={`w-[7px] h-[11px] rounded-[2px] ${on ? BLOCK_COLORS[i] : "bg-white/[0.06]"}`}
+          />
+        );
+      })}
+    </div>
   );
 }
 
 function Toolbox() {
   return (
-    <div className="grid md:grid-cols-3 gap-4">
-      {TOOLBOX.map((f) => (
-        <ToolboxCard key={f.file} {...f} />
-      ))}
-    </div>
+    <motion.div
+      variants={fadeUp}
+      className="rounded-2xl border border-white/[0.05] bg-white/[0.015] overflow-hidden"
+    >
+      <div className="grid md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/[0.05]">
+        {TOOLBOX.map(({ group, items }) => (
+          <div key={group} className="p-6 sm:p-7">
+            <p className="font-mono text-[11px] tracking-[0.2em] text-sky-400/70 mb-5 select-none">
+              # {group}
+            </p>
+            <ul className="space-y-3.5">
+              {items.map(({ name, level }) => (
+                <li key={name} className="flex items-center justify-between gap-4">
+                  <span className="font-mono text-[12px] sm:text-[13px] text-white/70 min-w-0 truncate">
+                    {name}
+                  </span>
+                  <LevelBlocks level={level} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </motion.div>
   );
 }
 
