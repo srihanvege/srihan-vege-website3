@@ -137,12 +137,49 @@ const EXPERIENCE = [
   },
 ];
 
-const SKILLS = [
-  "Python", "TypeScript", "JavaScript", "Java", "C", "SQL",
-  "LLM Agents", "Agentic Workflows", "Synthetic Data", "CTGAN", "Gaussian Copula", "SDV",
-  "PyTorch", "scikit-learn", "Pandas", "NumPy",
-  "React", "Next.js", "Tailwind", "Node.js", "API Design", "MongoDB",
-  "Git", "Linux",
+interface Tool {
+  name: string;
+  level: number; // 0-100
+}
+
+interface ToolboxFile {
+  file: string;
+  items: Tool[];
+}
+
+const TOOLBOX: ToolboxFile[] = [
+  {
+    file: "languages.txt",
+    items: [
+      { name: "Python", level: 95 },
+      { name: "TypeScript", level: 85 },
+      { name: "JavaScript", level: 85 },
+      { name: "Java", level: 70 },
+      { name: "C", level: 65 },
+      { name: "SQL", level: 70 },
+    ],
+  },
+  {
+    file: "ml_&_agents.txt",
+    items: [
+      { name: "PyTorch", level: 80 },
+      { name: "scikit-learn", level: 85 },
+      { name: "Pandas · NumPy", level: 90 },
+      { name: "LLM agents · tool use", level: 85 },
+      { name: "SDV · CTGAN · Copula", level: 75 },
+    ],
+  },
+  {
+    file: "web_&_infra.txt",
+    items: [
+      { name: "React · Next.js", level: 80 },
+      { name: "Tailwind", level: 85 },
+      { name: "Node.js", level: 75 },
+      { name: "API design", level: 85 },
+      { name: "MongoDB", level: 65 },
+      { name: "Git · Linux", level: 85 },
+    ],
+  },
 ];
 
 // ─────────────────────────────────────────────────────────────
@@ -503,24 +540,58 @@ function ProjectCard({ project }: { project: Project }) {
 }
 
 // ─────────────────────────────────────────────────────────────
-//  Skills marquee
+//  Toolbox (terminal-window skill cards)
 // ─────────────────────────────────────────────────────────────
-function SkillsMarquee() {
-  const tripled = [...SKILLS, ...SKILLS, ...SKILLS];
+function ToolboxCard({ file, items }: ToolboxFile) {
   return (
-    <div className="relative overflow-hidden -mx-6 sm:-mx-10 xl:-mx-16">
-      <div className="marquee-track flex gap-3 py-1">
-        {tripled.map((skill, i) => (
-          <span
-            key={i}
-            className="flex-shrink-0 font-mono text-[12px] tracking-wide px-4 py-2.5 rounded-xl border border-white/[0.06] text-white/50 bg-white/[0.015] whitespace-nowrap hover:border-sky-500/25 hover:text-sky-400/80 transition-colors cursor-default"
-          >
-            {skill}
-          </span>
-        ))}
+    <motion.div
+      variants={fadeUp}
+      className="group relative rounded-2xl border border-white/[0.05] bg-white/[0.015] overflow-hidden transition-all duration-500 hover:border-white/10 hover:bg-white/[0.03]"
+    >
+      <div className="absolute -top-20 -right-20 w-52 h-52 rounded-full bg-sky-500/[0.06] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+      {/* title bar */}
+      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-white/[0.05]">
+        <div className="flex gap-1.5 flex-shrink-0">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+        </div>
+        <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-white/35 leading-relaxed">
+          srihan@purdue:~ $ cat {file}
+        </span>
       </div>
-      <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#050511] to-transparent pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#050511] to-transparent pointer-events-none" />
+
+      {/* rows */}
+      <ul className="px-5 py-4 space-y-3.5">
+        {items.map(({ name, level }) => (
+          <li key={name} className="flex items-center gap-4">
+            <span className="text-white/20 font-mono text-[10px] select-none flex-shrink-0">▹</span>
+            <span className="font-mono text-[12px] sm:text-[13px] text-white/70 flex-1 min-w-0 truncate">
+              {name}
+            </span>
+            <div className="w-20 sm:w-28 h-[3px] rounded-full bg-white/[0.06] overflow-hidden flex-shrink-0">
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: `${level}%` }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+                className="h-full rounded-full bg-gradient-to-r from-sky-400 via-indigo-400 to-violet-500"
+              />
+            </div>
+          </li>
+        ))}
+      </ul>
+    </motion.div>
+  );
+}
+
+function Toolbox() {
+  return (
+    <div className="grid md:grid-cols-3 gap-4">
+      {TOOLBOX.map((f) => (
+        <ToolboxCard key={f.file} {...f} />
+      ))}
     </div>
   );
 }
@@ -571,8 +642,13 @@ export default function App() {
           </motion.div>
         </Section>
 
+        {/* ── Toolbox ── */}
+        <Section id="skills" number="02" title="Toolbox.">
+          <Toolbox />
+        </Section>
+
         {/* ── Experience ── */}
-        <Section id="experience" number="02" title="Experience.">
+        <Section id="experience" number="03" title="Experience.">
           <div className="max-w-2xl">
             {EXPERIENCE.map((e, idx) => (
               <motion.div
@@ -612,7 +688,7 @@ export default function App() {
         </Section>
 
         {/* ── Publications ── */}
-        <Section id="publications" number="03" title="Publications.">
+        <Section id="publications" number="04" title="Publications.">
           <motion.div
             variants={fadeUp}
             className="group relative rounded-2xl border border-white/[0.05] bg-white/[0.015] p-8 sm:p-10 max-w-3xl overflow-hidden hover:border-white/10 transition-all duration-500"
@@ -642,17 +718,12 @@ export default function App() {
         </Section>
 
         {/* ── Projects ── */}
-        <Section id="projects" number="04" title="Projects.">
+        <Section id="projects" number="05" title="Projects.">
           <div className="grid sm:grid-cols-2 gap-4 max-w-5xl">
             {PROJECTS.map((project) => (
               <ProjectCard key={project.title} project={project} />
             ))}
           </div>
-        </Section>
-
-        {/* ── Skills ── */}
-        <Section id="skills" number="05" title="Skills.">
-          <SkillsMarquee />
         </Section>
 
         {/* ── Contact ── */}
