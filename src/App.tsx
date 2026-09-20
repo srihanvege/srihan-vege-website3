@@ -550,6 +550,14 @@ const BLOCK_COLORS = [
   "bg-violet-500", "bg-violet-500", "bg-violet-500",
 ];
 
+function levelLabel(level: number): string {
+  if (level >= 90) return "Expert";
+  if (level >= 75) return "Advanced";
+  if (level >= 60) return "Intermediate";
+  if (level >= 40) return "Familiar";
+  return "Beginner";
+}
+
 function LevelBlocks({ level }: { level: number }) {
   const filled = Math.round((level / 100) * BLOCKS);
   return (
@@ -585,11 +593,22 @@ function Toolbox() {
             </p>
             <ul className="space-y-3.5">
               {items.map(({ name, level }) => (
-                <li key={name} className="flex items-center justify-between gap-4">
-                  <span className="font-mono text-[12px] sm:text-[13px] text-white/70 min-w-0 truncate">
+                <li
+                  key={name}
+                  tabIndex={0}
+                  aria-label={`${name}: ${levelLabel(level)}`}
+                  className="group relative flex items-center justify-between gap-4 cursor-default outline-none"
+                >
+                  <span className="font-mono text-[12px] sm:text-[13px] text-white/70 group-hover:text-white/90 group-focus-visible:text-white/90 min-w-0 truncate transition-colors">
                     {name}
                   </span>
                   <LevelBlocks level={level} />
+                  <span
+                    role="tooltip"
+                    className="pointer-events-none absolute right-0 -top-7 font-mono text-[10px] tracking-[0.15em] uppercase text-white/85 bg-[#0d0d1f] border border-white/10 rounded px-2 py-1 whitespace-nowrap opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 group-focus-visible:opacity-100 group-focus-visible:translate-y-0 transition-all duration-200"
+                  >
+                    {levelLabel(level)}
+                  </span>
                 </li>
               ))}
             </ul>
