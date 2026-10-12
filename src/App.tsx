@@ -1,17 +1,5 @@
 import React from "react";
-import { motion, MotionConfig, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
-import { usePath, Link } from "./router";
-import AgentTrace from "./components/AgentTrace";
-import Field from "./game/Field";
-import {
-  INFO,
-  PROJECTS,
-  EXPERIENCE,
-  TOOLBOX,
-  fadeUp,
-  stagger,
-  type Project,
-} from "./data";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import {
   Github,
   Linkedin,
@@ -21,8 +9,195 @@ import {
   Download,
   ArrowUpRight,
   ArrowDown,
-  Gamepad2,
 } from "lucide-react";
+
+// ─────────────────────────────────────────────────────────────
+//  Data
+// ─────────────────────────────────────────────────────────────
+const INFO = {
+  name: "Srihan Vege",
+  email: "svege@purdue.edu",
+  resumeUrl: "/srihan_vege_resume.pdf",
+  cvUrl: "/srihan_vege_cv.pdf",
+  github: "https://github.com/srihanvege",
+  linkedin: "https://www.linkedin.com/in/srihan-vege/",
+};
+
+interface Project {
+  title: string;
+  description: string;
+  tags: string[];
+  year: string;
+  link?: string;
+}
+
+const PROJECTS: Project[] = [
+  {
+    title: "TRUTH DECAY",
+    description:
+      "Joint first author of a study on multiturn sycophancy in LLMs. Built the evaluation harness; reduced accuracy degradation by ~43%. NAACL SRW 2025.",
+    tags: ["LLM Eval", "NLP", "Python"],
+    year: "2025",
+    link: "https://arxiv.org/abs/2503.11656",
+  },
+  {
+    title: "Vela · YC W26",
+    description:
+      "Built and deployed GA4 event tracking infrastructure across Vela's website to measure user workflows, conversion funnels, and retention.",
+    tags: ["TypeScript", "GA4", "Analytics"],
+    year: "2026",
+  },
+  {
+    title: "ContrastIQ",
+    description:
+      "CT imaging model combining a CNN with pharmacokinetic priors to predict aortic peak enhancement timing. ~97% improvement on 272 patient scans. EMBC submitted, patent pending.",
+    tags: ["PyTorch", "Medical Imaging", "MONAI"],
+    year: "2024",
+  },
+  {
+    title: "REALestate.ai",
+    description:
+      "AI powered real estate valuation system that automates property value estimation by combining tabular features with location and market signals.",
+    tags: ["Machine Learning", "Real Estate"],
+    year: "2024",
+    link: "https://github.com/S-K-23/REALestate.ai",
+  },
+  {
+    title: "Credit Card Fraud Detection",
+    description:
+      "Binary classification pipeline for fraudulent transactions, with feature engineering and model evaluation for reliable risk scoring.",
+    tags: ["Python", "XGBoost", "Pandas"],
+    year: "2026",
+    link: "https://github.com/srihanvege/Credit-Card-Fraud-Detection",
+  },
+];
+
+const EXPERIENCE = [
+  {
+    org: "Microsoft",
+    role: "Data Science Researcher",
+    date: "Aug 2026 to Present",
+    bullets: [
+      "Researching through Purdue's Data Mine Corporate Partners Learning Community.",
+    ],
+  },
+  {
+    org: "Bioqore",
+    role: "Software Engineering Intern",
+    date: "Jun 2026 to Aug 2026",
+    bullets: [
+      "Built a synthetic biomanufacturing data framework in Python using SDV's Gaussian Copula and CTGAN models, achieving 85% fidelity against real process data.",
+      "Designed a biological validity rule engine and model bake-off harness enforcing domain plausibility constraints; flagged 93% of implausible synthetic records across 8 validation rules.",
+    ],
+  },
+  {
+    org: "NuStudio.AI",
+    role: "AI/ML Intern",
+    date: "May 2026 to Sep 2026",
+    bullets: [
+      "Engineered an LLM-powered agent for automated cross-language code migration under the Apex team, reaching 95% translation accuracy on test conversions.",
+      "Designed and implemented REST endpoints for Sarvos's Action Broker, covering typed action proposal contracts and validate/execute flows across billing, document, and matter-intake domains.",
+      "Refined agent behavior, tested edge cases, and validated outputs across Cortava AI's credit union AI product suite, improving tool reliability and surfacing failure modes across core platform workflows.",
+    ],
+  },
+  {
+    org: "Algoverse AI Research",
+    role: "Machine Learning Researcher",
+    date: "Aug 2024 to Apr 2025",
+    bullets: [
+      "Built multiturn LLM evaluation harness; reduced accuracy degradation from sycophancy by ~43% via prompt strategies.",
+      "Joint first author of TRUTH DECAY, presented at NAACL SRW 2025; 25+ citations, including work from Harvard and Google DeepMind.",
+    ],
+  },
+  {
+    org: "Northwestern University · Bagci Lab (MHIL)",
+    role: "Machine Learning Engineer",
+    date: "Jun 2024 to Feb 2025",
+    bullets: [
+      "Developed CT imaging model for aortic peak enhancement timing; mode timing error ~0.3s (≈97% improvement).",
+      "Improved prediction accuracy on 272 scans; reduced error from ~200 HU to ~100 HU; EMBC submitted; patent pending.",
+    ],
+  },
+  {
+    org: "FireFly EDU (501c3)",
+    role: "Cofounder & Vice President",
+    date: "Jun 2023 to Aug 2024",
+    bullets: [
+      "Built and led education nonprofit serving underserved youth; recruited exec team across marketing and finance.",
+      "Taught CS, Math, Biology, English, Physics to students aged 5 to 15 at Heal Paradise school.",
+    ],
+  },
+  {
+    org: "Stanford ML/Molecular Imaging Fellowship",
+    role: "Research Student",
+    date: "Jun 2023 to Aug 2023",
+    bullets: [
+      "Studied AI/deep learning applications in PET/MRI/SPECT under Dr. Frezghi Habte; surveyed CNN/RNN imaging tools.",
+    ],
+  },
+];
+
+interface Tool {
+  name: string;
+  level: number; // 0-100
+}
+
+interface ToolboxGroup {
+  group: string;
+  items: Tool[];
+}
+
+const TOOLBOX: ToolboxGroup[] = [
+  {
+    group: "languages",
+    items: [
+      { name: "Python", level: 95 },
+      { name: "TypeScript", level: 85 },
+      { name: "JavaScript", level: 85 },
+      { name: "Java", level: 70 },
+      { name: "C", level: 65 },
+      { name: "SQL", level: 70 },
+    ],
+  },
+  {
+    group: "ml & agents",
+    items: [
+      { name: "PyTorch", level: 80 },
+      { name: "scikit-learn", level: 85 },
+      { name: "Pandas · NumPy", level: 90 },
+      { name: "LLM agents · tool use", level: 85 },
+      { name: "SDV · CTGAN · Copula", level: 75 },
+    ],
+  },
+  {
+    group: "web & infra",
+    items: [
+      { name: "React · Next.js", level: 80 },
+      { name: "Tailwind", level: 85 },
+      { name: "Node.js", level: 75 },
+      { name: "API design", level: 85 },
+      { name: "MongoDB", level: 65 },
+      { name: "Git · Linux", level: 85 },
+    ],
+  },
+];
+
+// ─────────────────────────────────────────────────────────────
+//  Animation variants
+// ─────────────────────────────────────────────────────────────
+const fadeUp = {
+  hidden: { opacity: 0, y: 26 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] as const },
+  },
+};
+
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
+};
 
 // ─────────────────────────────────────────────────────────────
 //  Scroll progress bar
@@ -66,7 +241,7 @@ function MagneticLink({ href, children }: { href: string; children: React.ReactN
 // ─────────────────────────────────────────────────────────────
 //  Nav
 // ─────────────────────────────────────────────────────────────
-function Nav({ navigate }: { navigate: (to: string) => void }) {
+function Nav() {
   const [scrolled, setScrolled] = React.useState(false);
 
   React.useEffect(() => {
@@ -110,13 +285,6 @@ function Nav({ navigate }: { navigate: (to: string) => void }) {
           >
             CV ↗
           </a>
-          <Link
-            to="/play"
-            navigate={navigate}
-            className="font-mono text-[11px] tracking-[0.25em] uppercase border border-violet-500/30 text-violet-300/75 hover:text-violet-200 hover:border-violet-400/50 px-3 py-1.5 rounded transition-all"
-          >
-            Play ↗
-          </Link>
         </div>
       </div>
     </nav>
@@ -126,7 +294,7 @@ function Nav({ navigate }: { navigate: (to: string) => void }) {
 // ─────────────────────────────────────────────────────────────
 //  Hero Section
 // ─────────────────────────────────────────────────────────────
-function HeroSection({ navigate }: { navigate: (to: string) => void }) {
+function HeroSection() {
   const { scrollY } = useScroll();
   const textY = useTransform(scrollY, [0, 700], [0, -140]);
   const textOpacity = useTransform(scrollY, [0, 400], [1, 0]);
@@ -202,9 +370,6 @@ function HeroSection({ navigate }: { navigate: (to: string) => void }) {
             <a href={INFO.cvUrl} target="_blank" rel="noreferrer" className="hero-btn-accent">
               <Download className="w-3.5 h-3.5" /> CV
             </a>
-            <Link to="/play" navigate={navigate} className="hero-btn-play">
-              <Gamepad2 className="w-3.5 h-3.5" /> Play my resume
-            </Link>
           </motion.div>
         </div>
       </motion.div>
@@ -457,12 +622,12 @@ function Toolbox() {
 // ─────────────────────────────────────────────────────────────
 //  App
 // ─────────────────────────────────────────────────────────────
-function Site({ navigate }: { navigate: (to: string) => void }) {
+export default function App() {
   return (
     <div className="min-h-screen bg-[#050511] text-white overflow-x-hidden">
       <ScrollProgress />
-      <Nav navigate={navigate} />
-      <HeroSection navigate={navigate} />
+      <Nav />
+      <HeroSection />
 
       <main>
         {/* ── About ── */}
@@ -504,20 +669,8 @@ function Site({ navigate }: { navigate: (to: string) => void }) {
           <Toolbox />
         </Section>
 
-        {/* ── Agent trace ── */}
-        <Section id="agent" number="03" title="Agents, Live.">
-          <motion.p variants={fadeUp} className="text-lg text-white/55 leading-relaxed max-w-2xl mb-10">
-            The loop I build at work: an agent proposes a typed action, a gate
-            validates it, and only then does anything execute. Every result is
-            auditable. Sometimes the gate says no.
-          </motion.p>
-          <motion.div variants={fadeUp} className="max-w-3xl">
-            <AgentTrace />
-          </motion.div>
-        </Section>
-
         {/* ── Experience ── */}
-        <Section id="experience" number="04" title="Experience.">
+        <Section id="experience" number="03" title="Experience.">
           <div className="max-w-2xl">
             {EXPERIENCE.map((e, idx) => (
               <motion.div
@@ -557,7 +710,7 @@ function Site({ navigate }: { navigate: (to: string) => void }) {
         </Section>
 
         {/* ── Publications ── */}
-        <Section id="publications" number="05" title="Publications.">
+        <Section id="publications" number="04" title="Publications.">
           <motion.div
             variants={fadeUp}
             className="group relative rounded-2xl border border-white/[0.05] bg-white/[0.015] p-8 sm:p-10 max-w-3xl overflow-hidden hover:border-white/10 transition-all duration-500"
@@ -587,7 +740,7 @@ function Site({ navigate }: { navigate: (to: string) => void }) {
         </Section>
 
         {/* ── Projects ── */}
-        <Section id="projects" number="06" title="Projects.">
+        <Section id="projects" number="05" title="Projects.">
           <div className="grid sm:grid-cols-2 gap-4 max-w-5xl">
             {PROJECTS.map((project) => (
               <ProjectCard key={project.title} project={project} />
@@ -596,7 +749,7 @@ function Site({ navigate }: { navigate: (to: string) => void }) {
         </Section>
 
         {/* ── Contact ── */}
-        <Section id="contact" number="07" title="Let's Talk.">
+        <Section id="contact" number="06" title="Let's Talk.">
           <motion.div variants={fadeUp} className="max-w-2xl">
             <p className="text-lg sm:text-xl text-white/60 leading-relaxed mb-9">
               Open to research collaborations, internships, and interesting
@@ -655,21 +808,5 @@ function Site({ navigate }: { navigate: (to: string) => void }) {
         </div>
       </footer>
     </div>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────
-//  Routes
-// ─────────────────────────────────────────────────────────────
-export default function App() {
-  const [path, navigate] = usePath();
-  return (
-    <MotionConfig reducedMotion="user">
-      {path === "/play" ? (
-        <Field onExit={() => navigate("/")} />
-      ) : (
-        <Site navigate={navigate} />
-      )}
-    </MotionConfig>
   );
 }
